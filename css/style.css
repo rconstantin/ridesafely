@@ -1,0 +1,16 @@
+body {
+  /*background-color: #000;*/
+  margin: 0;
+  overflow: hidden;
+}
+
+#townId {
+	background: linear-gradient(#b98286b3, #1f1a1a);
+	overflow: hidden;
+	position: absolute;	
+	width: 100%;	
+}
+
+	
+	
+	
