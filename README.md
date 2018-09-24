@@ -1,5 +1,5 @@
 # ridesafely
-## a Three.js game about bike riding safety.
+## A Three.js game about bike riding safety.
 1. This project is using Babel and Webpack to organize and run locally.
 2. To build, run: npm run webpack
 3. To run Locally (Starting up the http-server): npm start (http-server -p 8000 => http://localhost:8000/ to run)
