@@ -4,50 +4,20 @@
 'use strict';
 
 import debug3dAxes from './dbg_3d_coord';
+import {createPaths, pathList} from './bikePaths';
+import Colors from './colors';
+import {activeSegment, speed, getPosition, setPosition} from './decisionTree';
+import {createBike, bike, pedals, front_wheel, back_wheel} from './bikeLoad';
 
-// let THREE =  require('three');
-// alternative syntax from es6
-// import * as THREE from 'three';
-// const scene = new THREE.Scene();
 
-let renderer, scene, camera, controls, bike;
-let angle = 0;
-let position = 0;
-let activeSegment = 0;
-// direction vector for movement
-// let direction = new THREE.Vector3(1, 0, 0);
-// let up = new THREE.Vector3(0, 0, 1);
-// let axis = new THREE.Vector3();
-// scalar to simulate speed
-let speed = 1; //2.5;
-let pathList = [], decisionPoints = [];
+let renderer, scene, camera, controls;
+
+
 let hemisphereLight, shadowLight;
 let clock = new THREE.Clock();
 let up = new THREE.Vector3( 0, 0, 1 );
 let axis = new THREE.Vector3( );
 let radians, tangent;
-let period = 2000; // periodic timer
-let back_wheel = null;
-let front_wheel = null;
-let rider = null;
-let pedals = null;
-let frame = null;
-
-window.addEventListener('load', init, false);
-
-let Colors = {
-  red:0xC61A05,
-  white:0xd8d0d1,
-  brown:0x59332e,
-  pink:0xF5A0F2,
-  brownDark:0x23190f,
-  lightblue: 0x80DFFF,
-  blue:0x0000FF,
-  orange:0xFC6531,
-  beige: 0xEBCDA4,
-  grey: 0x303030,
-  yellow: 0xFFFF1A
-};
 
 function createLights() {
   // A hemisphere light is a gradient colored light; 
@@ -136,301 +106,6 @@ function createScene() {
   controls.enableZoom = true;
   controls.update();
 
-}
-// First define a Bike Object
-
-// Bike = function(){
-//   // Create an empty container that will hold the different parts of the bike
-//   this.mesh = new THREE.Object3D();
-//   this.mesh.name = 'Bike';
-//   let aBike = new THREE.Object3D();;
-//   let geometry = new THREE.CylinderBufferGeometry( 5, 5, 2, 32 );
-//   let material = new THREE.MeshPhongMaterial( {color: Colors.red} );//before MeshBasicMaterial
-//   frontWheel = new THREE.Mesh( geometry, material );
-//   frontWheel.rotation.x = 1.7*Math.PI / 2; 
-
-//   this.mesh.add( frontWheel );
-
-  
-//   // this.mesh.add(aBike);
-// }
-
-function createBike() {
-  bike = new THREE.Object3D();
-  bike.mesh = new THREE.Object3D();
-  // bike.backWheel = new THREE.Object3D();
-  // bike.frontWheel = new THREE.Object3D();
-  let mtlLoader = new THREE.MTLLoader();
-  mtlLoader.setTexturePath('assets/');
-  mtlLoader.load('assets/Wheel_back1.mtl', function (mtl) {
-
-    mtl.preload();
-
-    let objLoader = new THREE.OBJLoader();
-    objLoader.setMaterials(mtl);
-    // objLoader.setPath('/examples/ridesafely/assets/');
-    // objLoader.load('assets/norider_bicycle.obj', function (object) {
-       objLoader.load('assets/Wheel_back1.obj', function (object) {
-          object.scale.set(5, 5, 5);
-          object.rotation.y = Math.PI/2;
-          // object.position.z = 0;
-          // bike.backWheel.add(object);
-          object.position.y = -26;
-          object.position.z = -5.5;
-          back_wheel = object;
-          bike.mesh.add(object);
-          // bike.backWheel.add(object);
-          // bike.backWheel.position.y = 0;
-          scene.add(bike.mesh);
-        });
-    });
-
-    // Front Wheel loading
-     
-    mtlLoader.load('assets/Wheel_front1.mtl', function (mtl) {
-
-    mtl.preload();
-
-    let objLoader = new THREE.OBJLoader();
-    objLoader.setMaterials(mtl);
-        objLoader.load('assets/Wheel_front1.obj', function (object) {
-          object.scale.set(5, 5, 5);
-          object.rotation.y = Math.PI/2;
-          object.position.y = -9.5;
-          object.position.z = -5.5;
-          // bike.frontWheel.add(object);
-          bike.mesh.add(object);
-          front_wheel = object;
-       });
-  });
-   
-
-
-  mtlLoader.load('assets/frame-nopedals.mtl', function (mtl) {
-
-    mtl.preload();
-
-    let objLoader = new THREE.OBJLoader();
-    objLoader.setMaterials(mtl);
-       objLoader.load('assets/frame-nopedals.obj', function (object) {
-          object.scale.set(5, 5, 5);
-          object.rotation.z = Math.PI/2;
-          object.position.set(0,-10,-5.5);
-          bike.mesh.add(object);
-          frame = object;
-       });
-  });
-
-  // Pedals+crankArm
-
-  mtlLoader.load('assets/pedalsCrankArms.mtl', function (mtl) {
-
-    mtl.preload();
-
-    var objLoader = new THREE.OBJLoader();
-    objLoader.setMaterials(mtl);
-        objLoader.load('assets/pedalsCrankArms.obj', function (object) {
-          object.scale.set(0.5, 0.5, 0.5);
-          // object.rotation.z = Math.PI/2;
-          object.position.set(0.5,-19,-5.0);
-          // object.position.z = 0;
-          // bike.frontWheel.add(object);
-          pedals = object;
-          bike.mesh.add(object);
-
-       });
-  });
-
-  mtlLoader.load('assets/riderinpos.mtl', function (mtl) {
-
-    mtl.preload();
-
-    var objLoader = new THREE.OBJLoader();
-    objLoader.setMaterials(mtl);
-       objLoader.load('assets/riderinpos.obj', function (object) {
-          object.scale.set(5, 5, 5);
-          object.rotation.y = Math.PI;
-          object.rotation.x = Math.PI;
-          object.rotation.x=Math.PI/2;
-          // object.rotation.z=Math.PI/2;
-          object.position.set(0,-21,-9);
-          rider = object;
-      
-          bike.mesh.add(object);
-       });
-  });
-
-  bike.mesh.position.z = 10;
-
-}
-
-function createDecisionPoints() {
-  decisionPoint[0] = new THREE.Vector3(-160, -185, 0);
-  decisionPoint[1] = new THREE.Vector3(-160,35, 0);
-  decisionPoint[2] = new THREE.Vector3(-135, -185,0);
-  decisionPoint[3] = new THREE.Vector3(-40,-185,0);
-  decisionPoint[4] = new THREE.Vector3(-40,35,0);
-  decisionPoint[5] = new THREE.Vector3(110,-185,0);
-  decisionPoint[6] = new THREE.Vector3(110,35,0);
-  decisionPoint[7] = new THREE.Vector3(-40,35,0);
-}
-  
-
-function createPath(pId, src, dst) {
-
-  pathList[pId] = new THREE.Path();
-  pathList[pId].moveTo(src.x, src.y);
-  for (let i = 0; i < dst.length; i++) {
-    pathList[pId].lineTo(dst[i].x, dst[i].y);
-    // pathList[pId].quadraticCurveTo( dst[i].x-1, dst[i].y-1, dst[i].x, dst[i].y );
-  }
-
-  drawPath(pId);
-}
-
-function createPaths() {  
-
-  // the pathList
-  let destP = [], src;
-  
-  // P1 with 0 based indices
-  
-  src = new THREE.Vector3(-250,-240,0);
-  destP[0] = new THREE.Vector3(-160,-240,0);
-  destP[1] = new THREE.Vector3(-160,-185,0); 
-  createPath(0, src, destP);
-
-  // P2 with 0 based indices
-  destP  = []; // reset destP array
-  src = new THREE.Vector3(-160,-185,0);
-  destP[0] = new THREE.Vector3(-160,35,0);
-  createPath(1, src, destP);
-
-  // P3
-  src = new THREE.Vector3(-160,35,0);
-  destP[0] = new THREE.Vector3(-160,185,0);
-  destP[1] = new THREE.Vector3(250,185,0); 
-  // 0 based indices
-  createPath(2, src, destP);
- 
-  // P4
-  destP  = []; // reset destP array
-  src = new THREE.Vector3(-160,-185,0);
-  destP[0] = new THREE.Vector3(-135,-185,0);
-  // 0 based indices
-  createPath(3, src, destP);
-  
-  // P5
-  destP  = []; // reset destP array
-  src = new THREE.Vector3(-160,35,0);
-  destP[0] = new THREE.Vector3(-40,35,0);
-  // 0 based indices
-  createPath(4, src, destP);
-
-  // P6
-  destP  = []; // reset destP array
-  src = new THREE.Vector3(-135,-185,0);
-  destP[0] = new THREE.Vector3(-80,-150,0);
-  destP[1] = new THREE.Vector3(-40,-185,0); 
-  // 0 based indices
-  createPath(5, src, destP);
-
-  // P7
-  destP  = []; // reset destP array
-  src = new THREE.Vector3(-135,-185,0);
-  destP[0] = new THREE.Vector3(-80,-170,0);
-  destP[1] = new THREE.Vector3(-40,-185,0); 
-  // 0 based indices
-  createPath(6, src, destP);
-
-  // P8
-  destP  = []; // reset destP array
-  src = new THREE.Vector3(-40,-185,0);
-  destP[0] = new THREE.Vector3(110,-185,0);
-  // 0 based indices
-  createPath(7, src, destP);
-
-  // P9
-  destP  = []; // reset destP array
-  src = new THREE.Vector3(-40,-185,0);
-  destP[0] = new THREE.Vector3(-40,35,0); // 35 instead of 10 to reach DP5
-  // 0 based indices
-  createPath(8, src, destP);
-
-  // P10
-  destP  = []; // reset destP array
-  src = new THREE.Vector3(-40,35,0);
-  destP[0] = new THREE.Vector3(-10,35,0);
-  destP[1] = new THREE.Vector3(-10,185,0);
-  destP[2] = new THREE.Vector3(250,185,0); 
-  // 0 based indices
-  createPath(9, src, destP);
-  
-  // P11
-  destP  = []; // reset destP array
-  src = new THREE.Vector3(-40,35,0);
-  destP[0] = new THREE.Vector3(110,35,0);
-  // 0 based indices
-  createPath(10, src, destP);
-
-  // P12
-  destP  = []; // reset destP array
-  src = new THREE.Vector3(110,35,0);
-  destP[0] = new THREE.Vector3(110,185,0);
-  destP[1] = new THREE.Vector3(250,185,0); 
-  // 0 based indices
-  createPath(11, src, destP);
-
-  // P13
-  destP  = []; // reset destP array
-  src = new THREE.Vector3(110,35,0);
-  destP[0] = new THREE.Vector3(185,35,0);
-  destP[1] = new THREE.Vector3(185,185,0); 
-  destP[2] = new THREE.Vector3(250,185,0); 
-  // 0 based indices
-  createPath(12, src, destP);
-
-  // P14
-  destP  = []; // reset destP array
-  src = new THREE.Vector3(110,-185,0);
-  destP[0] = new THREE.Vector3(110,35,0);
-  destP[1] = new THREE.Vector3(110,185,0); 
-  destP[2] = new THREE.Vector3(250,185,0); 
-  // 0 based indices
-  createPath(13, src, destP);
-
-  // P15
-  destP  = []; // reset destP array
-  src = new THREE.Vector3(110,-185,0);
-  destP[0] = new THREE.Vector3(185,-185,0);
-  destP[1] = new THREE.Vector3(185,185,0); 
-  destP[2] = new THREE.Vector3(250,185,0); 
-  // 0 based indices
-  createPath(14, src, destP);
-
-}
-
-
-function drawPath( segment ) {
-  let vertices = pathList[segment].getSpacedPoints(20);
-
-  // Change 2D points to 3D points
-  for (let i = 0; i < vertices.length; i++) {
-    let point = vertices[i];
-    vertices[i] = new THREE.Vector3(point.x, point.y, 0);
-  }
-  let lineGeometry = new THREE.Geometry();
-  lineGeometry.vertices = vertices;
-  let lineMaterial = new THREE.LineDashedMaterial({ linewidth: 1, color: Colors.red, dashSize: 3, gapSize: 3 });
- 
-  // let lineMaterial = new THREE.LineBasicMaterial({
-  //   color: Colors.red
-  // });
-  let line = new THREE.Line(lineGeometry, lineMaterial);
-  scene.add(line);
-  // Start angle and point
-  previousAngle = getAngle( segment, position );
-  previousPoint = pathList[segment].getPoint( position );
 
 }
 
@@ -473,311 +148,17 @@ function createFloor() {
   scene.add(container);
 
 }
-setTimeout(check, period);
 
-function check() {
-  if (pathList[activeSegment] != null && pathList[activeSegment].getPoint(position) === null) 
-  {
-     speed = 1;
-     switch (activeSegment) {
-        case 0:
-          decisionPoint1();
-          break;
-        case 1:
-          decisionPoint2();
-          break;
-        case 3:
-          decisionPoint3();
-          break;
-        case 4:
-          decisionPoint8();
-          break;
-        case 8:
-          decisionPoint5();
-          break;
-        case 5:
-        case 6:
-          decisionPoint4();
-          break;
-        case 7:
-          decisionPoint6();
-          break;
-        case 10:
-          decisionPoint7();
-          break;
-        case 2:
-        case 9:
-        case 11:
-        case 12:
-        case 13:
-        case 14:
-        default:
-          break;
-     }
-     
-  }
-  else {
-    setTimeout(check, period);
-  }
-
-}
-
-
-function decisionPoint1()
-{
-    let $textAndPic = $('<div></div>');
-    $textAndPic.append('What\'s this cycling sign stand for? <br />');
-    $textAndPic.append('<img src="./images/right.png" />');
-    
-    BootstrapDialog.show({
-        title: 'Guess what this means',
-        message: $textAndPic,
-        buttons: [{
-            label: 'Continue Straight',
-            action: function(dialogRef){
-                activeSegment = 1; // P2
-                position = 0;
-                dialogRef.close();
-                setTimeout(check, period);
-            }
-        }, {
-            label: 'Turn Right',
-            action: function(dialogRef){
-                activeSegment = 3;  //P4
-                position = 0;
-                speed=10;
-                dialogRef.close();
-                setTimeout(check, period);
-            }
-        }]
-    });
-    
-}      
-
-function decisionPoint2()
-{
-    let $textAndPic = $('<div></div>');
-    $textAndPic.append('What\'s this cycling sign stand for? <br />');
-    $textAndPic.append('<img src="./images/stop1.png" />');
-    $textAndPic.append('Cautious going straight: busy traffic road ahead! <br />');
-    $textAndPic.append('Cautious turning right: traffic violation - entering one-way road against traffic! <br />');
-    
-    BootstrapDialog.show({
-        title: 'Guess what this means',
-        message: $textAndPic,
-        buttons: [{
-            label: 'Continue Straight',
-            action: function(dialogRef){
-                activeSegment = 2; // P3
-                position = 0;
-                speed=2;
-                dialogRef.close();
-                setTimeout(check, period);
-            }
-        }, {
-            label: 'Turn Right',
-            action: function(dialogRef){
-                activeSegment = 4;  //P5
-                position = 0;
-                speed=2;
-                dialogRef.close();
-                setTimeout(check, period);
-            }
-        }]
-    });
-    
-}
-
-function decisionPoint3()
-{
-    let $textAndPic = $('<div></div>');
-    $textAndPic.append('Caution: don\'t crash into car door opening! <br />');
-    $textAndPic.append('<img src="./images/dooring.png" />');
-    
-    BootstrapDialog.show({
-        title: 'Defensive Riding: Don\'t take chances',
-        message: $textAndPic,
-        buttons: [{
-            label: 'ride close',
-            action: function(dialogRef){
-                activeSegment = 6; // P7
-                position = 0;
-                dialogRef.close();
-                setTimeout(check, period);
-            }
-        }, {
-            label: 'steer away',
-            action: function(dialogRef){
-                activeSegment = 5;  //P6
-                position = 0;
-                dialogRef.close();
-                setTimeout(check, period);
-            }
-        }]
-    });
-   
-}
-
-function decisionPoint4()
-{
-    let $textAndPic = $('<div></div>');
-    $textAndPic.append('Caution: Obey Traffic signs - Stop and check for traffic! <br />');
-    $textAndPic.append('<img src="./images/left.png" />');
-    
-    BootstrapDialog.show({
-        title: 'Defensive Riding: Don\'t take chances',
-        message: $textAndPic,
-        buttons: [{
-            label: 'Full stop - turn left when clear',
-            action: function(dialogRef){
-                activeSegment = 8; // P9
-                position = 0;
-                dialogRef.close();
-                setTimeout(check, period);
-            }
-        }, {
-            label: 'Full stop - continue straight when clear',
-            action: function(dialogRef){
-                activeSegment = 7;  //P8
-                position = 0;
-                dialogRef.close();
-                setTimeout(check, period);
-            }
-        }]
-    });
-   
-}
-
-function decisionPoint5()
-{
-    let $textAndPic = $('<div></div>');
-    $textAndPic.append('Caution: Obey Traffic signs - Stop and check for traffic! <br />');
-    $textAndPic.append('<img src="./images/right.png" />');
-    
-    BootstrapDialog.show({
-        title: 'Defensive Riding: Don\'t take chances',
-        message: $textAndPic,
-        buttons: [{
-            label: 'Full stop - turn right when clear',
-            action: function(dialogRef){
-                activeSegment = 10; // P11
-                position = 0;
-                dialogRef.close();
-                setTimeout(check, period);
-            }
-        }, {
-            label: 'Full stop - continue straight when clear',
-            action: function(dialogRef){
-                activeSegment = 9;  //P10
-                position = 0;
-                dialogRef.close();
-                setTimeout(check, period);
-            }
-        }]
-    });
-   
-}
-
-function decisionPoint6()
-{
-    let $textAndPic = $('<div></div>');
-    $textAndPic.append('Caution: Obey Traffic signs - Avoid Riding on busy sidewalks! <br />');
-    $textAndPic.append('<img src="./images/left.png" />');
-    
-    BootstrapDialog.show({
-        title: 'Defensive Riding: Don\'t take chances',
-        message: $textAndPic,
-        buttons: [{
-            label: 'Full stop - turn left when clear',
-            action: function(dialogRef){
-                activeSegment = 13; // P14
-                position = 0;
-                dialogRef.close();
-                setTimeout(check, period);
-            }
-        }, {
-            label: 'Full stop - continue straight to sidewalk',
-            action: function(dialogRef){
-                activeSegment = 14;  //P15
-                position = 0;
-                dialogRef.close();
-                setTimeout(check, period);
-            }
-        }]
-    });
-   
-}
-
-function decisionPoint7()
-{
-    let $textAndPic = $('<div></div>');
-    $textAndPic.append('Caution: Obey Traffic laws - Avoid Riding on busy sidewalks! <br />');
-    $textAndPic.append('<img src="./images/left.png" />');
-    
-    BootstrapDialog.show({
-        title: 'Defensive Riding: Don\'t take chances',
-        message: $textAndPic,
-        buttons: [{
-            label: 'Full stop - turn left when clear',
-            action: function(dialogRef){
-                activeSegment = 11; // P12
-                position = 0;
-                dialogRef.close();
-                setTimeout(check, period);
-            }
-        }, {
-            label: 'Full stop - continue straight to sidewalk',
-            action: function(dialogRef){
-                activeSegment = 12;  //P13
-                position = 0;
-                dialogRef.close();
-                setTimeout(check, period);
-            }
-        }]
-    });
-   
-}
-
-function decisionPoint8()
-{
-    let $textAndPic = $('<div></div>');
-    $textAndPic.append('Caution: Obey Traffic laws - Get Back on Track! <br />');
-    $textAndPic.append('<img src="./images/left.png" />');
-    
-    BootstrapDialog.show({
-        title: 'Defensive Riding: Don\'t take chances',
-        message: $textAndPic,
-        buttons: [{
-            label: 'Full stop - turn left when clear',
-            action: function(dialogRef){
-                activeSegment = 9; // P10
-                position = 0;
-                dialogRef.close();
-                setTimeout(check, period);
-            }
-        }, {
-            label: 'Full stop - continue straight to sidewalk',
-            action: function(dialogRef){
-                activeSegment = 10;  //P11
-                position = 0;
-                dialogRef.close();
-                setTimeout(check, period);
-            }
-        }]
-    });
-   
-}
-
-function getActiveSegment(){
-    return activeSegment;
-}
-let previousPoint, previousAngle;
 function move( segment ) {
-  
+  if (pathList === null) {
+    return;
+  }
   // add up position for movement
-  position += 0.002 * speed ;
+  let pos = getPosition();
+  pos += 0.002 * speed ;
+  setPosition(pos);
   
-  let point = pathList[segment].getPoint( position);
+  let point = pathList[segment].getPoint( getPosition());
   if (point === null) {
     
      return;
@@ -793,7 +174,7 @@ function move( segment ) {
   bike.mesh.position.y = point.y+4;
 
 
-  let angle = getAngle(segment, position);
+  let angle = getAngle(segment, getPosition());
   if (angle > 0) {
     angle = - Math.PI + angle;
   }
@@ -807,14 +188,12 @@ function move( segment ) {
       
   }
   
-  previousPoint = point;
-  previousAngle = angle;
-  
+
 }
 
-function getAngle( segment, position ){
+function getAngle( segment, aPosition ){
 // get the 2Dtangent to the curve
-  let tangent = pathList[segment].getTangent(position).normalize();
+  let tangent = pathList[segment].getTangent(aPosition).normalize();
 
   // change tangent to 3D
   let angle = - Math.atan( tangent.x / tangent.y);
@@ -832,7 +211,7 @@ function render() {
 
 // animate
 function animate() {
-  let segment = getActiveSegment();
+  let segment = activeSegment;
   move(segment);
   requestAnimationFrame(animate);
   render();
@@ -849,9 +228,18 @@ export function init() {
 
   // add the objects
   createBike();
+  
+  scene.add(bike.mesh);
 
-  createPaths();
+  let lines = [];
 
+  lines = createPaths();
+
+  for (let i = 0; i < lines.length; i++) 
+  {
+     scene.add(lines[i]);
+  }
+  // pathList = list;
   // createRoad();
 
   // createSky();
@@ -873,6 +261,4 @@ function handleMouseMove(event) {
 
 window.addEventListener('load', init, false);
 
-// export default {
-//   init:init;
-// };
+
