@@ -8,18 +8,20 @@ import {createPaths, pathList} from './bikePaths';
 import Colors from './colors';
 import {activeSegment, speed, getPosition, setPosition} from './decisionTree';
 import {createBike, bike, pedals, front_wheel, back_wheel} from './bikeLoad';
+import {createTown, town, parkedCarDoor} from './townLoad';
 
 
 let renderer, scene, camera, controls;
 
 
-let hemisphereLight, shadowLight;
-let clock = new THREE.Clock();
-let up = new THREE.Vector3( 0, 0, 1 );
-let axis = new THREE.Vector3( );
-let radians, tangent;
+// let clock = new THREE.Clock();
+// let axis = new THREE.Vector3( );
+// let radians, tangent;
 
 function createLights() {
+
+  let hemisphereLight, shadowLight;
+
   // A hemisphere light is a gradient colored light; 
   // the first parameter is the sky color, the second parameter is the ground color, 
   // the third parameter is the intensity of the light
@@ -169,15 +171,26 @@ function move( segment ) {
   if (bike.mesh === null) {
     return;
   }
-  
-  bike.mesh.position.x = point.x-4;
-  bike.mesh.position.y = point.y+4;
+  if (parkedCarDoor !== null) {
+    if (segment === 6) {
+      // moving towards parked car. For now just open the door
+      parkedCarDoor.rotation.z = -1.5;
+    }
+    else {
+      parkedCarDoor.rotation.z = 0;
+    }
+  }
+  bike.mesh.position.x = point.x;//-4;
+  bike.mesh.position.y = point.y;//+4;
 
 
   let angle = getAngle(segment, getPosition());
   if (angle > 0) {
     angle = - Math.PI + angle;
   }
+
+  let up = new THREE.Vector3( 0, 0, 1 );
+
   // set the quaternion
   bike.mesh.quaternion.setFromAxisAngle( up, angle );
 
@@ -225,6 +238,10 @@ export function init() {
   createFloor();
   // add the lights
   createLights();
+
+  // add town components: roads, buildings cars
+  createTown();
+  scene.add(town);
 
   // add the objects
   createBike();

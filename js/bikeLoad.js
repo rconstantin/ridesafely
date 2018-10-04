@@ -1,6 +1,6 @@
 'use strict';
 
-var back_wheel = null,
+let back_wheel = null,
     front_wheel = null,
     rider = null,
     pedals = null,
@@ -110,7 +110,9 @@ function createBike() {
        });
   });
 
-  bike.mesh.position.z = 10;
+  // bike.mesh.position.z = 10;
+  bike.mesh.position.z = 2.2;
+  bike.mesh.scale.set(0.2,0.2,0.2);
 
 }
 

@@ -2,7 +2,7 @@
 
 import Colors from './colors';
 
-var pathList = [];
+let pathList = [];
 
 function createPath(pId, src, dst) {
 
@@ -27,13 +27,13 @@ function createPaths() {
   
   src = new THREE.Vector3(-250,-240,0);
   destP[0] = new THREE.Vector3(-160,-240,0);
-  destP[1] = new THREE.Vector3(-160,-185,0); 
+  destP[1] = new THREE.Vector3(-160,-170,0); 
   lines[0] = new THREE.Line();
   lines[0] = createPath(0, src, destP);
 
   // P2 with 0 based indices
   destP  = []; // reset destP array
-  src = new THREE.Vector3(-160,-185,0);
+  src = new THREE.Vector3(-160,-170,0);
   destP[0] = new THREE.Vector3(-160,35,0);
   lines[1] = new THREE.Line();
   lines[1] = createPath(1, src, destP);
@@ -48,8 +48,8 @@ function createPaths() {
  
   // P4
   destP  = []; // reset destP array
-  src = new THREE.Vector3(-160,-185,0);
-  destP[0] = new THREE.Vector3(-135,-185,0);
+  src = new THREE.Vector3(-160,-170,0);
+  destP[0] = new THREE.Vector3(-135,-170,0);
   // 0 based indices
   lines[3] = new THREE.Line();
   lines[3] = createPath(3, src, destP);
@@ -64,33 +64,33 @@ function createPaths() {
 
   // P6
   destP  = []; // reset destP array
-  src = new THREE.Vector3(-135,-185,0);
-  destP[0] = new THREE.Vector3(-80,-150,0);
-  destP[1] = new THREE.Vector3(-40,-185,0); 
+  src = new THREE.Vector3(-135,-170,0);
+  destP[0] = new THREE.Vector3(-110,-155,0);
+  destP[1] = new THREE.Vector3(-40,-170,0); 
   // 0 based indices
   lines[5] = new THREE.Line();
   lines[5] = createPath(5, src, destP);
 
   // P7
   destP  = []; // reset destP array
-  src = new THREE.Vector3(-135,-185,0);
-  destP[0] = new THREE.Vector3(-80,-170,0);
-  destP[1] = new THREE.Vector3(-40,-185,0); 
+  src = new THREE.Vector3(-135,-170,0);
+  // destP[0] = new THREE.Vector3(-80,-170,0);
+  destP[0] = new THREE.Vector3(-40,-170,0); 
   // 0 based indices
   lines[6] = new THREE.Line();
   lines[6] = createPath(6, src, destP);
 
   // P8
   destP  = []; // reset destP array
-  src = new THREE.Vector3(-40,-185,0);
-  destP[0] = new THREE.Vector3(110,-185,0);
+  src = new THREE.Vector3(-40,-170,0);
+  destP[0] = new THREE.Vector3(110,-170,0);
   // 0 based indices
   lines[7] = new THREE.Line();
   lines[7] = createPath(7, src, destP);
 
   // P9
   destP  = []; // reset destP array
-  src = new THREE.Vector3(-40,-185,0);
+  src = new THREE.Vector3(-40,-170,0);
   destP[0] = new THREE.Vector3(-40,35,0); // 35 instead of 10 to reach DP5
   // 0 based indices
   lines[8] = new THREE.Line();
@@ -135,7 +135,7 @@ function createPaths() {
 
   // P14
   destP  = []; // reset destP array
-  src = new THREE.Vector3(110,-185,0);
+  src = new THREE.Vector3(110,-170,0);
   destP[0] = new THREE.Vector3(110,35,0);
   destP[1] = new THREE.Vector3(110,185,0); 
   destP[2] = new THREE.Vector3(250,185,0); 
@@ -145,8 +145,8 @@ function createPaths() {
 
   // P15
   destP  = []; // reset destP array
-  src = new THREE.Vector3(110,-185,0);
-  destP[0] = new THREE.Vector3(185,-185,0);
+  src = new THREE.Vector3(110,-170,0);
+  destP[0] = new THREE.Vector3(185,-170,0);
   destP[1] = new THREE.Vector3(185,185,0); 
   destP[2] = new THREE.Vector3(250,185,0); 
   // 0 based indices

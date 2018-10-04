@@ -5,9 +5,9 @@
 import {pathList} from './bikePaths';
 let decisionPoints = [];
 let period = 2000; // periodic timer
-var activeSegment = 0;
-var position = 0;
-var speed = 1;
+let activeSegment = 0;
+let position = 0;
+let speed = 1;
 let list = pathList;
 
 function resetPosition() {
@@ -21,12 +21,12 @@ function setPosition(pos) {
 }
 
 function createDecisionPoints() {
-  decisionPoint[0] = new THREE.Vector3(-160, -185, 0);
-  decisionPoint[1] = new THREE.Vector3(-160,35, 0);
-  decisionPoint[2] = new THREE.Vector3(-135, -185,0);
-  decisionPoint[3] = new THREE.Vector3(-40,-185,0);
+  decisionPoint[0] = new THREE.Vector3(-160, -165, 0);
+  decisionPoint[1] = new THREE.Vector3(-160, 35, 0);
+  decisionPoint[2] = new THREE.Vector3(-135, -165,0);
+  decisionPoint[3] = new THREE.Vector3(-40,-165,0);
   decisionPoint[4] = new THREE.Vector3(-40,35,0);
-  decisionPoint[5] = new THREE.Vector3(110,-185,0);
+  decisionPoint[5] = new THREE.Vector3(110,-165,0);
   decisionPoint[6] = new THREE.Vector3(110,35,0);
   decisionPoint[7] = new THREE.Vector3(-40,35,0);
 }
@@ -185,7 +185,7 @@ function decisionPoint3()
             label: 'steer away',
             action: function(dialogRef){
                 activeSegment = 5;  //P6
-                esetPosition(); //position = 0;
+                resetPosition(); //position = 0;
                 dialogRef.close();
                 setTimeout(check, period);
             }
