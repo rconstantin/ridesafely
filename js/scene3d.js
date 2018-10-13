@@ -4,15 +4,20 @@
 'use strict';
 
 import debug3dAxes from './dbg_3d_coord';
-import {createPaths, pathList} from './bikePaths';
+import infoButton from './info';
+import {createPaths, pathList, CarSegments} from './bikePaths';
 import Colors from './colors';
-import {activeSegment, speed, getPosition, setPosition} from './decisionTree';
+import {activeSegment, getBikeSpeed, getPosition, setPosition} from './decisionTree';
 import {createBike, bike, pedals, front_wheel, back_wheel} from './bikeLoad';
-import {createTown, town, parkedCarDoor} from './townLoad';
+import {createTown, town, parkedCarDoor, redCar, yellowCar} from './townLoad';
+
+// import lottie from 'lottie-web';
 
 
-let renderer, scene, camera, controls;
-
+let renderer, scene, trailingCamera, tcontrols, hoveringCamera, hcontrols;
+let carPosition = 0;
+let keyboard = new THREEx.KeyboardState();
+let camera = hoveringCamera, carSpeed = 0.1;
 
 // let clock = new THREE.Clock();
 // let axis = new THREE.Vector3( );
@@ -20,39 +25,40 @@ let renderer, scene, camera, controls;
 
 function createLights() {
 
-  let hemisphereLight, shadowLight;
+  let hemisphereLight, ambientLight;
 
   // A hemisphere light is a gradient colored light; 
   // the first parameter is the sky color, the second parameter is the ground color, 
   // the third parameter is the intensity of the light
   hemisphereLight = new THREE.HemisphereLight(0xaaaaaa,0x000000, 0.9);
-  
+  ambientLight = new THREE.AmbientLight(0x111111);
   // A directional light shines from a specific direction. 
   // It acts like the sun, that means that all the rays produced are parallel. 
-  shadowLight = new THREE.DirectionalLight(0xffffff, 0.9);
+  // shadowLight = new THREE.DirectionalLight(0xffffff, 0.9);
 
-  // Set the direction of the light  
-  shadowLight.position.set(150, 350, 350);
+  // // Set the direction of the light  
+  // shadowLight.position.set(150, 350, 350);
   
-  // Allow shadow casting 
-  shadowLight.castShadow = true;
+  // // Allow shadow casting 
+  // shadowLight.castShadow = true;
 
-  // define the visible area of the projected shadow
-  shadowLight.shadow.camera.left = -400;
-  shadowLight.shadow.camera.right = 400;
-  shadowLight.shadow.camera.top = 400;
-  shadowLight.shadow.camera.bottom = -400;
-  shadowLight.shadow.camera.near = 1;
-  shadowLight.shadow.camera.far = 1000;
+  // // define the visible area of the projected shadow
+  // shadowLight.shadow.camera.left = -400;
+  // shadowLight.shadow.camera.right = 400;
+  // shadowLight.shadow.camera.top = 400;
+  // shadowLight.shadow.camera.bottom = -400;
+  // shadowLight.shadow.camera.near = 1;
+  // shadowLight.shadow.camera.far = 1000;
 
-  // define the resolution of the shadow; the higher the better, 
-  // but also the more expensive and less performant
-  shadowLight.shadow.mapSize.width = 2048;
-  shadowLight.shadow.mapSize.height = 2048;
+  // // define the resolution of the shadow; the higher the better, 
+  // // but also the more expensive and less performant
+  // shadowLight.shadow.mapSize.width = 2048;
+  // shadowLight.shadow.mapSize.height = 2048;
   
   // to activate the lights, just add them to the scene
   scene.add(hemisphereLight);  
-  scene.add(shadowLight);
+  scene.add(ambientLight);
+  // scene.add(shadowLight);
 }
 
 
@@ -92,23 +98,57 @@ function createScene() {
   let nearPlane = 1,
       farPlane = 10000;
   // Camera setup: Do not add to scene to avoid rotation problems   
-  camera = new THREE.PerspectiveCamera(
+  trailingCamera = new THREE.PerspectiveCamera(
     fieldOfView,
     aspectRatio,
     nearPlane,
     farPlane
     );
  
-  camera.position.set(-50, 250, 450 );
 
- 
-  controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.25;
-  controls.enableZoom = true;
-  controls.update();
+  trailingCamera.position.set(0, -250, 50);
+
+  tcontrols = new THREE.OrbitControls(trailingCamera, renderer.domElement);
+  tcontrols.enableDamping = true;
+  tcontrols.dampingFactor = 0.25;
+  tcontrols.enableZoom = true;
+  tcontrols.update();
+  
+  // hovering camera
+  hoveringCamera = new THREE.PerspectiveCamera(
+    fieldOfView,
+    aspectRatio,
+    nearPlane,
+    farPlane
+    );
+  hoveringCamera.position.set(0, 350, 450);
+  hoveringCamera.lookAt(scene.position);
 
 
+  hcontrols = new THREE.OrbitControls(hoveringCamera, renderer.domElement);
+  hcontrols.enableDamping = true;
+  hcontrols.dampingFactor = 0.25;
+  hcontrols.enableZoom = true;
+  hcontrols.update();
+
+  let anim = lottie.loadAnimation({
+    container: document.getElementById('logo'), // the dom element that will contain the animation
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    path: 'js/data_rs.json' // the path to the animation json
+  });
+
+  lottie.loadAnimation({
+    container: document.getElementById('bike'), // the dom element that will contain the animation
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    path: 'js/data_bike.json' // the path to the animation json
+  });
+  // scene.add(anim); Illegal anim is not a THREE.Object3D()
+
+  infoButton();
 }
 
 
@@ -151,13 +191,13 @@ function createFloor() {
 
 }
 
-function move( segment ) {
+function updateBike( segment ) {
   if (pathList === null) {
     return;
   }
   // add up position for movement
   let pos = getPosition();
-  pos += 0.002 * speed ;
+  pos += 0.002 * getBikeSpeed() ;
   setPosition(pos);
   
   let point = pathList[segment].getPoint( getPosition());
@@ -180,8 +220,8 @@ function move( segment ) {
       parkedCarDoor.rotation.z = 0;
     }
   }
-  bike.mesh.position.x = point.x;//-4;
-  bike.mesh.position.y = point.y;//+4;
+  bike.mesh.position.x = point.x;
+  bike.mesh.position.y = point.y;
 
 
   let angle = getAngle(segment, getPosition());
@@ -204,6 +244,36 @@ function move( segment ) {
 
 }
 
+function updateCar( segment , car) {
+  
+  // add up position for movement
+  if (car === null) {
+    return;
+  }
+  carPosition += 0.002 * carSpeed ;
+  
+  let point = pathList[segment].getPoint( carPosition);
+  if (point === null) {
+    
+     return;
+  }
+  
+  
+  
+  car.position.x = point.x;
+  car.position.y = point.y;
+
+  let up = new THREE.Vector3( 0, 0, 1 );
+
+  let angle = getAngle(segment, carPosition);
+  if (angle > 0) {
+    angle = - Math.PI + angle;
+  }
+  // set the quaternion
+  car.quaternion.setFromAxisAngle( up, angle );
+
+}
+
 function getAngle( segment, aPosition ){
 // get the 2Dtangent to the curve
   let tangent = pathList[segment].getTangent(aPosition).normalize();
@@ -217,7 +287,15 @@ function getAngle( segment, aPosition ){
 // render
 function render() {
 
-  controls.update();
+  hcontrols.update();
+  tcontrols.update();
+
+  if ( keyboard.pressed("1") ) {
+     camera = hoveringCamera;  
+  }
+  if ( keyboard.pressed("2") ) {
+     camera = trailingCamera; 
+  }
   renderer.render(scene, camera);
   
 }
@@ -225,7 +303,8 @@ function render() {
 // animate
 function animate() {
   let segment = activeSegment;
-  move(segment);
+  updateBike(segment);
+  updateCar(CarSegments.redCar, redCar);
   requestAnimationFrame(animate);
   render();
 }
@@ -245,7 +324,8 @@ export function init() {
 
   // add the objects
   createBike();
-  
+  bike.mesh.add(trailingCamera);
+
   scene.add(bike.mesh);
 
   let lines = [];
@@ -260,7 +340,7 @@ export function init() {
   // createRoad();
 
   // createSky();
-
+  camera = hoveringCamera;
   // start a loop that will update the objects' positions 
   // and render the scene on each frame
   animate();

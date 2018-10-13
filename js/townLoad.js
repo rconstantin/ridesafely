@@ -37,7 +37,6 @@ function createTown() {
       });
   });
 
-
   let loader = new THREE.ColladaLoader();
   
   loader.load( 'assets/car-low-poly6.dae',
@@ -73,11 +72,12 @@ function createTown() {
     objLoader.setMaterials(mtl);
     objLoader.load('assets/yellow2.obj', function (object) {
         object.scale.set(5, 5, 5);
-        object.rotation.x = Math.PI/2;
         yellowCar = object;
         yellowCar.rotation.x = Math.PI/2;
+        yellowCar.rotation.y = Math.PI;
         yellowCar.rotation.z= 0;
-        yellowCar.position.set(110, 170,0);
+        yellowCar.position.set(-4, 100,0);
+        
         town.add(object);
       });
   });
@@ -100,13 +100,13 @@ function createTown() {
         
     });
     redCar.updateMatrix();
-    redCar.rotation.x = 0;
+    redCar.rotation.y = Math.PI;
     redCar.rotation.z= 0;
-    redCar.position.set(110, 100,0);
+    redCar.position.set(-4, 120,0);
     town.add(redCar);
   }); 
 
   
 }
 
-export {createTown, town, parkedCarDoor};
+export {createTown, town, parkedCarDoor, redCar, yellowCar};

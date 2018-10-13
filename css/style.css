@@ -11,6 +11,31 @@ body {
 	width: 100%;	
 }
 
+#logo {
+  position:fixed;
+  left:-200px;
+  top:-160px;
+}
+
+#bike {
+  position:fixed;
+  right:10px;
+  top:-50px;
+  width:25%;
+}
 	
-	
-	
+.button:hover {background-color: #3e8e41}
+
+.button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.modal-content {
+    position: relative;
+    right: 453px;
+    top: 96px;
+    /* height: 20px; */
+    width: 50%;	
+}

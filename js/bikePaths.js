@@ -4,6 +4,11 @@ import Colors from './colors';
 
 let pathList = [];
 
+let CarSegments = {
+  redCar: 31,
+  yellowCar: 32
+};
+
 function createPath(pId, src, dst) {
 
   pathList[pId] = new THREE.Path();
@@ -34,12 +39,12 @@ function createPaths() {
   // P2 with 0 based indices
   destP  = []; // reset destP array
   src = new THREE.Vector3(-160,-170,0);
-  destP[0] = new THREE.Vector3(-160,35,0);
+  destP[0] = new THREE.Vector3(-160,25,0);
   lines[1] = new THREE.Line();
   lines[1] = createPath(1, src, destP);
   
   // P3
-  src = new THREE.Vector3(-160,35,0);
+  src = new THREE.Vector3(-160,25,0);
   destP[0] = new THREE.Vector3(-160,185,0);
   destP[1] = new THREE.Vector3(250,185,0); 
   // 0 based indices
@@ -56,8 +61,8 @@ function createPaths() {
   
   // P5
   destP  = []; // reset destP array
-  src = new THREE.Vector3(-160,35,0);
-  destP[0] = new THREE.Vector3(-40,35,0);
+  src = new THREE.Vector3(-160,25,0);
+  destP[0] = new THREE.Vector3(-40,25,0);
   // 0 based indices
   lines[4] = new THREE.Line();
   lines[4] = createPath(4, src, destP);
@@ -91,15 +96,15 @@ function createPaths() {
   // P9
   destP  = []; // reset destP array
   src = new THREE.Vector3(-40,-170,0);
-  destP[0] = new THREE.Vector3(-40,35,0); // 35 instead of 10 to reach DP5
+  destP[0] = new THREE.Vector3(-40,25,0); 
   // 0 based indices
   lines[8] = new THREE.Line();
   lines[8] = createPath(8, src, destP);
 
   // P10
   destP  = []; // reset destP array
-  src = new THREE.Vector3(-40,35,0);
-  destP[0] = new THREE.Vector3(-10,35,0);
+  src = new THREE.Vector3(-40,25,0);
+  destP[0] = new THREE.Vector3(-10,25,0);
   destP[1] = new THREE.Vector3(-10,185,0);
   destP[2] = new THREE.Vector3(250,185,0); 
   // 0 based indices
@@ -108,26 +113,27 @@ function createPaths() {
   
   // P11
   destP  = []; // reset destP array
-  src = new THREE.Vector3(-40,35,0);
-  destP[0] = new THREE.Vector3(110,35,0);
+  src = new THREE.Vector3(-40,25,0);
+  destP[0] = new THREE.Vector3(110,25,0);
   // 0 based indices
   lines[10] = new THREE.Line();
   lines[10] = createPath(10, src, destP);
 
   // P12
   destP  = []; // reset destP array
-  src = new THREE.Vector3(110,35,0);
-  destP[0] = new THREE.Vector3(110,185,0);
-  destP[1] = new THREE.Vector3(250,185,0); 
+  src = new THREE.Vector3(110,25,0);
+  destP[0] = new THREE.Vector3(150,25,0);
+  destP[1] = new THREE.Vector3(150,185,0);
+  destP[2] = new THREE.Vector3(250,185,0); 
   // 0 based indices
   lines[11] = new THREE.Line();
   lines[11] = createPath(11, src, destP);
 
   // P13
   destP  = []; // reset destP array
-  src = new THREE.Vector3(110,35,0);
-  destP[0] = new THREE.Vector3(185,35,0);
-  destP[1] = new THREE.Vector3(185,185,0); 
+  src = new THREE.Vector3(110,25,0);
+  destP[0] = new THREE.Vector3(150,25,0);
+  destP[1] = new THREE.Vector3(150,185,0); 
   destP[2] = new THREE.Vector3(250,185,0); 
   // 0 based indices
   lines[12] = new THREE.Line();
@@ -135,9 +141,10 @@ function createPaths() {
 
   // P14
   destP  = []; // reset destP array
-  src = new THREE.Vector3(110,-170,0);
-  destP[0] = new THREE.Vector3(110,35,0);
-  destP[1] = new THREE.Vector3(110,185,0); 
+  src = new THREE.Vector3(100,-170,0);
+  destP[0] = new THREE.Vector3(135,-170,0);
+  destP[1] = new THREE.Vector3(135,25,0);
+  destP[1] = new THREE.Vector3(135,185,0); 
   destP[2] = new THREE.Vector3(250,185,0); 
   // 0 based indices
   lines[13] = new THREE.Line();
@@ -145,42 +152,62 @@ function createPaths() {
 
   // P15
   destP  = []; // reset destP array
-  src = new THREE.Vector3(110,-170,0);
-  destP[0] = new THREE.Vector3(185,-170,0);
-  destP[1] = new THREE.Vector3(185,185,0); 
+  src = new THREE.Vector3(100,-170,0);
+  destP[0] = new THREE.Vector3(150,-170,0);
+  destP[1] = new THREE.Vector3(150,185,0); 
   destP[2] = new THREE.Vector3(250,185,0); 
   // 0 based indices
   lines[14] = new THREE.Line();
   lines[14] = createPath(14, src, destP);
   
+  // Red Car Path
+  // P31 === CarSegments.redCar
+  destP = []; // reset destP array
+  src = new THREE.Vector3(250,210,0);
+  destP[0] = new THREE.Vector3(185, 210, 0);
+  destP[1] = new THREE.Vector3(185, -165, 0);
+  destP[2] = new THREE.Vector3(125, -165, 0);
+  destP[3] = new THREE.Vector3(125, 60, 0);
+  destP[4] = new THREE.Vector3(0, 60, 0);
+  destP[5] = new THREE.Vector3(-10, 40, 0);
+  destP[6] = new THREE.Vector3(-165, 40, 0);
+  destP[7] = new THREE.Vector3(-165, 185, 0);
+  destP[8] = new THREE.Vector3(-40, 185, 0);
+  destP[9] = new THREE.Vector3(-40, 40, 0);
+  destP[10] = new THREE.Vector3(125, 40, 0);
+  destP[11] = new THREE.Vector3(125, 185, 0);
+  destP[12] = new THREE.Vector3(250, 185, 0);
+  
+  lines[15] = new THREE.Line();
+  lines[15] = createPath(CarSegments.redCar, src, destP);  
+
   return lines;
 }
 
 
 function drawPath( segment ) {
-  let vertices = pathList[segment].getSpacedPoints(20);
+  let vertices = [], point;
+  let mycolor = (segment < 30) ? Colors.red : Colors.blue;
 
-  // Change 2D points to 3D points
-  for (let i = 0; i < vertices.length; i++) {
-    let point = vertices[i];
+  
+  for (var i = 0; i < pathList[segment].curves.length; i++) {
+    // Change 2D points to 3D points
+    point = new THREE.Vector3(pathList[segment].curves[i].v1.x, 
+                            pathList[segment].curves[i].v1.y, 0);
     vertices[i] = new THREE.Vector3(point.x, point.y, 0);
+    
   }
+  point = new THREE.Vector3(pathList[segment].curves[pathList[segment].curves.length-1].v2.x, 
+                            pathList[segment].curves[pathList[segment].curves.length-1].v2.y, 0);
+  vertices[pathList[segment].curves.length] = new THREE.Vector3(point.x, point.y, 0);
   let lineGeometry = new THREE.Geometry();
   lineGeometry.vertices = vertices;
-  let lineMaterial = new THREE.LineDashedMaterial({ linewidth: 1, color: Colors.red, dashSize: 3, gapSize: 3 });
+  let lineMaterial = new THREE.LineDashedMaterial({ linewidth: 1, color: mycolor, dashSize: 3, gapSize: 3 });
  
-  // let lineMaterial = new THREE.LineBasicMaterial({
-  //   color: Colors.red
-  // });
   let line = new THREE.Line(lineGeometry, lineMaterial);
-  // Move this to calling function and back to scene3D
-  //scene.add(line);
-  // Start angle and point
-  // previousAngle = getAngle( segment, position );
-  // previousPoint = pathList[segment].getPoint( position );
 
   return line;
 
 }
 
-export {createPaths, pathList};
+export {createPaths, pathList, CarSegments};
