@@ -23,14 +23,14 @@ function setPosition(pos) {
   position = pos;
 }
 
-// $('body').click(function(evt){    
-//     if(evt.target.class === "decisionPoint")
-//           return;
+$('body').click(function(evt){    
+    if ((pathList[activeSegment].getPoint(position) === null) && (backup_timer === null) && (timer_id === null))
+    {
             
-//     backup_timer = setTimeout(altCheck, 5*period);
-//       //Do processing of click event here for every element except with id menu_content
-
-// });
+       backup_timer = setTimeout(altCheck, 5*period);
+      //Do processing of click event here for every element except with id menu_content
+    }
+});
 
 function createDecisionPoints() {
   decisionPoint[0] = new THREE.Vector3(-160, -165, 0);
@@ -83,9 +83,9 @@ function check() {
   // if (pathList[activeSegment] !== null && pathList[activeSegment].getPoint(position) === null) 
   if (pathList[activeSegment].getPoint(position) === null)
   {
-     if (backup_timer === null) {
-       backup_timer = setTimeout(altCheck, 5*period);
-     }
+     // if (backup_timer === null) {
+     //   backup_timer = setTimeout(altCheck, 5*period);
+     // }
      setBikeSpeed(1);
      
      switch (activeSegment) {
