@@ -23,6 +23,15 @@ function setPosition(pos) {
   position = pos;
 }
 
+// $('body').click(function(evt){    
+//     if(evt.target.class === "decisionPoint")
+//           return;
+            
+//     backup_timer = setTimeout(altCheck, 5*period);
+//       //Do processing of click event here for every element except with id menu_content
+
+// });
+
 function createDecisionPoints() {
   decisionPoint[0] = new THREE.Vector3(-160, -165, 0);
   decisionPoint[1] = new THREE.Vector3(-160, 25, 0);
@@ -125,7 +134,7 @@ function check() {
 
 function decisionPoint1()
 {
-    let $textAndPic = $('<div></div>');
+    let $textAndPic = $('<div class="decisionPoint"></div>');
     // $textAndPic.append('What\'s this cycling sign stand for? <br />');
     $textAndPic.append('<img src="./images/right.png" />');
     // resetPosition();
@@ -165,7 +174,7 @@ function decisionPoint1()
 
 function decisionPoint2()
 {
-    let $textAndPic = $('<div></div>');
+    let $textAndPic = $('<div class="decisionPoint"></div>');
     $textAndPic.append('What\'s this cycling sign stand for? <br />');
     $textAndPic.append('<img src="./images/stop.png" />');
     // $textAndPic.append('Cautious going straight: busy traffic road ahead! <br />');
@@ -208,7 +217,7 @@ function decisionPoint2()
 
 function decisionPoint3()
 {
-    let $textAndPic = $('<div></div>');
+    let $textAndPic = $('<div class="decisionPoint"></div>');
     // $textAndPic.append('Caution: don\'t crash into car door opening! <br />');
     $textAndPic.append('<img src="./images/dooring.png" />');
     
@@ -247,7 +256,7 @@ function decisionPoint3()
 
 function decisionPoint4()
 {
-    let $textAndPic = $('<div></div>');
+    let $textAndPic = $('<div class="decisionPoint"></div>');
     // $textAndPic.append('Caution: Obey Traffic signs - Stop and check for traffic! <br />');
     $textAndPic.append('<img src="./images/left.png" />');
     
@@ -285,7 +294,7 @@ function decisionPoint4()
 
 function decisionPoint5()
 {
-    let $textAndPic = $('<div></div>');
+    let $textAndPic = $('<div class="decisionPoint"></div>');
     // $textAndPic.append('Caution: Obey Traffic signs - Stop and check for traffic! <br />');
     $textAndPic.append('<img src="./images/right.png" />');
     
@@ -324,7 +333,7 @@ function decisionPoint5()
 
 function decisionPoint6()
 {
-    let $textAndPic = $('<div></div>');
+    let $textAndPic = $('<div class="decisionPoint"></div>');
     // $textAndPic.append('Caution: Obey Traffic signs - Avoid Riding on busy sidewalks! <br />');
     $textAndPic.append('<img src="./images/left.png" />');
     
@@ -363,7 +372,7 @@ function decisionPoint6()
 
 function decisionPoint7()
 {
-    let $textAndPic = $('<div></div>');
+    let $textAndPic = $('<div class="decisionPoint"></div>');
     // $textAndPic.append('Caution: Obey Traffic laws - Avoid Riding on busy sidewalks! <br />');
     $textAndPic.append('<img src="./images/left.png" />');
     
@@ -403,7 +412,7 @@ function decisionPoint7()
 
 function decisionPoint8()
 {
-    let $textAndPic = $('<div></div>');
+    let $textAndPic = $('<div class="decisionPoint"></div>');
     // $textAndPic.append('Caution: Obey Traffic laws - Get Back on Track! <br />');
     $textAndPic.append('<img src="./images/left.png" />');
     
