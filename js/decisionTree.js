@@ -13,6 +13,9 @@ let previousActive = null;
 let backup_timer = null;
 let timer_id = null;
 
+function resetSegment() {
+  activeSegment = 0;
+}
 function resetPosition() {
   position = 0;
 }
@@ -23,14 +26,14 @@ function setPosition(pos) {
   position = pos;
 }
 
-$('body').click(function(evt){    
-    if ((pathList[activeSegment].getPoint(position) === null) && (backup_timer === null) && (timer_id === null))
-    {
+// $('body').click(function(evt){    
+//     if ((pathList[activeSegment].getPoint(position) === null) && (backup_timer === null) && (timer_id === null))
+//     {
             
-       backup_timer = setTimeout(altCheck, 5*period);
-      //Do processing of click event here for every element except with id menu_content
-    }
-});
+//        backup_timer = setTimeout(altCheck, 5*period);
+//       //Do processing of click event here for every element except with id menu_content
+//     }
+// });
 
 function createDecisionPoints() {
   decisionPoint[0] = new THREE.Vector3(-160, -165, 0);
@@ -143,8 +146,8 @@ function decisionPoint1()
     BootstrapDialog.show({
         title: 'Guess sign',
         message: $textAndPic,
-        backdrop: 'static',
-        keyboard: false,
+        closeByBackdrop: false,
+        closeByKeyboard: false,
         buttons: [{
             label: 'Continue Straight',
             action: function(dialogRef){
@@ -186,8 +189,8 @@ function decisionPoint2()
     BootstrapDialog.show({
         title: 'Guess what this means',
         message: $textAndPic,
-        backdrop: 'static',
-        keyboard: false,
+        closeByBackdrop: false,
+        closeByKeyboard: false,
         buttons: [{
             label: 'Continue Straight',
             action: function(dialogRef){
@@ -227,8 +230,8 @@ function decisionPoint3()
     BootstrapDialog.show({
         title: 'Defensive Riding: Don\'t take chances',
         message: $textAndPic,
-        backdrop: 'static',
-        keyboard: false,
+        closeByBackdrop: false,
+        closeByKeyboard: false,
         buttons: [{
             label: 'ride close',
             action: function(dialogRef){
@@ -265,8 +268,8 @@ function decisionPoint4()
     BootstrapDialog.show({
         title: 'Defensive Riding: Don\'t take chances',
         message: $textAndPic,
-        backdrop: 'static',
-        keyboard: false,
+        closeByBackdrop: false,
+        closeByKeyboard: false,
         buttons: [{
             label: 'Full stop - turn left when clear',
             action: function(dialogRef){
@@ -304,8 +307,8 @@ function decisionPoint5()
     BootstrapDialog.show({
         title: 'Defensive Riding: Don\'t take chances',
         message: $textAndPic,
-        backdrop: 'static',
-        keyboard: false,
+        closeByBackdrop: false,
+        closeByKeyboard: false,
         buttons: [{
             label: 'Full stop - turn right when clear',
             action: function(dialogRef) {
@@ -343,8 +346,8 @@ function decisionPoint6()
     BootstrapDialog.show({
         title: 'Defensive Riding: Don\'t take chances',
         message: $textAndPic,
-        backdrop: 'static',
-        keyboard: false,
+        closeByBackdrop: false,
+        closeByKeyboard: false,
         buttons: [{
             label: 'Full stop - turn left when clear',
             action: function(dialogRef){
@@ -383,8 +386,8 @@ function decisionPoint7()
     BootstrapDialog.show({
         title: 'Defensive Riding: Don\'t take chances',
         message: $textAndPic,
-        backdrop: 'static',
-        keyboard: false,
+        closeByBackdrop: false,
+        closeByKeyboard: false,
         buttons: [{
             label: 'Full stop - turn left when clear',
             action: function(dialogRef){
@@ -422,8 +425,8 @@ function decisionPoint8()
     BootstrapDialog.show({
         title: 'Defensive Riding: Don\'t take chances',
         message: $textAndPic,
-        backdrop: 'static',
-        keyboard: 'false',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
         buttons: [{
             label: 'Full stop - turn left when clear',
             action: function(dialogRef){
@@ -453,4 +456,4 @@ function decisionPoint8()
 //     return activeSegment;
 // }
 
-export {activeSegment, getBikeSpeed, getPosition, setPosition};
+export {activeSegment, resetSegment, getBikeSpeed, getPosition, setPosition};

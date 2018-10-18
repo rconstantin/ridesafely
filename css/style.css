@@ -16,6 +16,11 @@ body {
   left:-200px;
   top:-160px;
 }
+#output {
+	position: fixed;
+	left: -100px;
+	top:-160px;
+}
 
 #bike {
   position:fixed;
@@ -34,8 +39,12 @@ body {
 
 .modal-content {
     position: relative;
-    right: 453px;
-    top: 96px;
+    right: 390px;
+    top: 60px;
     /* height: 20px; */
     width: 50%;	
+}
+
+.bootstrap-dialog .bootstrap-dialog-close-button {
+	 visibility: hidden;
 }

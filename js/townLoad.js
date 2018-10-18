@@ -1,7 +1,7 @@
 'use strict';
 
 let town = null, parkedCarDoor = null;
-let parkedCar = null, yellowCar = null, redCar = null;
+let parkedCar = null, yellowCar = null, redCar = null, doorCollider;
 
 function createTown() {
 
@@ -38,14 +38,37 @@ function createTown() {
   });
 
   let loader = new THREE.ColladaLoader();
-  
+  let bbox = null;
   loader.load( 'assets/car-low-poly6.dae',
     function (collada) {
       parkedCar = collada.scene;
       parkedCar.scale.set(3,3,3);
       parkedCar.traverse(function (child){
          if (child instanceof THREE.SkinnedMesh){  
-            parkedCarDoor = child.skeleton.bones[0];
+         	  parkedCarDoor = child;
+            parkedCarDoor.bone = child.skeleton.bones[0];
+            // parkedCarDoor.long = 3;
+            // parkedCarDoor.wide = 3;
+            // child.geometry.computeBoundingBox();
+           //  parkedCarDoor.bBox = new THREE.BoundingBoxHelper(child.geometry.boundingBox.min,
+  									// child.geometry.boundingBox.max);
+            // let colliderGeometry = new THREE.CubeGeometry(0.5,4,5,1,1,1,1);
+            // let wireMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe:true } );
+            // doorCollider = new THREE.Mesh( colliderGeometry, wireMaterial );
+            // // doorCollider.updateMatrix();
+            // doorCollider.position.set(-110,-170,3);
+            // bbox = new THREE.Box3();
+            // bbox.setFromObject( doorCollider );
+            // // parkedCarDoor.add(doorCollider);
+            // doorCollider.bBox = bbox;
+            let colliderGeometry = new THREE.CubeGeometry(0.5,4,5,1,1,1,1);
+            let wireMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe:true } );
+            let doorCollider = new THREE.Mesh( colliderGeometry, wireMaterial );
+            doorCollider.position.set(-110,-170,3);
+            doorCollider.long = 0.5;
+            doorCollider.wide = 4;
+            parkedCarDoor.doorCollider = doorCollider;
+
           }
           child.traverse(function(e){
             e.castShadow = true;
@@ -60,6 +83,7 @@ function createTown() {
       parkedCar.rotation.z = Math.PI/2;
       parkedCar.rotation.x= 0;
       parkedCar.position.set(-110, -175,0);
+      // town.add(doorCollider);
       town.add(parkedCar);
   }); 
 
@@ -102,7 +126,9 @@ function createTown() {
     redCar.updateMatrix();
     redCar.rotation.y = Math.PI;
     redCar.rotation.z= 0;
-    redCar.position.set(-4, 120,0);
+    redCar.position.set(250, 250,0);
+    redCar.long = 8;
+    redCar.wide = 6;
     town.add(redCar);
   }); 
 

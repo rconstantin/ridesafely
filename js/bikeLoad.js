@@ -105,12 +105,14 @@ function createBike() {
           // object.rotation.z=Math.PI/2;
           object.position.set(0,-21,-9);
           rider = object;
-      
           bike.mesh.add(object);
+          bike.rider = rider;
        });
   });
 
   // bike.mesh.position.z = 10;
+  bike.mesh.wide = 1;
+  bike.mesh.long = 3;
   bike.mesh.position.z = 2.2;
   bike.mesh.scale.set(0.2,0.2,0.2);
 

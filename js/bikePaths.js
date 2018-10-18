@@ -62,7 +62,9 @@ function createPaths() {
   // P5
   destP  = []; // reset destP array
   src = new THREE.Vector3(-160,25,0);
-  destP[0] = new THREE.Vector3(-40,25,0);
+  destP[0] = new THREE.Vector3(-150,25,0);
+  destP[1] = new THREE.Vector3(-150,40,0);
+  destP[2] = new THREE.Vector3(-40,40,0);
   // 0 based indices
   lines[4] = new THREE.Line();
   lines[4] = createPath(4, src, destP);
