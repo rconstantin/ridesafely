@@ -37,14 +37,36 @@ body {
   transform: translateY(4px);
 }
 
+   /* height: 20px; */
+    /*width: 50%; */
 .modal-content {
     position: relative;
     right: 390px;
     top: 60px;
-    /* height: 20px; */
-    width: 50%;	
+    width: fit-content;
+}
+
+.decisionPoint1 {
+  right: -1500px !important;
+  top: 425px !important;
+  opacity: 0.7 !important;
+}
+
+.decisionPoint2 {
+  right: -1400px !important;
+  top: 235px !important;
+  opacity: 0.7 !important;
 }
 
 .bootstrap-dialog .bootstrap-dialog-close-button {
 	 visibility: hidden;
+}
+
+.modal.in .modal-dialog {
+    opacity: 0.8;
+    filter: brightness(80%);
+}
+.welcomeDialog {
+  opacity: 1.0;
+  filter: brightness(100%);
 }

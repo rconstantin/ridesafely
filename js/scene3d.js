@@ -4,47 +4,35 @@
 'use strict';
 
 import debug3dAxes from './dbg_3d_coord';
-import infoButton from './info';
-import {createPaths, pathList, CarSegments} from './bikePaths';
+import {infoButton} from './info';
+import {createPaths, pathList, CarSegments, PedSegments} from './bikePaths';
 import Colors from './colors';
-import {activeSegment, resetSegment, getBikeSpeed, getPosition, setPosition} from './decisionTree';
-import {createBike, bike, pedals, front_wheel, back_wheel} from './bikeLoad';
-import {createTown, town, parkedCarDoor, redCar, yellowCar} from './townLoad';
+import {activeSegment, resetSegment, resetPosition, getBikeSpeed, getPosition, setPosition} from './decisionTree';
+import {createBike, bike} from './bikeLoad';
+import {createTown, town, parkedCarDoor, cars, pedestrians} from './townLoad';
+import {createCameras, getActiveCamera, setActiveCamera, hoveringCamera, trailingCamera, orbitControls} from './cameraControls';
+import {createLight} from './createLights';
 
-
-let renderer, scene, trailingCamera, tcontrols, hoveringCamera, hcontrols;
-let carPosition = 0;
+let renderer, scene;
+let carPosition = 0, boy1Position = 0, robot1Position = 0;
 let keyboard = new THREEx.KeyboardState();
-let camera = hoveringCamera, carSpeed = 0.1;
+let carSpeed = 0.1, pedSpeed = 0.05;
 let animId = null;
 let gameEnd = false;
+let clock = new THREE.Clock();
+let rs_logo = null, bike_anim = null;
+let backReset = false, backReset1 = false;
+let forwardReset = true, forwardReset1 = true;
+let pauseCount = 0, crashed = false;
+// let temp = new THREE.Vector3;
+// let goal = new THREE.Object3D;
 
 function clearText()
 {   document.getElementById('output').innerHTML = '..........';   }
 
 function appendText(txt)
-{   document.getElementById('output').innerHTML += txt;   }
-
-
-
-function createLights() {
-
-  let hemisphereLight, ambientLight, shadowLight;
-
-  // A hemisphere light is a gradient colored light; 
-  // the first parameter is the sky color, the second parameter is the ground color, 
-  // the third parameter is the intensity of the light
-  hemisphereLight = new THREE.HemisphereLight(0xaaaaaa,0x000000, 0.9);
-  ambientLight = new THREE.AmbientLight(0x111111);
-  // A directional light shines from a specific direction. 
-  // It acts like the sun, that means that all the rays produced are parallel. 
-  shadowLight = new THREE.DirectionalLight(0xffffff, 0.9);
-  
-  // to activate the lights, just add them to the scene
-  scene.add(hemisphereLight);  
-  scene.add(shadowLight);
-  scene.add(ambientLight);
-  // scene.add(shadowLight);
+{   
+  document.getElementById('output').innerHTML += txt;   
 }
 
 
@@ -79,45 +67,7 @@ function createScene() {
   container.appendChild(renderer.domElement);
 
  
-  let aspectRatio = width/height;
-  let fieldOfView = 45;
-  let nearPlane = 1,
-      farPlane = 10000;
-  // Camera setup: Do not add to scene to avoid rotation problems   
-  trailingCamera = new THREE.PerspectiveCamera(
-    fieldOfView,
-    aspectRatio,
-    nearPlane,
-    farPlane
-    );
- 
-
-  trailingCamera.position.set(0, -250, 50);
-
-  tcontrols = new THREE.OrbitControls(trailingCamera, renderer.domElement);
-  tcontrols.enableDamping = true;
-  tcontrols.dampingFactor = 0.25;
-  tcontrols.enableZoom = true;
-  tcontrols.update();
-  
-  // hovering camera
-  hoveringCamera = new THREE.PerspectiveCamera(
-    fieldOfView,
-    aspectRatio,
-    nearPlane,
-    farPlane
-    );
-  hoveringCamera.position.set(0, 350, 450);
-  hoveringCamera.lookAt(scene.position);
-
-
-  hcontrols = new THREE.OrbitControls(hoveringCamera, renderer.domElement);
-  hcontrols.enableDamping = true;
-  hcontrols.dampingFactor = 0.25;
-  hcontrols.enableZoom = true;
-  hcontrols.update();
-
-  let anim = lottie.loadAnimation({
+  rs_logo = lottie.loadAnimation({
     container: document.getElementById('logo'), // the dom element that will contain the animation
     renderer: 'svg',
     loop: true,
@@ -125,7 +75,7 @@ function createScene() {
     path: 'js/data_rs.json' // the path to the animation json
   });
 
-  lottie.loadAnimation({
+  bike_anim = lottie.loadAnimation({
     container: document.getElementById('bike'), // the dom element that will contain the animation
     renderer: 'svg',
     loop: true,
@@ -196,33 +146,62 @@ function simpleCollision(obj1, obj2)
     return false;
   }
 }
-// This ray based collision works but seems excessive for the simple collision situation
-// function rayCollision() {
-//   let originPoint = bikeCollider.position.clone();
-//     // clearText();
 
-//   for (let vertexIndex = 0; vertexIndex < bikeCollider.geometry.vertices.length; vertexIndex++)
-//   {   
-//       let localVertex = bikeCollider.geometry.vertices[vertexIndex].clone();
-//       let globalVertex = localVertex.applyMatrix4( bikeCollider.matrix );
-//       let directionVector = globalVertex.sub( bikeCollider.position );
-//
-//       let ray = new THREE.Ray( originPoint, directionVector.clone().normalize() );
-//       let doorCollisionResult = (ray.intersectsBox( doorCollider.bBox ));
+function welcomeDialog() {
+    let $textAndPic = $('<div class="welcomeDialog"></div>');
+    $textAndPic.append('<img src="./images/dialog.png" />');
+    $textAndPic.append('<p> In this level, the user is prompted to choose alternate paths for the cyclist. \
+                        The objective of the game to \n make it to the end without a crash.</p>');
+    $textAndPic.append('<div class="row"> \
+                          <div class="border col-md-6 boxlayout"> \
+                             <ul> Sample Interactions: \
+                               <li> Scene 1: Cyclist stops at intersection. The user decides between going straight or turning right.</li> \
+                               <li> Scene 2: the user is prompted to choose between passing close or away from the parked car. </li> \
+                               <li> Scene 3: the user is prompted to choose between going straight or turning left against traffic</li>\
+                               <li> Scene 4: The Cyclist crashes into incoming car and game ends</li> \
+                             </ul> \
+                          </div> \
+                          <div class="border col-md-6 boxlayout"> \
+                            <ul> Controls: \
+                              <li> To Choose the Top Hovering Camera, Press 1 (Mobile TBD)</li> \
+                              <li> To Choose the Trailing Camera, Press 2 (Mobile TBD)</li> \
+                              <li> To Zoom in and Out, use middle mouse wheel(Mobile TBD)</li> \
+                              <li> To Rotate around the Z axis, use left mouse button(Mobile TBD)</li> \
+                              <li> To move the Camera around, use right mouse button (Mobile TBD)</li> \
+                            </ul> \
+                          </div> \
+                        </div>');
+    
+    BootstrapDialog.show({
+      title: 'Ride Safely Interactive',
+      message: $textAndPic,
+      closeByBackdrop: false,
+      closeByKeyboard: false,
+      buttons: [{
+        label: 'Start Game',
+        action: function(dialogRef){
+          dialogRef.close();
+          // gameEnd = false;
+          animate();
+        }
+      }, {
+        label: 'Quit Game',
+        action: function(dialogRef) {
+          dialogRef.close();
+          return;
+        }
+    }]
+  });
+}
 
-//       if ( doorCollisionResult === true) 
-//       {
-//         appendText(" Hit Door");
-//         console.log(" Hit Door ");
-//       }
-
-//   }
-// }
 function restartGame() 
 {
+
   location.reload();
+
   gameEnd = false;
 }
+
 function crashBike() {
   // bike.mesh.rotation.z = 0.2;
   // bike.mesh.position.set(bike.mesh.position.x-0.2, bike.mesh.position.y-0.2,bike.mesh.position.z); 
@@ -246,13 +225,72 @@ function crashBike() {
               cancelAnimationFrame(animId);
 
               dialogRef.close();
-              
+              gameEnd = true;
               return;
           }
       }]
   });
+  // stops further animation
   gameEnd = true;
 }
+
+function collisionTests(segment) {
+  
+  if (simpleCollision(bike.mesh, cars.redCar) === true) {
+    console.log("Hit Red Car!");
+    crashBike();
+  }
+
+  if (simpleCollision(bike.mesh, cars.blueCar) === true) {
+    console.log("Hit Blue Car!");
+    crashBike();
+  }
+
+  if (simpleCollision(bike.mesh, pedestrians.walkingBoy) === true) {
+    console.log("Hit Boy!");
+    crashBike();
+  }
+
+  if (simpleCollision(bike.mesh, pedestrians.walkingGirl) === true) {
+    console.log("Hit Girl!");
+    crashBike();
+
+  }
+
+  if (simpleCollision(bike.mesh, pedestrians.runningRobot) === true) {
+    console.log("Hit Running Robot!");
+    crashBike();
+
+  }
+
+  if (simpleCollision(bike.mesh, pedestrians.runningRobot1) === true) {
+    console.log("Hit Running Robot1!");
+    crashBike();
+    
+  }
+
+  if (parkedCarDoor !== null) {
+    if (segment === 6) {
+      // moving towards parked car. For now just open the door
+      if (Math.random() < 0.005) {
+         parkedCarDoor.bone.rotation.z = -1.5;
+         parkedCarDoor.doorCollider.position.y = -170;
+      }
+      // rayCollision();
+      
+      if (simpleCollision(bike.mesh, parkedCarDoor.doorCollider))
+      {
+        console.log("Hit Car Door!");
+        crashBike();
+      }
+    }
+    else {
+      parkedCarDoor.bone.rotation.z = 0;
+      parkedCarDoor.doorCollider.position.y = -172;
+    }
+  }
+}
+
 function updateBike( segment ) {
   if (pathList === null) {
     return;
@@ -273,6 +311,9 @@ function updateBike( segment ) {
   if (bike.mesh === null) {
     return;
   }
+  // GET RID OF AE side animation to avoid distraction
+  rs_logo.destroy();
+  bike_anim.destroy();
 
   bike.mesh.position.x = point.x;
   bike.mesh.position.y = point.y;
@@ -288,33 +329,13 @@ function updateBike( segment ) {
   // set the quaternion
   bike.mesh.quaternion.setFromAxisAngle( up, angle );
 
-  if (bike.mesh.children.length > 5) 
+  if (bike.mesh.children.length > 4) 
   {
-    pedals.rotation.x -=0.1;
-    front_wheel.rotation.x -=0.1;
-    back_wheel.rotation.x -=0.1;
+    // pedals.rotation.x -= 0.08;
+    bike.front_wheel.rotation.x -=0.1;
+    bike.back_wheel.rotation.x -=0.1;
 
-    if (simpleCollision(bike.mesh, redCar) === true) {
-      console.log("Hit Car!");
-      crashBike();
-    }
-
-    if (parkedCarDoor !== null) {
-      if (segment === 6) {
-        // moving towards parked car. For now just open the door
-        parkedCarDoor.bone.rotation.z = -1.5;
-        // rayCollision();
-        
-        if (simpleCollision(bike.mesh, parkedCarDoor.doorCollider))
-        {
-          console.log("Hit Car Door!");
-          crashBike();
-        }
-      }
-      else {
-        parkedCarDoor.bone.rotation.z = 0;
-      }
-    }
+    collisionTests(segment);
     
   }
 }
@@ -325,22 +346,37 @@ function updateCar( segment , car) {
   if (car === null) {
     return;
   }
-  carPosition += 0.002 * carSpeed ;
+  carPosition += 0.0015 * carSpeed ;
   
-  let point = pathList[segment].getPoint( carPosition);
-  if (point === null) {
-    
+  let point = pathList[segment].getPoint(carPosition);
+  if (point === null) 
+  {
+     carPosition = 0;
      return;
   }
   
+  if (segment === CarSegments.blueCar) {
+
+    if ((pauseCount > 0) && (pauseCount < 80)) 
+    {
+       pauseCount++;
+       return;
+    }
+    if (pauseCount >= 80) 
+    {
+      pauseCount = 0;
+    }
+  
+    // pause at stop sign
+    if ((point.x + 60.0 < 1)  &&  (point.x + 60.0 > 0) &&  (point.y === -165)) {
+      // carPosition -= 0.0015 * carSpeed ;
+      pauseCount = 1;
+      return;
+    } 
+  }
   
   car.position.x = point.x;
   car.position.y = point.y;
-
-  // cc.position.x = point.x;
-  // cc.position.y = point.y;
-  
-  // redCar.bbox = bbox1;
   
 
   let up = new THREE.Vector3( 0, 0, 1 );
@@ -349,9 +385,74 @@ function updateCar( segment , car) {
   if (angle > 0) {
     angle = - Math.PI + angle;
   }
+  else { angle = Math.PI + angle;}
   // set the quaternion
   car.quaternion.setFromAxisAngle( up, angle );
+
+
+}
+
+
+function updatePedestrians() {
   
+  let segment = PedSegments.boy1;
+  let segment1 = PedSegments.robot1;
+  // add up position for movement
+  if (pedestrians === null) {
+    return;
+  }
+  boy1Position += 0.002 * pedSpeed ;
+  robot1Position += 0.005 * pedSpeed ;
+
+  let point = pathList[segment].getPoint(boy1Position);
+  let point1 = pathList[segment1].getPoint(robot1Position);
+  if (point === null) {
+     boy1Position = 0;
+     return;
+  }
+  if (point1 === null) {
+    robot1Position = 0;
+    return;
+  }
+  let prevPosition = pedestrians.walkingBoy.position.y;
+  let prevPosition1 = pedestrians.runningRobot.position.x;
+  if (prevPosition != 0) {
+    if (prevPosition > point.y && backReset === false) {
+      pedestrians.walkingBoy.rotation.y = 0;
+      pedestrians.walkingGirl.rotation.y = 0;
+      backReset = true;
+      forwardReset = false;
+    }
+    else if (prevPosition < point.y && forwardReset === false) {
+      pedestrians.walkingBoy.rotation.y = Math.PI;
+      pedestrians.walkingGirl.rotation.y = Math.PI;
+      backReset = false;
+      forwardReset = true;
+    }
+  }
+  if (prevPosition1 != 0) {
+    if (prevPosition1 > point1.x && backReset1 === false) {
+      pedestrians.runningRobot.rotation.y = 3*Math.PI/2;
+      pedestrians.runningRobot1.rotation.y = 3*Math.PI/2;
+      backReset1 = true;
+      forwardReset1 = false;
+    }
+    else if (prevPosition1 < point1.x && forwardReset1 === false) {
+      pedestrians.runningRobot.rotation.y = Math.PI/2;
+      pedestrians.runningRobot1.rotation.y = Math.PI/2;
+      backReset1 = false;
+      forwardReset1 = true;
+    }
+  }
+  pedestrians.walkingBoy.position.x = point.x;
+  pedestrians.walkingGirl.position.x = point.x - 5;
+  pedestrians.walkingBoy.position.y = pedestrians.walkingGirl.position.y = point.y;
+  
+  pedestrians.runningRobot.position.x = point1.x;
+  pedestrians.runningRobot1.position.x = point1.x;
+  pedestrians.runningRobot.position.y = point1.y;
+  pedestrians.runningRobot1.position.y = point1.y - 5;
+
 
 }
 
@@ -365,19 +466,55 @@ function getAngle( segment, aPosition ) {
   return angle;
 }
 
+
 // render
 function render() {
 
-  hcontrols.update();
-  tcontrols.update();
+  orbitControls.hcontrols.update();
+  orbitControls.tcontrols.update();
 
   if ( keyboard.pressed("1") ) {
-     camera = hoveringCamera;  
+     setActiveCamera(hoveringCamera);  
   }
   if ( keyboard.pressed("2") ) {
-     camera = trailingCamera; 
+     setActiveCamera(trailingCamera); 
   }
-  renderer.render(scene, camera);
+  let activeCamera = getActiveCamera();
+  if (activeCamera)
+  {
+    renderer.render(scene, activeCamera);
+  }
+
+  let delta = clock.getDelta();
+  if (bike.mixer) 
+  {
+    bike.mixer.update(delta);
+  }
+  if (town.billBoard && town.billBoard.mixer) 
+  {
+    town.billBoard.mixer.update(delta);
+  }
+  if (pedestrians.walkingBoy && pedestrians.walkingBoy.mixer) 
+  {
+    pedestrians.walkingBoy.mixer.update(delta);
+  }
+  if (pedestrians.walkingBoy1 && pedestrians.walkingBoy1.mixer) 
+  {
+    pedestrians.walkingBoy1.mixer.update(delta);
+  }
+  if (pedestrians.walkingGirl && pedestrians.walkingGirl.mixer) 
+  {
+    pedestrians.walkingGirl.mixer.update(delta);
+  }
+  if (pedestrians.runningRobot && pedestrians.runningRobot.mixer) 
+  {
+    pedestrians.runningRobot.mixer.update(delta);
+  }
+  if (pedestrians.runningRobot1 && pedestrians.runningRobot1.mixer) 
+  {
+    pedestrians.runningRobot1.mixer.update(delta);
+  }
+  // if (bike.mixer1) bike.mixer1.update(delta);
   
 }
 // HANDLE MOUSE EVENTS
@@ -398,16 +535,25 @@ function animate() {
 
   if (gameEnd === true) 
   {
-
     return;
   }
 
   let segment = activeSegment;
 
-  updateCar(CarSegments.redCar, redCar);
+  updateCar(CarSegments.redCar, cars.redCar);
+
+  updateCar(CarSegments.blueCar, cars.blueCar);
   
   updateBike(segment);
+
+  updatePedestrians();
+
   animId = requestAnimationFrame(animate);
+
+  // temp.setFromMatrixPosition(goal.matrixWorld);
+  // hoveringCamera.position.lerp(temp, 0.2);
+  //hoveringCamera.lookAt( bike.mesh.position );
+
   render();
 }
 
@@ -416,9 +562,12 @@ export function init() {
   // set up the scene, the camera and the renderer
   createScene();
 
+
+  createCameras(scene, renderer, bike);
+
   createFloor();
   // add the lights
-  createLights();
+  createLight(scene);
 
   // add town components: roads, buildings cars
   createTown();
@@ -431,13 +580,18 @@ export function init() {
   // add the objects
   createBike();
   
-  bike.mesh.add(trailingCamera);
+
   // // Bike Collider
   // let colliderGeometry = new THREE.CubeGeometry(2,3,3,1,1,1);
   // let wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:true } );
   // bikeCollider = new THREE.Mesh( colliderGeometry, wireMaterial );
   // scene.add(bikeCollider);
   scene.add(bike.mesh);
+
+  bike.mesh.add(trailingCamera);
+  setActiveCamera(trailingCamera);
+  // goal.position.set(0, -400, 50);
+  // bike.mesh.add(goal);
 
   // let ccGeometry = new THREE.CubeGeometry( 50, 50, 25, 1, 1, 1 );
   // let ccMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } ); //, wireframe:true } );
@@ -452,8 +606,6 @@ export function init() {
   // scene.add(cc);
   // collidableMeshList.push(cc);
 
-
-
   let lines = [];
 
   lines = createPaths();
@@ -466,10 +618,12 @@ export function init() {
   // createRoad();
 
   // createSky();
-  camera = hoveringCamera;
+  
   // start a loop that will update the objects' positions 
   // and render the scene on each frame
-  animate();
+  //animate();
+  welcomeDialog();
+  gameEnd = false;
 }
 
 

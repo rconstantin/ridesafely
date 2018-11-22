@@ -1,11 +1,6 @@
 'use strict';
 
-let back_wheel = null,
-    front_wheel = null,
-    rider = null,
-    pedals = null,
-    bike = null;
-let frame = null;
+let bike = null;
 
 
 function createBike() {
@@ -14,6 +9,7 @@ function createBike() {
   // bike.backWheel = new THREE.Object3D();
   // bike.frontWheel = new THREE.Object3D();
   let mtlLoader = new THREE.MTLLoader();
+  let jloader = new THREE.JSONLoader();
   mtlLoader.setTexturePath('assets/');
   mtlLoader.load('assets/Wheel_back1.mtl', function (mtl) {
 
@@ -28,7 +24,7 @@ function createBike() {
         // bike.backWheel.add(object);
         object.position.y = -26;
         object.position.z = -5.5;
-        back_wheel = object;
+        bike.back_wheel = object;
         bike.mesh.add(object);
         // move to scene3d
         // scene.add(bike.mesh);
@@ -50,7 +46,7 @@ function createBike() {
           object.position.z = -5.5;
           // bike.frontWheel.add(object);
           bike.mesh.add(object);
-          front_wheel = object;
+          bike.front_wheel = object;
        });
   });
    
@@ -67,55 +63,44 @@ function createBike() {
           object.rotation.z = Math.PI/2;
           object.position.set(0,-10,-5.5);
           bike.mesh.add(object);
-          frame = object;
+          // frame = object;
        });
   });
 
-  // Pedals+crankArm
-
-  mtlLoader.load('assets/pedalsCrankArms.mtl', function (mtl) {
-
-    mtl.preload();
-
-    var objLoader = new THREE.OBJLoader();
-    objLoader.setMaterials(mtl);
-        objLoader.load('assets/pedalsCrankArms.obj', function (object) {
-          object.scale.set(0.5, 0.5, 0.5);
-          // object.rotation.z = Math.PI/2;
-          object.position.set(0.5,-19,-5.0);
-          // object.position.z = 0;
-          // bike.frontWheel.add(object);
-          pedals = object;
-          bike.mesh.add(object);
-
-       });
-  });
-
-  mtlLoader.load('assets/riderinpos.mtl', function (mtl) {
-
-    mtl.preload();
-
-    var objLoader = new THREE.OBJLoader();
-    objLoader.setMaterials(mtl);
-       objLoader.load('assets/riderinpos.obj', function (object) {
-          object.scale.set(5, 5, 5);
-          object.rotation.y = Math.PI;
-          object.rotation.x = Math.PI;
-          object.rotation.x=Math.PI/2;
-          // object.rotation.z=Math.PI/2;
-          object.position.set(0,-21,-9);
-          rider = object;
-          bike.mesh.add(object);
-          bike.rider = rider;
-       });
-  });
-
-  // bike.mesh.position.z = 10;
-  bike.mesh.wide = 1;
-  bike.mesh.long = 3;
-  bike.mesh.position.z = 2.2;
-  bike.mesh.scale.set(0.2,0.2,0.2);
+   // From Blender Model: low-poly-cycle-enzo9-9.json
+   jloader.load('./assets/low-poly-cycle.json', function (geometry, materials) {
+      materials.forEach(function (material) {
+        material.skinning = true;
+      });
+      bike.rider = new THREE.SkinnedMesh(
+        geometry,
+        materials//new THREE.MeshFaceMaterial(materials)
+      );
+      bike.rider.scale.set(8,8,8);
+      bike.rider.position.set(0,-19,-10);
+      bike.rider.rotation.y = Math.PI;
+      bike.rider.rotation.x = Math.PI/2;
+      bike.mesh.add(bike.rider);
+      
+      bike.mixer = new THREE.AnimationMixer(bike.rider);
+      bike.anim = bike.mixer.clipAction(geometry.animations[1]);
+      bike.anim.setEffectiveWeight(1);
+      bike.anim.enabled = true;
+      bike.anim.play();
+      bike.anim.paused = true;
+      bike.anim.timeScale = 2;
+      
+      // bike.anim1.paused = false;
+      bike.anim.paused = false;
+    });
+    
+    
+    // bike.mesh.position.z = 10;
+    bike.mesh.wide = 1;
+    bike.mesh.long = 3;
+    bike.mesh.position.z = 2.2;
+    bike.mesh.scale.set(0.2,0.2,0.2);
 
 }
 
-export {createBike, bike, pedals, front_wheel, back_wheel}; //{createBike, bike, pedals, front_wheel, back_wheel, rider};
+export {createBike, bike}; //{createBike, bike, pedals, front_wheel, back_wheel, rider};
