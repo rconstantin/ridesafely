@@ -10,7 +10,7 @@ import Colors from './colors';
 import {activeSegment, resetSegment, resetPosition, getBikeSpeed, getPosition, setPosition} from './decisionTree';
 import {createBike, bike} from './bikeLoad';
 import {createTown, town, parkedCarDoor, cars, pedestrians} from './townLoad';
-import {createCameras, getActiveCamera, setActiveCamera, hoveringCamera, trailingCamera, orbitControls} from './cameraControls';
+import {createCameras, getActiveCamera, setActiveCamera, hoveringCamera, trailingCamera, orbitControls, inspectCamera} from './cameraControls';
 import {createLight} from './createLights';
 
 let renderer, scene;
@@ -24,8 +24,7 @@ let rs_logo = null, bike_anim = null;
 let backReset = false, backReset1 = false;
 let forwardReset = true, forwardReset1 = true;
 let pauseCount = 0, crashed = false;
-// let temp = new THREE.Vector3;
-// let goal = new THREE.Object3D;
+
 
 function clearText()
 {   document.getElementById('output').innerHTML = '..........';   }
@@ -272,7 +271,7 @@ function collisionTests(segment) {
   if (parkedCarDoor !== null) {
     if (segment === 6) {
       // moving towards parked car. For now just open the door
-      if (Math.random() < 0.005) {
+      if (Math.random() < 0.0025) {
          parkedCarDoor.bone.rotation.z = -1.5;
          parkedCarDoor.doorCollider.position.y = -170;
       }
@@ -292,6 +291,9 @@ function collisionTests(segment) {
 }
 
 function updateBike( segment ) {
+
+  let temp = new THREE.Vector3;
+
   if (pathList === null) {
     return;
   }
@@ -318,6 +320,10 @@ function updateBike( segment ) {
   bike.mesh.position.x = point.x;
   bike.mesh.position.y = point.y;
   
+  temp.setFromMatrixPosition(bike.mesh.tripod.matrixWorld);
+    
+  inspectCamera.position.lerp(temp, 0.2);
+  inspectCamera.lookAt( bike.mesh.position );
 
   let angle = getAngle(segment, getPosition());
   if (angle > 0) {
@@ -335,7 +341,7 @@ function updateBike( segment ) {
     bike.front_wheel.rotation.x -=0.1;
     bike.back_wheel.rotation.x -=0.1;
 
-    collisionTests(segment);
+    // collisionTests(segment);
     
   }
 }
@@ -547,6 +553,8 @@ function animate() {
   updateBike(segment);
 
   updatePedestrians();
+
+  collisionTests(segment);
 
   animId = requestAnimationFrame(animate);
 

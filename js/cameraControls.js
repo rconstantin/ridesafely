@@ -1,13 +1,14 @@
 'use strict';
 
 let activeCamera = null, trailingCamera = null, hoveringCamera = null, orbitControls = null;
+let inspectCamera = null;
 
 
 function createCameras( scene , renderer) {
 
  
   let aspectRatio = window.innerWidth/window.innerHeight;
-  let fieldOfView = 70, fieldOfView1 = 45;  //45;
+  let fieldOfView = 45, fieldOfView1 = 45;  //45;
   let nearPlane = 1, //1,
       farPlane = 1000; //10000;
 
@@ -62,6 +63,14 @@ function createCameras( scene , renderer) {
   orbitControls.hcontrols.enableZoom = true;
   orbitControls.hcontrols.update();
 
+  inspectCamera = new THREE.PerspectiveCamera(
+    35,
+    aspectRatio,
+    0.1,
+    1000
+    );
+  inspectCamera.position.set(0,2,25);
+
 }
 
 function setActiveCamera (aCamera) {
@@ -71,4 +80,4 @@ function getActiveCamera() {
 	return activeCamera;
 }
 
-export {createCameras, getActiveCamera, setActiveCamera, hoveringCamera, trailingCamera, orbitControls};
+export {createCameras, getActiveCamera, setActiveCamera, hoveringCamera, trailingCamera, orbitControls, inspectCamera};

@@ -246,6 +246,23 @@ mtlLoader.load('assets/dp9-arrows.mtl', function (mtl) {
       });
   });
 
+  mtlLoader.load('assets/finish-line.mtl', function (mtl) {
+
+    mtl.preload();
+
+    let objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(mtl);
+    objLoader.load('assets/finish-line.obj', function (object) {
+        object.scale.set(10, 10, 10);
+        object.rotation.x = 0;
+        object.rotation.y = -Math.PI/2;
+        object.rotation.z = -Math.PI/2;
+        object.position.set(240, 200, 2);
+        // town = object;
+        town.add(object);
+      });
+  });
+
   mtlLoader.load('assets/one-way.mtl', function (mtl) {
 
     mtl.preload();

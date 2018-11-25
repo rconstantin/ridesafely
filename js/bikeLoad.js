@@ -2,7 +2,6 @@
 
 let bike = null;
 
-
 function createBike() {
   bike = new THREE.Object3D();
   bike.mesh = new THREE.Object3D();
@@ -100,6 +99,11 @@ function createBike() {
     bike.mesh.long = 3;
     bike.mesh.position.z = 2.2;
     bike.mesh.scale.set(0.2,0.2,0.2);
+
+    // tripod for inspection camera
+    bike.mesh.tripod = new THREE.Object3D;
+    bike.mesh.add(bike.mesh.tripod);
+    bike.mesh.tripod.position.set(0,2,25);
 
 }
 
