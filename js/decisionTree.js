@@ -12,12 +12,12 @@ let decisionPoints = [];
 let period = 2000; // periodic timer
 let activeSegment = 0;
 let position = 0;
-let bikeSpeed = 1;
+let bikeSpeed = 2;
 let list = pathList;
 let previousActive = null;
 let timer_id = null;
 let inspect_id = null, inspect_period = 500;
-let choose_timer_id = null, choose_period = 10000;
+let choose_timer_id = null, choose_period = 20000, interval = null;
 
 function resetSegment() {
   activeSegment = 0;
@@ -150,7 +150,7 @@ function chooseForRider(segment1, segment2, arrowObj, speed1, speed2) {
     });
 }
 
-function restartCycling(segment, dialogRef, speed, arrowObj) {
+function restartCycling(segment, dialogRef, speed, arrowObj, curInterval) {
     activeSegment = segment; 
     // position = 0;
     resetPosition(); 
@@ -168,25 +168,47 @@ function restartCycling(segment, dialogRef, speed, arrowObj) {
     if (arrowObj) {
        arrowObj.position.z = -1; // hide directional arrows
     }
-    
+    if (curInterval) {
+        clearInterval(curInterval);
+    }
     bike.anim.paused = false;
     setActiveCamera(trailingCamera);
     setHLIntensity(4.0);
+}
+
+function displayCountdown(seconds_left) {
+
+    interval = setInterval(function() {
+        if (seconds_left <= 6) {
+            $( ".display_cnt" ).html( "<font color='red'>" + --seconds_left + "</font>" );
+
+        } else {
+            $('.display_cnt').html(--seconds_left);
+        }
+        if (seconds_left <= 0)
+        {
+           // $('#display_id').append("<span>Going with Random Choice!</span>");
+           clearInterval(interval);
+           interval = null;
+        }
+    }, 1000);
+    return interval;
 }
 
 function decisionPoint1()
 {
 
     choose_timer_id = setTimeout(chooseForRider, choose_period, 1, 3, town.dp1Arrows, null, 10);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $("<div </div>");
 
-    let $textAndPic = $('<div></div>');
 
+    let curInterval = displayCountdown(choose_period/1000);
     $textAndPic.append('<img src="./images/right.png" />');
-
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
     previousActive = activeSegment;
     town.dp1Arrows.position.z = 1;
     let dialog = BootstrapDialog.show({
-        title: 'DP-1: 5 seconds to choose a direction',
+        title: 'DP-1: Limited Time to make a choice',
         cssClass: 'decisionPoint1',
         message: $textAndPic,
         closeByBackdrop: false,
@@ -195,7 +217,7 @@ function decisionPoint1()
             label: 'Continue Straight',
             cssClass: 'btn-primary',
             action: function(dialogRef){
-              restartCycling(1, dialogRef, null, town.dp1Arrows);
+              restartCycling(1, dialogRef, null, town.dp1Arrows, curInterval);
               //town.dp1Arrows.position.z = -1;
               // setActiveCamera(trailingCamera);
             }
@@ -204,7 +226,7 @@ function decisionPoint1()
             cssClass: 'btn-danger',
             action: function(dialogRef){
   
-                restartCycling(3, dialogRef, 10, town.dp1Arrows);
+                restartCycling(3, dialogRef, 10, town.dp1Arrows, curInterval);
                 // town.dp1Arrows.position.z = -1;
                 // setActiveCamera(trailingCamera);
             }
@@ -246,12 +268,13 @@ function decisionPoint2()
 {
     choose_timer_id = setTimeout(chooseForRider, choose_period, 2, 4, town.dp2Arrows, 2, 2);  // args: segment1, segment2, etc.
     let $textAndPic = $('<div class="decisionPoint"></div>');
-    $textAndPic.append('<img src="./images/stop.png" />');
+    let curInterval = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
  
     previousActive = activeSegment;
     town.dp2Arrows.position.z = 1;
     BootstrapDialog.show({
-        title: 'DP-2: 5 seconds to choose a direction',
+        title: 'DP-2: Limited seconds to choose a direction',
         cssClass: 'decisionPoint1',
         message: $textAndPic,
         closeByBackdrop: false,
@@ -260,7 +283,7 @@ function decisionPoint2()
             label: 'Continue Straight',
             cssClass: 'btn-primary',
             action: function(dialogRef){
-                restartCycling(2, dialogRef, 2, town.dp2Arrows);
+                restartCycling(2, dialogRef, 2, town.dp2Arrows, curInterval);
                 // town.dp2Arrows.position.z = -1;
                 // setActiveCamera(trailingCamera);
             }
@@ -268,7 +291,7 @@ function decisionPoint2()
             label: 'Turn Right',
             cssClass: 'btn-danger',
             action: function(dialogRef){
-                restartCycling(4, dialogRef, 2, town.dp2Arrows);
+                restartCycling(4, dialogRef, 2, town.dp2Arrows, curInterval);
                 // town.dp2Arrows.position.z = -1;
                 // setActiveCamera(trailingCamera);
             }
@@ -296,11 +319,12 @@ function decisionPoint3()
     choose_timer_id = setTimeout(chooseForRider, choose_period, 6, 5, town.dp3Arrows, null, null);  // args: segment1, segment2, speed1, speed2
     let $textAndPic = $('<div class="decisionPoint"></div>');
     $textAndPic.append('Caution: potential car door opening! <br />');
-
+    let curInterval = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
     previousActive = activeSegment;
     town.dp3Arrows.position.z = 1;
     BootstrapDialog.show({
-        title: 'DP-3: Defensive Riding: 5 seconds to choose a direction',
+        title: 'DP-3: Limited seconds to choose a direction!',
         cssClass: 'decisionPoint1',
         message: $textAndPic,
         closeByBackdrop: false,
@@ -309,7 +333,7 @@ function decisionPoint3()
             label: 'Continue Straight',
             cssClass: 'btn-danger',
             action: function(dialogRef){
-               restartCycling(6, dialogRef, null, town.dp3Arrows);
+               restartCycling(6, dialogRef, null, town.dp3Arrows, curInterval);
                // town.dp3Arrows.position.z = -1;
                // setActiveCamera(trailingCamera);
             }
@@ -317,7 +341,7 @@ function decisionPoint3()
             label: 'Steer Away',
             cssClass: 'btn-primary',
             action: function(dialogRef){
-                restartCycling(5, dialogRef, null, town.dp3Arrows);
+                restartCycling(5, dialogRef, null, town.dp3Arrows, curInterval);
                 // town.dp3Arrows.position.z = -1;
                 // setActiveCamera(trailingCamera);
 
@@ -345,12 +369,13 @@ function decisionPoint4()
 {
     choose_timer_id = setTimeout(chooseForRider, choose_period, 8, 7, town.dp4Arrows, null, null);  // args: segment1, segment2, speed1, speed2
     let $textAndPic = $('<div class="decisionPoint"></div>');
-    $textAndPic.append('<img src="./images/left.png" />');
-    
+    // $textAndPic.append('<img src="./images/left.png" />');
+    let curInterval = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
     previousActive = activeSegment;
     town.dp4Arrows.position.z = 1;
     BootstrapDialog.show({
-        title: 'DP-4: Safe Riding: 5 seconds to choose a direction',
+        title: 'DP-4: Safe Riding: Limited seconds to choose a direction!',
         cssClass: 'decisionPoint2',
         message: $textAndPic,
         closeByBackdrop: false,
@@ -359,7 +384,7 @@ function decisionPoint4()
             label: 'Turn Left',
             cssClass: 'btn-primary',
             action: function(dialogRef){
-                restartCycling(8, dialogRef, null, town.dp4Arrows);
+                restartCycling(8, dialogRef, null, town.dp4Arrows, curInterval);
                 // town.dp4Arrows.position.z = -1;
   
             }
@@ -367,7 +392,7 @@ function decisionPoint4()
             label: 'Continue Straight',
             cssClass: 'btn-danger',
             action: function(dialogRef){
-                restartCycling(7, dialogRef, null, town.dp4Arrows);
+                restartCycling(7, dialogRef, null, town.dp4Arrows, curInterval);
                 // town.dp4Arrows.position.z = -1;
             }
         }, {
@@ -398,6 +423,20 @@ function decisionPoint4()
                 inspectCamera.rotation.z = 0;
                 inspect_id = setTimeout(resetCamera, inspect_period);
             }    
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-info',
+            action: function(dialogRef){
+                setActiveCamera(inspectCamera);
+                let temp =  new THREE.Vector3;
+                temp.setFromMatrixPosition(bike.mesh.tripod.matrixWorld);
+                inspectCamera.position.lerp(temp, 0.2);
+                inspectCamera.lookAt( bike.mesh.position );
+                inspectCamera.rotation.x = 0;
+                inspectCamera.rotation.y = -Math.PI;
+                inspectCamera.rotation.z = 0;
+                inspect_id = setTimeout(resetCamera, inspect_period);
+            }    
         }]
     });
    
@@ -407,12 +446,14 @@ function decisionPoint5()
 {
     choose_timer_id = setTimeout(chooseForRider, choose_period, 10, 9, town.dp5Arrows, null, null);  // args: segment1, segment2, speed1, speed2
     let $textAndPic = $('<div class="decisionPoint"></div>');
-    $textAndPic.append('<img src="./images/right.png" />');
-    
+    // $textAndPic.append('<img src="./images/right.png" />');
+    let curInterval = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+
     previousActive = activeSegment;
     town.dp5Arrows.position.z = 1;
     BootstrapDialog.show({
-        title: 'DP-5: Don\'t Tempt Drivers: 5 seconds to choose a direction',
+        title: 'DP-5: Don\'t Tempt Drivers!! Limited seconds to choose a direction!',
         message: $textAndPic,
         cssClass: 'decisionPoint2',
         closeByBackdrop: false,
@@ -421,7 +462,7 @@ function decisionPoint5()
             label: 'Turn Right',
             cssClass: 'btn-primary',
             action: function(dialogRef) {
-                restartCycling(10, dialogRef, null, town.dp5Arrows);
+                restartCycling(10, dialogRef, null, town.dp5Arrows, curInterval);
                 // town.dp5Arrows.position.z = -1;
     
             }
@@ -429,7 +470,7 @@ function decisionPoint5()
             label: 'Continue Straight',
             cssClass: 'btn-danger',
             action: function(dialogRef){
-                restartCycling(9, dialogRef, null, town.dp5Arrows);
+                restartCycling(9, dialogRef, null, town.dp5Arrows, curInterval);
                 // own.dp5Arrows.position.z = -1;
             }
                 }, {
@@ -469,12 +510,14 @@ function decisionPoint6()
 {
     choose_timer_id = setTimeout(chooseForRider, choose_period, 13, 14, town.dp6Arrows, null, null);  // args: segment1, segment2, speed1, speed2
     let $textAndPic = $('<div class="decisionPoint"></div>');
-    $textAndPic.append('<img src="./images/left.png" />');
-    
+    // $textAndPic.append('<img src="./images/left.png" />');
+    let curInterval = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+
     previousActive = activeSegment;
     town.dp6Arrows.position.z = 1;
     BootstrapDialog.show({
-        title: 'DP-6: Don\'t take chances: 5 seconds to choose a direction',
+        title: 'DP-6: Don\'t take chances: Limited seconds to choose a direction',
         message: $textAndPic,
         cssClass: 'decisionPoint2',
         closeByBackdrop: false,
@@ -483,14 +526,14 @@ function decisionPoint6()
             label: 'Turn Left',
             cssClass: 'btn-primary',
             action: function(dialogRef){
-                restartCycling (13, dialogRef, null, town.dp6Arrows);
+                restartCycling (13, dialogRef, null, town.dp6Arrows, curInterval);
                 // town.dp6Arrows.position.z = -1;    
             }
         }, {
             label: 'Continue Straight',
             cssClass: 'btn-danger',
             action: function(dialogRef){
-                restartCycling(14, dialogRef, null, town.dp6Arrows);
+                restartCycling(14, dialogRef, null, town.dp6Arrows, curInterval);
                 // town.dp6Arrows.position.z = -1; 
             }
                 }, {
@@ -530,13 +573,14 @@ function decisionPoint7()
 {
     choose_timer_id = setTimeout(chooseForRider, choose_period, 11, 12, town.dp7Arrows, null, null);  // args: segment1, segment2, speed1, speed2
     let $textAndPic = $('<div class="decisionPoint"></div>');
-    $textAndPic.append('<img src="./images/left.png" />');
-    
+    // $textAndPic.append('<img src="./images/left.png" />');
+    let curInterval = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
     previousActive = activeSegment;
     town.dp7Arrows.position.z = 1; 
 
     BootstrapDialog.show({
-        title: 'DP-7: Defensive Riding: Don\'t take chances',
+        title: 'DP-7: Don\'t take chances! Limited Seconds to choose next path!',
         message: $textAndPic,
         cssClass: 'decisionPoint2',
         closeByBackdrop: false,
@@ -545,14 +589,14 @@ function decisionPoint7()
             label: 'Turn Left',
             cssClass: 'btn-primary',
             action: function(dialogRef){
-                restartCycling(11, dialogRef, null, town.dp7Arrows);
+                restartCycling(11, dialogRef, null, town.dp7Arrows, curInterval);
                 // town.dp7Arrows.position.z = -1; 
             }
         }, {
             label: 'Cross to Sidewalk',
             cssClass: 'btn-danger',
             action: function(dialogRef){
-                restartCycling(12, dialogRef, null, town.dp7Arrows);
+                restartCycling(12, dialogRef, null, town.dp7Arrows, curInterval);
                 // town.dp7Arrows.position.z = -1; 
 
             }
@@ -593,12 +637,13 @@ function decisionPoint8()
 {
     choose_timer_id = setTimeout(chooseForRider, choose_period, 9, 10, town.dp8Arrows, null, null);  // args: segment1, segment2, speed1, speed2
     let $textAndPic = $('<div class="decisionPoint"></div>');
-    $textAndPic.append('<img src="./images/left.png" />');
-    
+    // $textAndPic.append('<img src="./images/left.png" />');
+    let curInterval = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
     previousActive = activeSegment;
     town.dp8Arrows.position.z = 1; 
     BootstrapDialog.show({
-        title: 'DP-8: Defensive Riding: Don\'t take chances',
+        title: 'DP-8: Don\'t take chances! Limited Seconds to choose next path!',
         message: $textAndPic,
         cssClass: 'decisionPoint2',
         closeByBackdrop: false,
@@ -607,14 +652,14 @@ function decisionPoint8()
             label: 'Turn Left',
             cssClass: 'btn-primary',
             action: function(dialogRef){
-                restartCycling(9, dialogRef, null, town.dp8Arrows);
+                restartCycling(9, dialogRef, null, town.dp8Arrows, curInterval);
                 // town.dp8Arrows.position.z = -1; 
             }
         }, {
             label: 'Continue Straight to Sidewalk',
             cssClass: 'btn-danger',
             action: function(dialogRef){
-                restartCycling(10, dialogRef, null, town.dp8Arrows);
+                restartCycling(10, dialogRef, null, town.dp8Arrows, curInterval);
                 // town.dp8Arrows.position.z = -1; 
             }
                 }, {
@@ -654,10 +699,12 @@ function decisionPoint9()
 {
     choose_timer_id = setTimeout(chooseForRider, choose_period, 15, 16, town.dp9Arrows, null, null);  // args: segment1, segment2, speed1, speed2
     let $textAndPic = $('<div class="decisionPoint"></div>');
+    let curInterval = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
     previousActive = activeSegment;
     town.dp9Arrows.position.z = 1; 
     BootstrapDialog.show({
-        title: 'DP-9: Defensive Riding: Heavy Traffic Alert!',
+        title: 'DP-9: Heavy Traffic Alert!! Limited Seconds to choose next Path!',
         message: $textAndPic,
         cssClass: 'decisionPoint2',
         closeByBackdrop: false,
@@ -666,14 +713,14 @@ function decisionPoint9()
             label: 'Continue on Road',
             cssClass: 'btn-primary',
             action: function(dialogRef){
-                restartCycling(15, dialogRef, null, town.dp9Arrows);
+                restartCycling(15, dialogRef, null, town.dp9Arrows, curInterval);
                 // town.dp9Arrows.position.z = -1; 
             }
         }, {
             label: 'Cross to Sidewalk',
             cssClass: 'btn-danger',
             action: function(dialogRef){
-                restartCycling(16, dialogRef, null, town.dp9Arrows);    
+                restartCycling(16, dialogRef, null, town.dp9Arrows, curInterval);    
                 // town.dp9Arrows.position.z = -1; 
             }
         }, {
@@ -713,12 +760,14 @@ function decisionPoint10()
 {
     choose_timer_id = setTimeout(chooseForRider, choose_period, 17, 18, town.dp10Arrows, null, null);  // args: segment1, segment2, speed1, speed2
     let $textAndPic = $('<div class="decisionPoint"></div>');
+    let curInterval = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
  
     previousActive = activeSegment;
     town.dp10Arrows.position.z = 1; 
 
     BootstrapDialog.show({
-        title: 'DP-10: Pedestrians Alert VS Heavy Traffic Alert!',
+        title: 'DP-10: Pedestrians Alert! Heavy Traffic Alert!: Limited Seconds to choose a direction!',
         message: $textAndPic,
         cssClass: 'decisionPoint2',
         closeByBackdrop: false,
@@ -727,14 +776,14 @@ function decisionPoint10()
             label: 'Continue on Sidewalk',
             cssClass: 'btn-danger',
             action: function(dialogRef){
-                restartCycling(17, dialogRef, null, town.dp10Arrows);
+                restartCycling(17, dialogRef, null, town.dp10Arrows, curInterval);
                 // town.dp10Arrows.position.z = -1;
             }
         }, {
             label: 'Cross to Roadside',
             cssClass: 'btn-primary',
             action: function(dialogRef){
-                restartCycling(18, dialogRef, null, town.dp10Arrows);
+                restartCycling(18, dialogRef, null, town.dp10Arrows, curInterval);
                 // town.dp10Arrows.position.z = -1;
             }
         }, {
@@ -760,11 +809,12 @@ function decisionPoint11()
 {
     choose_timer_id = setTimeout(chooseForRider, choose_period, 19, 20, town.dp11Arrows, null, null);  // args: segment1, segment2, speed1, speed2
     let $textAndPic = $('<div class="decisionPoint"></div>');
- 
+    let curInterval = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
     previousActive = activeSegment;
     town.dp11Arrows.position.z = 1;
     BootstrapDialog.show({
-        title: 'DP-11: Pedestrians Alert VS Heavy Traffic Alert!',
+        title: 'DP-11: Pedestrians Alert!! Limited Seconds to choose a path!',
         message: $textAndPic,
         cssClass: 'decisionPoint2',
         closeByBackdrop: false,
@@ -773,14 +823,14 @@ function decisionPoint11()
             label: 'Continue on Roadside',
             cssClass: 'btn-primary',
             action: function(dialogRef){
-                restartCycling(19, dialogRef, null, town.dp11Arrows);
+                restartCycling(19, dialogRef, null, town.dp11Arrows, curInterval);
                 // town.dp11Arrows.position.z = -1;
             }
         }, {
             label: 'Cross to Sidewalk',
             cssClass: 'btn-danger',
             action: function(dialogRef){
-                restartCycling(20, dialogRef, null, town.dp11Arrows);
+                restartCycling(20, dialogRef, null, town.dp11Arrows, curInterval);
                 // town.dp11Arrows.position.z = -1;
             }
         }, {
@@ -820,11 +870,13 @@ function decisionPoint12()
 {
     choose_timer_id = setTimeout(chooseForRider, choose_period, 21, 22, town.dp12Arrows, null, null);  // args: segment1, segment2, speed1, speed2
     let $textAndPic = $('<div class="decisionPoint"></div>');
- 
+    let curInterval = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+
     previousActive = activeSegment;
     town.dp12Arrows.position.z = 1;
     BootstrapDialog.show({
-        title: 'DP-12: Pedestrians Alert VS Heavy Traffic Alert!',
+        title: 'DP-12: Heavy Traffic Alert! Limited Seconds to choose a direction!',
         message: $textAndPic,
         cssClass: 'decisionPoint2',
         closeByBackdrop: false,
@@ -833,14 +885,14 @@ function decisionPoint12()
             label: 'Continue on Sidewalk',
             cssClass: 'btn-danger',
             action: function(dialogRef){
-                restartCycling(21, dialogRef, null, town.dp12Arrows);
+                restartCycling(21, dialogRef, null, town.dp12Arrows, curInterval);
                 // town.dp12Arrows.position.z = -1;
             }
         }, {
             label: 'Cross to Roadside',
             cssClass: 'btn-primary',
             action: function(dialogRef){
-                restartCycling(22, dialogRef, null, town.dp12Arrows);
+                restartCycling(22, dialogRef, null, town.dp12Arrows, curInterval);
                 // town.dp12Arrows.position.z = -1;
             }
         }, {
@@ -866,11 +918,12 @@ function decisionPoint13()
 {
     choose_timer_id = setTimeout(chooseForRider, choose_period, 23, 24, town.dp13Arrows, null, null);  // args: segment1, segment2, speed1, speed2
     let $textAndPic = $('<div class="decisionPoint"></div>');
-
+    let curInterval = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
     previousActive = activeSegment;
     town.dp13Arrows.position.z = 1;
     BootstrapDialog.show({
-        title: 'DP-13: Pedestrians Alert VS Heavy Traffic Alert!',
+        title: 'DP-13: Pedestrians Alert/Traffic Alert! Limited Seconds to choose next path!',
         message: $textAndPic,
         cssClass: 'decisionPoint2',
         closeByBackdrop: false,
@@ -879,14 +932,14 @@ function decisionPoint13()
             label: 'Continue on Roadside',
             cssClass: 'btn-primary',
             action: function(dialogRef){
-                restartCycling(23, dialogRef, null, town.dp13Arrows);
+                restartCycling(23, dialogRef, null, town.dp13Arrows, curInterval);
                 // town.dp13Arrows.position.z = -1;
             }
         }, {
             label: 'Cross to Sidewalk',
             cssClass: 'btn-danger',
             action: function(dialogRef){
-                restartCycling(24, dialogRef, null, town.dp13Arrows);
+                restartCycling(24, dialogRef, null, town.dp13Arrows, curInterval);
                 // town.dp13Arrows.position.z = -1;
             }
         }, {

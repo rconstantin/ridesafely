@@ -83,9 +83,8 @@ function createPaths() {
 
   // P1 with 0 based indices
   
-  src = new THREE.Vector3(-250,-240,0);
-  destP[0] = new THREE.Vector3(-155,-240,0);
-  destP[1] = new THREE.Vector3(-155,-170,0); 
+  src = new THREE.Vector3(-155,-240,0);
+  destP[0] = new THREE.Vector3(-155,-170,0); 
   lines[counter] = new THREE.Line();
   lines[counter] = createPath(0, src, destP);
 

@@ -16,6 +16,25 @@ body {
   left:-200px;
   top:-160px;
 }
+#chaseCamera {
+  position:fixed;
+  left:100px;
+}
+span:hover {
+    text-decoration: underline;
+}
+.cameraDisplay {
+  text-decoration: none;
+  position: fixed;
+  top: 40px;
+}
+#topCamera {
+  position:fixed;
+  left:50px;
+}
+span:hover {
+    text-decoration: underline;
+}
 #output {
 	position: fixed;
 	left: -100px;
@@ -69,4 +88,19 @@ body {
 .welcomeDialog {
   opacity: 1.0;
   filter: brightness(100%);
+  width: 1200px;
+}
+
+.welcomeDialog img {
+    width: 51%;
+    position: relative;
+    top: -169px;
+}
+
+}
+.welcomeDialog .modal-content {
+    position: relative;
+    /* right: 390px; */
+    top: 100px;
+    width: fit-content;
 }

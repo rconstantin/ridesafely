@@ -4,7 +4,7 @@
 'use strict';
 
 import debug3dAxes from './dbg_3d_coord';
-import {infoButton} from './info';
+import {infoButton, selectCameraView} from './info';
 import {createPaths, pathList, CarSegments, PedSegments} from './bikePaths';
 import Colors from './colors';
 import {activeSegment, resetSegment, resetPosition, getBikeSpeed, getPosition, setPosition} from './decisionTree';
@@ -84,6 +84,7 @@ function createScene() {
   // scene.add(anim); Illegal anim is not a THREE.Object3D()
 
   infoButton();
+  selectCameraView();
 
 }
 
@@ -148,25 +149,30 @@ function simpleCollision(obj1, obj2)
 
 function welcomeDialog() {
     let $textAndPic = $('<div class="welcomeDialog"></div>');
-    $textAndPic.append('<img src="./images/dialog.png" />');
+    $textAndPic.append('<img src="./images/gameLayout.png" />');
+    $textAndPic.append('<video controls width="500" autoplay="true"> \
+          <source src="./images/sampleRide.mp4" type="video/mp4"> \
+          <source src="./images/sampleScene.png"> \
+          Sorry, your browser doesn\'t support embedded videos. \
+          </video>');
     $textAndPic.append('<p> In this level, the user is prompted to choose alternate paths for the cyclist. \
                         The objective of the game to \n make it to the end without a crash.</p>');
     $textAndPic.append('<div class="row"> \
                           <div class="border col-md-6 boxlayout"> \
                              <ul> Sample Interactions: \
-                               <li> Scene 1: Cyclist stops at intersection. The user decides between going straight or turning right.</li> \
-                               <li> Scene 2: the user is prompted to choose between passing close or away from the parked car. </li> \
-                               <li> Scene 3: the user is prompted to choose between going straight or turning left against traffic</li>\
-                               <li> Scene 4: The Cyclist crashes into incoming car and game ends</li> \
+                               <li> Cyclist stops at intersection. The user has to decide between going straight or turning right.</li> \
+                               <li> Cyclist can and SHOULD check surrounding traffic before deciding on the next move. </li> \
+                               <li> Cyclist can check the View from Behind, Right Side and/or Left Side.</li>\
+                               <li> If the Cyclist does not make a choice when COUNTDOWN reaches 0, A random choice is done.</li> \
                              </ul> \
                           </div> \
                           <div class="border col-md-6 boxlayout"> \
                             <ul> Controls: \
-                              <li> To Choose the Top Hovering Camera, Press 1 (Mobile TBD)</li> \
-                              <li> To Choose the Trailing Camera, Press 2 (Mobile TBD)</li> \
+                              <li> To Choose the Top Hovering Camera, Press 1 (Mobile: Red Camera Icon)</li> \
+                              <li> To Choose the Trailing Camera, Press 2 (Mobile: Black Camera Icon)</li> \
                               <li> To Zoom in and Out, use middle mouse wheel(Mobile TBD)</li> \
                               <li> To Rotate around the Z axis, use left mouse button(Mobile TBD)</li> \
-                              <li> To move the Camera around, use right mouse button (Mobile TBD)</li> \
+                              <li> To move the TOP Camera around, use right mouse button (Mobile: screen touch)</li> \
                             </ul> \
                           </div> \
                         </div>');

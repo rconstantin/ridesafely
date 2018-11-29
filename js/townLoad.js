@@ -32,13 +32,13 @@ function createTown()
       });
   });
   mtlLoader.setTexturePath('assets/');
-  mtlLoader.load('assets/houses-layout.mtl', function (mtl) {
+  mtlLoader.load('assets/houses-layout41.mtl', function (mtl) {
 
     mtl.preload();
 
     let objLoader = new THREE.OBJLoader();
     objLoader.setMaterials(mtl);
-    objLoader.load('assets/houses-layout.obj', function (object) {
+    objLoader.load('assets/houses-layout41.obj', function (object) {
         object.scale.set(2, 2, 2);
         object.rotation.x = Math.PI/2;
         // town = object;
@@ -46,24 +46,24 @@ function createTown()
       });
   });
   
-  mtlLoader.load('assets/stop_sign.mtl', function (mtl) {
+  // mtlLoader.load('assets/stop_sign.mtl', function (mtl) {
 
-    mtl.preload();
+  //   mtl.preload();
 
-    let objLoader = new THREE.OBJLoader();
-    objLoader.setMaterials(mtl);
-    objLoader.load('assets/stop_sign.obj', function (object) {
-        object.scale.set(1, 1, 1);
-        object.rotation.x = Math.PI/2;
-        object.rotation.y = -Math.PI/2;
-        object.position.set(-145, -178, -1);
-        let clone = object.clone();
-        clone.position.set(-55, -178, -1);
-        clone.rotation.y = -Math.PI;
-        town.add(object);
-        town.add(clone);
-      });
-  });
+  //   let objLoader = new THREE.OBJLoader();
+  //   objLoader.setMaterials(mtl);
+  //   objLoader.load('assets/stop_sign.obj', function (object) {
+  //       object.scale.set(1, 1, 1);
+  //       object.rotation.x = Math.PI/2;
+  //       object.rotation.y = -Math.PI/2;
+  //       object.position.set(-145, -178, -1);
+  //       let clone = object.clone();
+  //       clone.position.set(-55, -178, -1);
+  //       clone.rotation.y = -Math.PI;
+  //       town.add(object);
+  //       town.add(clone);
+  //     });
+  // });
   
   mtlLoader.load('assets/dp1-arrows.mtl', function (mtl) {
 
@@ -227,22 +227,39 @@ mtlLoader.load('assets/dp9-arrows.mtl', function (mtl) {
       });
   });
 
-  mtlLoader.load('assets/donotenter_sign.mtl', function (mtl) {
+  // mtlLoader.load('assets/donotenter_sign.mtl', function (mtl) {
+
+  //   mtl.preload();
+
+  //   let objLoader = new THREE.OBJLoader();
+  //   objLoader.setMaterials(mtl);
+  //   objLoader.load('assets/donotenter_sign.obj', function (object) {
+  //       object.scale.set(1, 1, 1);
+  //       object.rotation.x = Math.PI/2;
+  //       object.rotation.y = -Math.PI;
+  //       object.position.set(-145, 16, -1);
+  //       let clone = object.clone();
+  //       clone.position.set(-145, 58, -1);
+  //       // town = object;
+  //       town.add(object);
+  //       town.add(clone);
+  //     });
+  // });
+
+ mtlLoader.load('assets/start.mtl', function (mtl) {
 
     mtl.preload();
 
     let objLoader = new THREE.OBJLoader();
     objLoader.setMaterials(mtl);
-    objLoader.load('assets/donotenter_sign.obj', function (object) {
-        object.scale.set(1, 1, 1);
-        object.rotation.x = Math.PI/2;
-        object.rotation.y = -Math.PI;
-        object.position.set(-145, 16, -1);
-        let clone = object.clone();
-        clone.position.set(-145, 58, -1);
+    objLoader.load('assets/start.obj', function (object) {
+        object.scale.set(20, 20, 10);
+        object.rotation.x = 0;
+        object.rotation.y = -Math.PI/2;
+        object.rotation.z = -Math.PI/2;
+        object.position.set(-190, -250, 1);
         // town = object;
         town.add(object);
-        town.add(clone);
       });
   });
 
@@ -257,7 +274,7 @@ mtlLoader.load('assets/dp9-arrows.mtl', function (mtl) {
         object.rotation.x = 0;
         object.rotation.y = -Math.PI/2;
         object.rotation.z = -Math.PI/2;
-        object.position.set(240, 200, 2);
+        object.position.set(240, 200, 1);
         // town = object;
         town.add(object);
       });
