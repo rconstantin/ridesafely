@@ -8,6 +8,7 @@ function createTown()
 {
 
 	town = new THREE.Object3D();
+  town.dpArrows = [];
 	cars = new THREE.Object3D();
 	pedestrians = new THREE.Object3D();
 
@@ -58,10 +59,10 @@ function createTown()
         object.rotation.x = Math.PI/2;
         object.rotation.y = -Math.PI/2;
         object.position.set(-160, -165, -1); //DP1
-        town.dp1Arrows = object;
+        town.dpArrows[0] = object;
         let clone = object.clone();
         clone.position.set(-160, 25, -1); //DP2
-        town.dp2Arrows = clone;
+        town.dpArrows[1] = clone;
         town.add(object);
         town.add(clone);
       });
@@ -78,7 +79,7 @@ function createTown()
         object.rotation.x = Math.PI/2;
         object.rotation.y = -Math.PI/2;
         object.position.set(-10, 240, -1); //DP10
-        town.dp10Arrows = object;
+        town.dpArrows[9] = object;
         town.add(object);
         
       });
@@ -95,7 +96,7 @@ mtlLoader.load('assets/dp12-arrows.mtl', function (mtl) {
         object.rotation.x = Math.PI/2;
         object.rotation.y = 0; 
         object.position.set(140, -10, -1); //DP12
-        town.dp12Arrows = object;
+        town.dpArrows[11] = object;
         town.add(object);
         
       });
@@ -112,7 +113,7 @@ mtlLoader.load('assets/dp13-arrows.mtl', function (mtl) {
         object.rotation.x = Math.PI/2;
         object.rotation.y = -Math.PI/2;
         object.position.set(-55, 178, -1); //DP13 
-        town.dp13Arrows = object;
+        town.dpArrows[12] = object;
         town.add(object);
         
       });
@@ -129,7 +130,7 @@ mtlLoader.load('assets/dp3-arrows.mtl', function (mtl) {
         object.rotation.x = Math.PI/2;
         object.rotation.y = -Math.PI/2;
         object.position.set(-120, -170, -1); //DP3
-        town.dp3Arrows = object;
+        town.dpArrows[2] = object;
         town.add(object);
         
       });
@@ -148,7 +149,7 @@ mtlLoader.load('assets/dp10-arrows.mtl', function (mtl) {
         object.rotation.x = Math.PI/2;
         object.rotation.y = -Math.PI/2;
         object.position.set(-10, 240, -1); //DP10
-        town.dp10Arrows = object;
+        town.dpArrows[9] = object;
         town.add(object);
         
       });
@@ -165,13 +166,13 @@ mtlLoader.load('assets/dp9-arrows.mtl', function (mtl) {
         object.rotation.x = Math.PI/2;
         object.rotation.y = -Math.PI/2;
         object.position.set(-160,178, -1); //DP9
-        town.dp9Arrows = object;
+        town.dpArrows[8] = object;
         let clone = object.clone(); // DP11
         clone.position.set(-5, 178, -1);
-        town.dp11Arrows = clone;
+        town.dpArrows[10] = clone;
         let clone1 = object.clone(); // DP5
         clone1.position.set(-40,25, -1);
-        town.dp5Arrows = clone1;
+        town.dpArrows[4] = clone1;
         
         town.add(object);
         town.add(clone);
@@ -191,16 +192,16 @@ mtlLoader.load('assets/dp9-arrows.mtl', function (mtl) {
         object.rotation.x = Math.PI/2;
         object.rotation.y = -Math.PI/2;
         object.position.set(-55,-165, -1); //DP4
-        town.dp4Arrows = object;
+        town.dpArrows[3] = object;
         let clone = object.clone(); // DP7
         clone.position.set(100,25, -1);
-        town.dp7Arrows = clone;
+        town.dpArrows[6] = clone;
         let clone1 = object.clone(); // DP6
         clone1.position.set(100,-165, -1);
-        town.dp6Arrows = clone1;
+        town.dpArrows[5] = clone1;
         let clone2 = object.clone(); // DP8
         clone2.position.set(-60,35, -1);
-        town.dp8Arrows = clone2;
+        town.dpArrows[7] = clone2;
         
         town.add(object);
         town.add(clone);

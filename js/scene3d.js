@@ -12,7 +12,7 @@ import {createBike, bike} from './bikeLoad';
 import {createTown, town, parkedCarDoor, cars, pedestrians} from './townLoad';
 import {createCameras, getActiveCamera, setActiveCamera, hoveringCamera, trailingCamera, orbitControls, inspectCamera} from './cameraControls';
 import {createLight} from './createLights';
-import {visibilityDuringGame, visibilityOutsideGame, hideAll} from './hide';
+import {visibilityDuringGame, visibilityOutsideGame, hideCameraSelect, hideAll} from './hide';
 
 let renderer, scene;
 let carPosition = 0, boy1Position = 0, robot1Position = 0;
@@ -221,6 +221,7 @@ function crashBike() {
                             dialog.close();
     });
   cleanup(); // cleanup dangling timers 
+  hideCameraSelect();
   BootstrapDialog.show({
       title: 'Game Over!',
       message: "Ready to Restart the Game?",

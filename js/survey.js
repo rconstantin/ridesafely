@@ -5,7 +5,7 @@ let json = {
     showProgressBar: "bottom",
     showTimerPanel: "top",
     maxTimeToFinishPage: 10,
-    maxTimeToFinish: 65,
+    maxTimeToFinish: 90,
     firstPageIsStarted: true,
     startSurveyText: "Start Quiz",
     pages: [
@@ -33,6 +33,7 @@ let json = {
                 }
             ]
         }, {
+            maxTimeToFinish: 15,
             questions: [
                 {
                     type: "radiogroup",
@@ -99,8 +100,8 @@ let json = {
             questions: [
                 {
                     type: "radiogroup",
-                    name: "Navigation Sign",
-                    title: "What does this sign indicate:</n> ![stopSign](../images/stop.png)",
+                    name: "Stop Sign",
+                    title: "What does this sign indicate: ![stopSign](../images/stop.png)",
                     choicesOrder: "random",
                     choices: [
                         "Turn Right",
@@ -115,8 +116,8 @@ let json = {
             questions: [
                 {
                     type: "radiogroup",
-                    name: "Navigation Sign",
-                    title: "What does this sign indicate:</n> ![rightSign](../images/right.png)",
+                    name: "Turning Right Sign",
+                    title: "What does this sign indicate: ![rightSign](../images/right.png)",
                     choicesOrder: "random",
                     choices: [
                         "Turn Right",
@@ -131,8 +132,8 @@ let json = {
             questions: [
                 {
                     type: "radiogroup",
-                    name: "Navigation Sign",
-                    title: "What does this sign indicate:</n> ![leftSign](../images/left.png)",
+                    name: "Turning Left Sign",
+                    title: "What does this sign indicate: ![leftSign](../images/left.png)",
                     choicesOrder: "random",
                     choices: [
                         "Turn Right",

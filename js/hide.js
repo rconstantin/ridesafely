@@ -3,7 +3,7 @@
 function visibilityDuringGame() {
 	$('.meta').hide();
 	$('#infoButton').hide();
-	$('#topCamera').show()
+	$('#topCamera').show();
 	$('#chaseCamera').show();
 	$('#score').show();
 }
@@ -11,7 +11,7 @@ function visibilityDuringGame() {
 function visibilityOutsideGame() {
 	$('.meta').show();
 	$('#infoButton').show();
-	$('#topCamera').hide()
+	$('#topCamera').hide();
 	$('#chaseCamera').hide();
 	$('#score').hide();
 	
@@ -20,9 +20,17 @@ function visibilityOutsideGame() {
 function hideAll() {
 	$('.meta').hide();
 	$('#infoButton').hide();
-	$('#topCamera').hide()
+	$('#topCamera').hide();
 	$('#chaseCamera').hide();
 	$('#score').hide();
 }
 
-export {visibilityDuringGame, visibilityOutsideGame, hideAll};
+function hideCameraSelect() {
+	$('#topCamera').hide()
+	$('#chaseCamera').hide();
+}
+function showCameraSelect() {
+	$('#topCamera').show();
+	$('#chaseCamera').show();
+}
+export {visibilityDuringGame, visibilityOutsideGame, hideCameraSelect, showCameraSelect, hideAll};
