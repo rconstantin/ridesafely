@@ -33,13 +33,13 @@ function createTown()
       });
   });
   mtlLoader.setTexturePath('assets/');
-  mtlLoader.load('assets/houses-layout41.mtl', function (mtl) {
+  mtlLoader.load('assets/houses-layout.mtl', function (mtl) {
 
     mtl.preload();
 
     let objLoader = new THREE.OBJLoader();
     objLoader.setMaterials(mtl);
-    objLoader.load('assets/houses-layout41.obj', function (object) {
+    objLoader.load('assets/houses-layout.obj', function (object) {
         object.scale.set(2, 2, 2);
         object.rotation.x = Math.PI/2;
         // town = object;
