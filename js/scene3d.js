@@ -7,11 +7,12 @@ import debug3dAxes from './dbg_3d_coord';
 import {infoButton, selectCameraView} from './info';
 import {createPaths, pathList, CarSegments, PedSegments} from './bikePaths';
 import Colors from './colors';
-import {activeSegment, resetSegment, resetPosition, getBikeSpeed, getPosition, setPosition} from './decisionTree';
+import {activeSegment, resetSegment, resetPosition, getBikeSpeed, getPosition, setPosition, cleanup, reward} from './decisionTree';
 import {createBike, bike} from './bikeLoad';
 import {createTown, town, parkedCarDoor, cars, pedestrians} from './townLoad';
 import {createCameras, getActiveCamera, setActiveCamera, hoveringCamera, trailingCamera, orbitControls, inspectCamera} from './cameraControls';
 import {createLight} from './createLights';
+import {visibilityDuringGame, visibilityOutsideGame, hideAll} from './hide';
 
 let renderer, scene;
 let carPosition = 0, boy1Position = 0, robot1Position = 0;
@@ -23,16 +24,7 @@ let clock = new THREE.Clock();
 let rs_logo = null, bike_anim = null;
 let backReset = false, backReset1 = false;
 let forwardReset = true, forwardReset1 = true;
-let pauseCount = 0, crashed = false;
-
-
-function clearText()
-{   document.getElementById('output').innerHTML = '..........';   }
-
-function appendText(txt)
-{   
-  document.getElementById('output').innerHTML += txt;   
-}
+let pauseCount = 0, pauseCount1 = 0, pauseCount2 = 0, crashed = false;
 
 
 function createScene() {
@@ -134,6 +126,9 @@ function createFloor() {
 // A collision occurs if any of the parts of the bounding boxes intersect.
 function simpleCollision(obj1, obj2) 
 {
+  if (obj1 === null || obj2 === null) {
+    return false;
+  }
   if (obj1.position.x < obj2.position.x + obj2.wide &&
       obj1.position.x + obj1.wide > obj2.position.x &&
       obj1.position.y < obj2.position.y + obj2.long &&
@@ -184,14 +179,18 @@ function welcomeDialog() {
       closeByKeyboard: false,
       buttons: [{
         label: 'Start Game',
+        cssClass: 'btn-success',
         action: function(dialogRef){
+          visibilityDuringGame();
           dialogRef.close();
           // gameEnd = false;
           animate();
         }
       }, {
         label: 'Quit Game',
+        cssClass: 'btn-danger',
         action: function(dialogRef) {
+          visibilityOutsideGame();
           dialogRef.close();
           return;
         }
@@ -199,12 +198,18 @@ function welcomeDialog() {
   });
 }
 
-function restartGame() 
+function restartGame(dialogRef) 
 {
 
-  location.reload();
-
+  // location.reload();
+  cleanup();
+  // resetReward();
+  // resetPosition();
+  // resetSegment();
+  // dialogRef.close();
   gameEnd = false;
+  animate();
+
 }
 
 function crashBike() {
@@ -212,6 +217,10 @@ function crashBike() {
   // bike.mesh.position.set(bike.mesh.position.x-0.2, bike.mesh.position.y-0.2,bike.mesh.position.z); 
   // bike.rider.position.set(3,3,-9);
   // bike.rider.rotation.z = 0.3;
+  $.each(BootstrapDialog.dialogs, function(id, dialog) {
+                            dialog.close();
+    });
+  cleanup(); // cleanup dangling timers 
   BootstrapDialog.show({
       title: 'Game Over!',
       message: "Ready to Restart the Game?",
@@ -219,14 +228,17 @@ function crashBike() {
       closeByKeyboard: false,
       buttons: [{
           label: 'Restart Game',
+          cssClass: 'btn-success',
           action: function(dialogRef){
-              restartGame();
-              dialogRef.close();
-              gameEnd = false;
+              restartGame(dialogRef);
+              // dialogRef.close();
+              // gameEnd = false;
           }
       }, {
           label: 'Leave Game',
+          cssClass: 'btn-danger',
           action: function(dialogRef){
+              visibilityOutsideGame();
               cancelAnimationFrame(animId);
 
               dialogRef.close();
@@ -240,6 +252,11 @@ function crashBike() {
 }
 
 function collisionTests(segment) {
+
+  if (segment === 0)
+  {
+    return;
+  }
   
   if (simpleCollision(bike.mesh, cars.redCar) === true) {
     console.log("Hit Red Car!");
@@ -247,6 +264,14 @@ function collisionTests(segment) {
   }
 
   if (simpleCollision(bike.mesh, cars.blueCar) === true) {
+    console.log("Hit Blue Car!");
+    crashBike();
+  }
+  if (simpleCollision(bike.mesh, cars.greenCar) === true) {
+    console.log("Hit Blue Car!");
+    crashBike();
+  }
+  if (simpleCollision(bike.mesh, cars.yellowCar1) === true) {
     console.log("Hit Blue Car!");
     crashBike();
   }
@@ -262,6 +287,11 @@ function collisionTests(segment) {
 
   }
 
+  if (simpleCollision(bike.mesh, pedestrians.walkingGirl1) === true) {
+    console.log("Hit Girl 1!");
+    crashBike();
+
+  }
   if (simpleCollision(bike.mesh, pedestrians.runningRobot) === true) {
     console.log("Hit Running Robot!");
     crashBike();
@@ -277,7 +307,7 @@ function collisionTests(segment) {
   if (parkedCarDoor !== null) {
     if (segment === 6) {
       // moving towards parked car. For now just open the door
-      if (Math.random() < 0.0025) {
+      if (Math.random() < 0.025) {
          parkedCarDoor.bone.rotation.z = -1.5;
          parkedCarDoor.doorCollider.position.y = -170;
       }
@@ -294,6 +324,10 @@ function collisionTests(segment) {
       parkedCarDoor.doorCollider.position.y = -172;
     }
   }
+}
+
+function updateScore() {
+  $('#score').text("SCORE: " + reward);
 }
 
 function updateBike( segment ) {
@@ -352,13 +386,73 @@ function updateBike( segment ) {
   }
 }
 
+function obeySignLaw(segment, point) {
+  if (segment === CarSegments.blueCar && (point.y === -160)) {
+
+    if ((pauseCount > 0) && (pauseCount < 80)) 
+    {
+       pauseCount++;
+       return true;
+    }
+    if (pauseCount >= 80) 
+    {
+      pauseCount = 0;
+    }
+  
+    // pause at stop sign
+    if ((point.x + 60.0 < 1)  &&  (point.x + 60.0 > 0)) {
+      // carPosition -= 0.0015 * carSpeed ;
+      pauseCount = 1;
+      return true;
+    } 
+  }
+  else if ((segment === CarSegments.yellowCar1) && (point.y === -160)) {
+    if ((pauseCount2 > 0) && (pauseCount2 < 80)) 
+    {
+       pauseCount2++;
+       return true;
+    }
+    if (pauseCount2 >= 80) 
+    {
+      pauseCount2 = 0;
+    }
+  
+    // pause at stop sign
+    if ((point.x + 60.0 < 1)  &&  (point.x + 60.0 > 0)) {
+      // carPosition -= 0.0015 * carSpeed ;
+      pauseCount2 = 1;
+      return true;
+    } 
+  }
+  else if ((segment === CarSegments.yellowCar1) &&  (point.x === -165)) {
+    if ((pauseCount1 > 0) && (pauseCount1 < 80)) 
+    {
+       pauseCount1++;
+       return true;
+    }
+    if (pauseCount1 >= 80) 
+    {
+      pauseCount1 = 0;
+    }
+  
+    // pause at stop sign
+    if ((point.y - 170.0 < 1)  &&  (point.y - 170.0 > 0)) {
+      // carPosition -= 0.0015 * carSpeed ;
+      pauseCount1 = 1;
+      return true;
+    } 
+  }
+
+  return false;
+}
 function updateCar( segment , car) {
   
   // add up position for movement
   if (car === null) {
     return;
   }
-  carPosition += 0.0015 * carSpeed ;
+  // let randomSpeed = Math.floor((Math.random() * 10) + 1)/5.0; // number between 1 and 2
+  carPosition += 0.0015 * (car.speed);
   
   let point = pathList[segment].getPoint(carPosition);
   if (point === null) 
@@ -367,24 +461,9 @@ function updateCar( segment , car) {
      return;
   }
   
-  if (segment === CarSegments.blueCar) {
-
-    if ((pauseCount > 0) && (pauseCount < 80)) 
-    {
-       pauseCount++;
-       return;
-    }
-    if (pauseCount >= 80) 
-    {
-      pauseCount = 0;
-    }
-  
-    // pause at stop sign
-    if ((point.x + 60.0 < 1)  &&  (point.x + 60.0 > 0) &&  (point.y === -165)) {
-      // carPosition -= 0.0015 * carSpeed ;
-      pauseCount = 1;
-      return;
-    } 
+  if (obeySignLaw(segment, point) === true)   // stop cars at certain stop signs.
+  {
+    return;
   }
   
   car.position.x = point.x;
@@ -432,12 +511,15 @@ function updatePedestrians() {
     if (prevPosition > point.y && backReset === false) {
       pedestrians.walkingBoy.rotation.y = 0;
       pedestrians.walkingGirl.rotation.y = 0;
+      pedestrians.walkingGirl1.rotation.y = 0;
+      
       backReset = true;
       forwardReset = false;
     }
     else if (prevPosition < point.y && forwardReset === false) {
       pedestrians.walkingBoy.rotation.y = Math.PI;
       pedestrians.walkingGirl.rotation.y = Math.PI;
+      pedestrians.walkingGirl1.rotation.y = Math.PI;
       backReset = false;
       forwardReset = true;
     }
@@ -458,7 +540,10 @@ function updatePedestrians() {
   }
   pedestrians.walkingBoy.position.x = point.x;
   pedestrians.walkingGirl.position.x = point.x - 5;
+  pedestrians.walkingGirl1.position.x = point.x + 5;
+  
   pedestrians.walkingBoy.position.y = pedestrians.walkingGirl.position.y = point.y;
+  pedestrians.walkingGirl1.position.y = point.y - 5;
   
   pedestrians.runningRobot.position.x = point1.x;
   pedestrians.runningRobot1.position.x = point1.x;
@@ -518,6 +603,10 @@ function render() {
   {
     pedestrians.walkingGirl.mixer.update(delta);
   }
+  if (pedestrians.walkingGirl1 && pedestrians.walkingGirl1.mixer) 
+  {
+    pedestrians.walkingGirl1.mixer.update(delta);
+  }
   if (pedestrians.runningRobot && pedestrians.runningRobot.mixer) 
   {
     pedestrians.runningRobot.mixer.update(delta);
@@ -555,8 +644,14 @@ function animate() {
   updateCar(CarSegments.redCar, cars.redCar);
 
   updateCar(CarSegments.blueCar, cars.blueCar);
-  
+
+  updateCar(CarSegments.yellowCar1, cars.yellowCar1);
+
+  updateCar(CarSegments.greenCar, cars.greenCar);
+
   updateBike(segment);
+
+  updateScore();
 
   updatePedestrians();
 
@@ -636,6 +731,7 @@ export function init() {
   // start a loop that will update the objects' positions 
   // and render the scene on each frame
   //animate();
+  hideAll();
   welcomeDialog();
   gameEnd = false;
 }

@@ -7,7 +7,10 @@ let pathList = [], decisionPoint = [];
 
 let CarSegments = {
   redCar: 31,
-  blueCar: 32
+  blueCar: 32,
+  yellowCar: 33,
+  yellowCar1: 34,
+  greenCar: 35
 };
 
 let PedSegments = {
@@ -148,10 +151,10 @@ function createPaths() {
   lines[counter] = createPath(7, src, destP);
 
   // P9
-  destP  = []; // reset destP array
+  destP  = []; // P9 starts at DP4
   src = new THREE.Vector3(-55,-170,0);
-  destP[0] = new THREE.Vector3(-30,-170,0); 
-  destP[1] = new THREE.Vector3(-30,25,0); 
+  destP[0] = new THREE.Vector3(-25,-170,0); 
+  destP[1] = new THREE.Vector3(-25,25,0); 
   // 0 based indices
   lines[counter++] = new THREE.Line();
   lines[counter] = createPath(8, src, destP);
@@ -340,7 +343,7 @@ function createPaths() {
   lines[counter++] = new THREE.Line();
   lines[counter] = createPath(CarSegments.redCar, src, destP);
 
-  // P32 === CarSegments.blackCar
+  // P32 === CarSegments.blueCar
   destP = []; // reset destP array
   src = new THREE.Vector3(-250,-160,0);
   destP[0] = new THREE.Vector3(128, -160, 0);
@@ -351,6 +354,35 @@ function createPaths() {
   
   lines[counter++] = new THREE.Line();
   lines[counter] = createPath(CarSegments.blueCar, src, destP); 
+
+// P33 === CarSegments.yellowCar1
+  destP = []; // reset destP array
+  src = new THREE.Vector3(-250,-160,0);
+  destP[0] = new THREE.Vector3(-30, -160, 0);
+  destP[1] = new THREE.Vector3(-30, 40, 0);
+  destP[2] = new THREE.Vector3(-40, 40, 0);
+  destP[3] = new THREE.Vector3(-165, 40, 0);
+  destP[4] = new THREE.Vector3(-165, 250, 0);
+
+
+  
+  lines[counter++] = new THREE.Line();
+  lines[counter] = createPath(CarSegments.yellowCar1, src, destP); 
+
+// P35 === CarSegments.greenCar
+  destP = []; // reset destP array
+  src = new THREE.Vector3(-30,-250,0);
+  destP[0] = new THREE.Vector3(-30, 25, 0);
+  // destP[1] = new THREE.Vector3(-25, 45, 0);
+  destP[1] = new THREE.Vector3(-20, 210, 0);
+  destP[2] = new THREE.Vector3(-200, 210, 0);
+  // destP[4] = new THREE.Vector3(-185, -155, 0);
+  // destP[5] = new THREE.Vector3(-250, -155, 0);
+
+  
+  lines[counter++] = new THREE.Line();
+  lines[counter] = createPath(CarSegments.greenCar, src, destP); 
+
 
 
   // Pedestrians on sidewalk1 startinh at P41

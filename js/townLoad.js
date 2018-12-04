@@ -3,7 +3,7 @@
 let town = null, parkedCarDoor = null;
 let cars, parkedCar = null, doorCollider = null;
 let pedestrians = null;
-
+let carSpeed = 0.1;
 function createTown() 
 {
 
@@ -46,24 +46,6 @@ function createTown()
       });
   });
   
-  // mtlLoader.load('assets/stop_sign.mtl', function (mtl) {
-
-  //   mtl.preload();
-
-  //   let objLoader = new THREE.OBJLoader();
-  //   objLoader.setMaterials(mtl);
-  //   objLoader.load('assets/stop_sign.obj', function (object) {
-  //       object.scale.set(1, 1, 1);
-  //       object.rotation.x = Math.PI/2;
-  //       object.rotation.y = -Math.PI/2;
-  //       object.position.set(-145, -178, -1);
-  //       let clone = object.clone();
-  //       clone.position.set(-55, -178, -1);
-  //       clone.rotation.y = -Math.PI;
-  //       town.add(object);
-  //       town.add(clone);
-  //     });
-  // });
   
   mtlLoader.load('assets/dp1-arrows.mtl', function (mtl) {
 
@@ -227,25 +209,6 @@ mtlLoader.load('assets/dp9-arrows.mtl', function (mtl) {
       });
   });
 
-  // mtlLoader.load('assets/donotenter_sign.mtl', function (mtl) {
-
-  //   mtl.preload();
-
-  //   let objLoader = new THREE.OBJLoader();
-  //   objLoader.setMaterials(mtl);
-  //   objLoader.load('assets/donotenter_sign.obj', function (object) {
-  //       object.scale.set(1, 1, 1);
-  //       object.rotation.x = Math.PI/2;
-  //       object.rotation.y = -Math.PI;
-  //       object.position.set(-145, 16, -1);
-  //       let clone = object.clone();
-  //       clone.position.set(-145, 58, -1);
-  //       // town = object;
-  //       town.add(object);
-  //       town.add(clone);
-  //     });
-  // });
-
  mtlLoader.load('assets/start.mtl', function (mtl) {
 
     mtl.preload();
@@ -331,11 +294,8 @@ mtlLoader.load('assets/dp9-arrows.mtl', function (mtl) {
       parkedCar.rotation.z = Math.PI/2;
       parkedCar.rotation.x= 0;
       parkedCar.position.set(-110, -175,0);
-      // cars.blackCar = parkedCar.clone();
-      // cars.blackCar.add(parkedCarDoor);
-      // town.add(doorCollider);
+      
       town.add(parkedCar);
-      // town.add(cars.blackCar);
   }); 
 
   mtlLoader.setTexturePath('assets/');
@@ -348,6 +308,7 @@ mtlLoader.load('assets/dp9-arrows.mtl', function (mtl) {
     objLoader.load('assets/yellow2.obj', function (object) {
         object.scale.set(5, 5, 5);
         cars.yellowCar = object;
+        cars.yellowCar.speed = (Math.random()+1) * carSpeed;
         cars.yellowCar.rotation.x = Math.PI/2;
         cars.yellowCar.rotation.y = Math.PI;
         cars.yellowCar.rotation.z= 0;
@@ -357,6 +318,46 @@ mtlLoader.load('assets/dp9-arrows.mtl', function (mtl) {
       });
   });
 
+  mtlLoader.setTexturePath('assets/');
+  mtlLoader.load('assets/car-yellow1.mtl', function (mtl) {
+
+    mtl.preload();
+
+    let objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(mtl);
+    objLoader.load('assets/car-yellow1.obj', function (object) {
+        object.scale.set(3, 3, 3);
+        cars.yellowCar1 = object;
+        cars.yellowCar1.rotation.x = 0;
+        cars.yellowCar1.rotation.y = 0;
+        cars.yellowCar1.rotation.z= 0;
+        cars.yellowCar1.long = 6;
+        cars.yellowCar1.wide = 4;
+        cars.yellowCar1.speed = (Math.random()+1) * carSpeed;
+        town.add(cars.yellowCar1);
+      });
+  });
+
+  mtlLoader.setTexturePath('assets/');
+  mtlLoader.load('assets/car-green1.mtl', function (mtl) {
+
+    mtl.preload();
+
+    let objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(mtl);
+    objLoader.load('assets/car-green1.obj', function (object) {
+        object.scale.set(3, 3, 3);
+        cars.greenCar = object;
+        cars.greenCar.rotation.x = 0; //Math.PI/2;
+        cars.greenCar.rotation.y = 0;
+        cars.greenCar.rotation.z= Math.PI/2;
+        cars.greenCar.long = 6;
+        cars.greenCar.wide = 4;
+        cars.greenCar.speed = (Math.random()+1) * carSpeed;
+        
+        town.add(cars.greenCar);
+      });
+  });
  loader.load( 'assets/car-low-red.dae',
     function (collada) {
     cars.redCar = collada.scene;
@@ -378,8 +379,9 @@ mtlLoader.load('assets/dp9-arrows.mtl', function (mtl) {
     cars.redCar.rotation.y = Math.PI;
     cars.redCar.rotation.z= 0;
     cars.redCar.position.set(250, 250,0);
-    cars.redCar.long = 8;
-    cars.redCar.wide = 6;
+    cars.redCar.long = 6;
+    cars.redCar.wide = 5;
+    cars.redCar.speed = (Math.random()+1) * carSpeed;
     town.add(cars.redCar);
   }); 
 
@@ -404,8 +406,9 @@ mtlLoader.load('assets/dp9-arrows.mtl', function (mtl) {
     cars.blueCar.rotation.y = Math.PI;
     cars.blueCar.rotation.z= 0;
     cars.blueCar.position.set(250, 250,0);
-    cars.blueCar.long = 8;
-    cars.blueCar.wide = 6;
+    cars.blueCar.long = 6;
+    cars.blueCar.wide = 5;
+    cars.blueCar.speed = (Math.random()+1) * carSpeed;
     town.add(cars.blueCar);
   }); 
    createAnimChar();
@@ -431,14 +434,7 @@ function createAnimChar() {
       town.add(billBoard);
       town.billBoard = animCommons(billBoard, geometry.animations[1], 0.5);
       
-      // town.billBoard.mixer = new THREE.AnimationMixer(billBoard);
-      // town.billBoard.anim = town.billBoard.mixer.clipAction(geometry.animations[1]);
-      // town.billBoard.anim.setEffectiveWeight(1);
-      // town.billBoard.anim.enabled = true;
-      // town.billBoard.anim.play();
-      // town.billBoard.anim.timeScale = 0.5;
-      
-      // town.billBoard.anim.paused = false;
+ 
     });
 
 	// From Blender Model low-poly-boy-walk9.blend
@@ -459,16 +455,7 @@ function createAnimChar() {
       walkingBoy.long= 2;
       town.add(walkingBoy);
       pedestrians.walkingBoy = animCommons(walkingBoy, geometry.animations[0], 2);
-      // town.walkingBoy = walkingBoy;
-      // town.walkingBoy.mixer = new THREE.AnimationMixer(walkingBoy);
-      // town.walkingBoy.anim = town.walkingBoy.mixer.clipAction(geometry.animations[0]);
-      // town.walkingBoy.anim.setEffectiveWeight(1);
-      // town.walkingBoy.anim.enabled = true;
-      // town.walkingBoy.anim.play();
-      // town.walkingBoy.anim.timeScale = 0.5;
-      
-      // town.walkingBoy.anim.paused = false;
-      // Clone the walking boy with different color cloths
+ 
       let walkingBoy1 = walkingBoy.clone();
       walkingBoy1.position.set(-115, -110, 0);
       walkingBoy1.rotation.y = -Math.PI;
@@ -477,14 +464,7 @@ function createAnimChar() {
       
       town.add(walkingBoy1);
       pedestrians.walkingBoy1 = animCommons(walkingBoy1, geometry.animations[0], 0.12);
-      // town.walkingBoy1.mixer = new THREE.AnimationMixer(town.walkingBoy1);
-      // town.walkingBoy1.anim = town.walkingBoy1.mixer.clipAction(geometry.animations[0]);
-      // town.walkingBoy1.anim.setEffectiveWeight(1);
-      // town.walkingBoy1.anim.enabled = true;
-      // town.walkingBoy1.anim.play();
-      // town.walkingBoy1.anim.timeScale = 0.7;
-      
-      // town.walkingBoy1.anim.paused = false;
+ 
     });
 
    // From Blender Model low-poly-girl-walk1.blend
@@ -504,14 +484,26 @@ function createAnimChar() {
       walkingGirl.long = 2;
       town.add(walkingGirl);
       pedestrians.walkingGirl = animCommons(walkingGirl, geometry.animations[0], 2);
-      // town.walkingGirl.mixer = new THREE.AnimationMixer(walkingGirl);
-      // town.walkingGirl.anim = town.walkingGirl.mixer.clipAction(geometry.animations[0]);
-      // town.walkingGirl.anim.setEffectiveWeight(1);
-      // town.walkingGirl.anim.enabled = true;
-      // town.walkingGirl.anim.play();
-      // town.walkingGirl.anim.timeScale = 2;
-      
-      // town.walkingGirl.anim.paused = false;
+  
+    });
+
+  jloader.load('./assets/low-poly-girl-walk2.json', function (geometry, materials) {
+      materials.forEach(function (material) {
+        material.skinning = true;
+      });
+      let walkingGirl1 = new THREE.SkinnedMesh(
+        geometry,
+        materials//new THREE.MeshFaceMaterial(materials)
+      );
+      walkingGirl1.scale.set(1.2,1.2,1.2);
+      walkingGirl1.position.set(165,0,1);
+      walkingGirl1.rotation.y = Math.PI;
+      walkingGirl1.rotation.x = Math.PI/2;
+      walkingGirl1.wide = 2;
+      walkingGirl1.long = 2;
+      town.add(walkingGirl1);
+      pedestrians.walkingGirl1 = animCommons(walkingGirl1, geometry.animations[0], 2);
+  
     });
 
   jloader.load('./assets/robot-rig3.json', function (geometry, materials) {
@@ -530,14 +522,7 @@ function createAnimChar() {
       runningRobot.long = 2;
       town.add(runningRobot);
       pedestrians.runningRobot = animCommons(runningRobot, geometry.animations[3], 1);
-      // town.runningRobot.mixer = new THREE.AnimationMixer(runningRobot);
-      // town.runningRobot.anim = town.runningRobot.mixer.clipAction(geometry.animations[3]);
-      // town.runningRobot.anim.setEffectiveWeight(1);
-      // town.runningRobot.anim.enabled = true;
-      // town.runningRobot.anim.play();
-      // town.runningRobot.anim.timeScale = 1;
-      
-      // town.runningRobot.anim.paused = false;
+ 
     });
 
    jloader.load('./assets/robot-rig4.json', function (geometry, materials) {
@@ -556,14 +541,7 @@ function createAnimChar() {
       runningRobot1.long = 2;
       town.add(runningRobot1);
       pedestrians.runningRobot1 = animCommons(runningRobot1, geometry.animations[3], 1.2);
-      // town.runningRobot1.mixer = new THREE.AnimationMixer(runningRobot1);
-      // town.runningRobot1.anim = town.runningRobot1.mixer.clipAction(geometry.animations[3]);
-      // town.runningRobot1.anim.setEffectiveWeight(1);
-      // town.runningRobot1.anim.enabled = true;
-      // town.runningRobot1.anim.play();
-      // town.runningRobot1.anim.timeScale = 1.2;
-      
-      // town.runningRobot1.anim.paused = false;
+ 
     });
 }
 

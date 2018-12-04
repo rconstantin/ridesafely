@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <title>Ride Safely Interactive Game</title>
-  <link rel="stylesheet" href="css/style.css">
+  
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/css/bootstrap-dialog.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
   <link href="css/bootstrap.css" rel="stylesheet">
@@ -14,29 +14,24 @@
   <script type="text/javascript" src="lib/MTLLoader.js"></script>
   <script type="text/javascript" src="lib/ColladaLoader.js"></script>
   <script type="text/javascript" src="lib/lottie.min.js"></script>
-
+  <link rel="stylesheet" href="css/style.css">
  <!-- <script type="text/javascript" src="lib/Coordinates.js"></script> -->
   <!-- <script type="text/javascript" src="lib/OrbitAndPanControls.js"></script> -->
 </head>
 <body>
   <div id="message"></div>
-  <a id="infoButton" href="#" title="Place Holder for General Game Info. 
-    "></a>
+  <a id="infoButton" href="#" title="Place Holder for General Game Info."></a>
   <a id="topCamera" href="#" title="Select Top Camera View"></a>
   <a id="chaseCamera" href="#" title="Select Trailing Camera View"></a>
 
   <div id="logo"></div>
-  <div id="output"></div>
-  <dir id="bike"></dir>
-  <div id="townId">
-    
-  </div>
-  <!-- <div id="infoBox"title="Game Information">
-    Press '1' for trailing camera, <br/>'2' for hovering camera. <br/>
-    Movement controls: For Phase-1 follow interactive instructions.<br/>
-    Phase-2: TBD<br/>
-  </div> -->
-
+  <div id="score"> </div>
+  <div id="bike"></div>
+  <div id="townId"></div>
+  <nav class="meta">
+    <a class="demo-link" href="survey.html">Survey</a>
+    <a class="demo-link" href="index.html">Game</a>
+  </nav>
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   
