@@ -18,7 +18,7 @@ let list = pathList;
 let previousActive = null;
 let timer_id = null;
 let inspect_id = null, inspect_period = 500, initReward = 100, bonus = 0;
-let choose_timer_id = null, countdown_interval_id = null, choose_period = 20000, interval = null, reward = initReward, timeoutLoss = 10, badDecision = 20, goodDecision = 20, goodHabit = 5;
+let choose_timer_id = null, countdown_interval_id = null, choose_period = 12000, interval = null, reward = initReward, timeoutLoss = 10, badDecision = 20, goodDecision = 20, goodHabit = 5;
 
 function resetReward() {
     reward = initReward;
@@ -73,7 +73,9 @@ function cleanup() {
         clearInterval(countdown_interval_id);
     }
     $.each(town.dpArrows, function(id, dpArrow) {
-        dpArrow.position.z = -1;
+        if (dpArrow) {
+            dpArrow.position.z = -1;
+        }
     });
     restartCycling(0);
 }
@@ -147,9 +149,12 @@ function check() {
         case 16:
           decisionPoint10();
           break;
+        case 13:
+          decisionPoint14();
+          break;
         case 11:
         case 12:
-        case 13:
+        
         case 17:
         case 18:
         case 19:
@@ -158,8 +163,119 @@ function check() {
         case 22:
         case 23:
         case 24:
+        case 26:
+        case 27:
+            journeyCompleted();
+            break;
+        case 49:
+            decisionPoint21();
+            break;
+        case 50: 
+            decisionPoint27();
+            break;
+        case 51:
+            decisionPoint22();
+            break;
+        case 52:
+            decisionPoint26();
+            break;
+        case 53:
+            decisionPoint31();
+            break;
+        case 54:
+            decisionPoint23();
+            break;
+        case 55:
+            decisionPoint30();
+            break;
+        case 56:
+            decisionPoint38();
+            break;
+        case 57:
+            decisionPoint28();
+            break;
+        case 58:
+            decisionPoint24();
+            break;
+        case 59:
+            decisionPoint29();
+            break;
+        case 60:
+            decisionPoint35();
+            break;
+        case 61:
+            decisionPoint31();
+            break;
+        case 62:
+            decisionPoint24();
+            break;
+        case 63:
+            decisionPoint39();
+            break;
+        case 64:
+        case 72:
+            decisionPoint40();
+            break;
+        case 65:
+            decisionPoint37();
+            break;
+        case 66:
+            decisionPoint33();
+            break;
+        case 68:
+            decisionPoint36();
+            break;
+        case 69:
+            decisionPoint32();
+            break;  
+        case 71:
+            decisionPoint25();
+            break;   
+        case 73: 
+            decisionPoint37();
+            break;
+
+        case 74:
+            decisionPoint34();
+            break;
+        case 75:
+            decisionPoint35();
+            break;
+        case 76: 
+            decisionPoint26();
+            break;
+        case 77: 
+        case 85:
+            decisionPoint27();
+            break;
+        case 78:
+        case 86:
+            decisionPoint24();
+            break;
+        case 79:
+            decisionPoint39();
+            break;
+        case 80:
+            decisionPoint37();
+            break;
+        case 81:
+        case 83:
+        case 87:
+            decisionPoint40();
+            break;
+        case 84:
+            decisionPoint31();
+            break;
+        case 88:
+            decisionPoint25();
+            break;
+        case 67:
+        case 70:
+        case 72:
+        case 82:
+        case 89:
         default:
-          journeyCompleted();
+            gameFinishLine2();
           break;
      }
      
@@ -188,7 +304,7 @@ function chooseForRider(segment1, segment2, arrowObj, speed1, speed2) {
 function restartCycling(segment, dialogRef, speed, arrowObj, curInterval) {
     reward += bonus;
     activeSegment = segment; 
-    // position = 0;
+    
     resetPosition(); 
     if (dialogRef) {
         dialogRef.close();
@@ -809,13 +925,13 @@ function decisionPoint13()
         closeByKeyboard: false,
         buttons: [{
             label: 'Continue on Roadside',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-danger',
             action: function(dialogRef){
                 restartCycling(23, dialogRef, null, town.dpArrows[12], countdown_interval_id);
             }
         }, {
             label: 'Cross to Sidewalk',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-success',
             action: function(dialogRef){
                 reward -= 20;
                 restartCycling(24, dialogRef, null, town.dpArrows[12], countdown_interval_id);
@@ -825,6 +941,51 @@ function decisionPoint13()
             cssClass: 'btn-success lookout',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
+                
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(Math.PI);
+            }
+        }]
+    });
+   
+}
+
+function decisionPoint14()
+{
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 26, 27, town.dpArrows[13], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[13].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-14: Pedestrians Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Continue straight',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                restartCycling(25, dialogRef, null, town.dpArrows[13], countdown_interval_id);
+            }
+        }, {
+            label: 'Cross thru Sidewalk',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                reward -= 20;
+                restartCycling(26, dialogRef, null, town.dpArrows[13], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Right',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(0);
                 
             }
         }, {
@@ -846,6 +1007,952 @@ function journeyCompleted() {
 
     BootstrapDialog.show({
         title: 'Successful Completion!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Restart Cycling Journey',
+            cssClass: 'btn-success',
+            action: function(dialogRef){
+                resetReward();
+                restartCycling(0,dialogRef);
+            }
+        }, {
+            label: 'Go to Level 2',
+            cssClass: 'btn-success',
+            action: function(dialogRef){
+                restartCycling(49,dialogRef);
+            }    
+        }, {
+            label: 'Leave Game',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                visibilityOutsideGame();
+                showCameraSelect();
+                dialogRef.close();
+                return;
+            }
+        }]
+    });
+}
+
+function decisionPoint21() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 50, 51, town.dpArrows[20], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[20].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-21: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Turn Left',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                restartCycling(50, dialogRef, null, town.dpArrows[20], countdown_interval_id);
+            }
+        }, {
+            label: 'Continue Straight',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(51, dialogRef, null, town.dpArrows[20], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Left',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI/2);
+                
+            }
+        }]
+    });
+}
+function decisionPoint22() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 54, 55, town.dpArrows[21], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[21].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-22: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Turn Left',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                restartCycling(55, dialogRef, null, town.dpArrows[21], countdown_interval_id);
+            }
+        }, {
+            label: 'Continue Straight',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(54, dialogRef, null, town.dpArrows[21], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Left',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI/2);
+                
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(0);
+            }
+        }]
+    });
+}
+
+function decisionPoint23() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 68, 69, town.dpArrows[22], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[22].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-23: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Turn Left',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                restartCycling(68, dialogRef, null, town.dpArrows[22], countdown_interval_id);
+            }
+        }, {
+            label: 'Continue Straight',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(69, dialogRef, null, town.dpArrows[22], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Right',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI/2);
+                
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(0);
+            }
+        }]
+    });
+}
+
+function decisionPoint24() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 64, 65, town.dpArrows[23], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[23].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-24: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Turn Left',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                restartCycling(65, dialogRef, null, town.dpArrows[23], countdown_interval_id);
+            }
+        }, {
+            label: 'Cross Road',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(64, dialogRef, null, town.dpArrows[23], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Left',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI/2);
+                
+            }
+        }, {
+            label: 'Look Right',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(Math.PI/2);
+                
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(0);
+            }
+        }]
+    });
+}
+
+function decisionPoint25() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 66, 67, town.dpArrows[24], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[24].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-25: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Continue Straight',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                restartCycling(67, dialogRef, null, town.dpArrows[24], countdown_interval_id);
+            }
+        }, {
+            label: 'Turn Left',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(66, dialogRef, null, town.dpArrows[24], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Left',
+            cssClass: 'btn-danger lookout',
+            action: function(dialogRef){
+                setInspectCamera(0);
+                
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(Math.PI/2);
+            }
+        }]
+    });
+}
+
+function decisionPoint26() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 56, 57, town.dpArrows[25], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[25].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-26: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Turn Back',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                restartCycling(56, dialogRef, null, town.dpArrows[25], countdown_interval_id);
+            }
+        }, {
+            label: 'Turn Left',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(57, dialogRef, null, town.dpArrows[25], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Right',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI);
+                
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI/2);
+            }
+        }]
+    });
+}
+
+function decisionPoint27() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 52, 53, town.dpArrows[26], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[26].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-27: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Cross to Roadside',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                restartCycling(53, dialogRef, null, town.dpArrows[26], countdown_interval_id);
+            }
+        }, {
+            label: 'Along Sidewalk',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(52, dialogRef, null, town.dpArrows[26], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Right',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(Math.PI/2);
+                
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(0);
+            }
+        }]
+    });
+}
+
+function decisionPoint28() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 58, 59, town.dpArrows[27], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[27].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-28: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Turn Left',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                restartCycling(59, dialogRef, null, town.dpArrows[27], countdown_interval_id);
+            }
+        }, {
+            label: 'Continue Cross',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(58, dialogRef, null, town.dpArrows[27], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Left',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI/2);
+                
+            }
+        }, {
+            label: 'Look Right',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(Math.PI/2);
+            }
+        }]
+    });
+}
+
+function decisionPoint29() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 60, 61, town.dpArrows[28], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[28].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-29: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Turn Back',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                restartCycling(60, dialogRef, null, town.dpArrows[28], countdown_interval_id);
+            }
+        }, {
+            label: 'Turn Right',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(61, dialogRef, null, town.dpArrows[28], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Left',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(0);
+                
+            }
+        }, {
+            label: 'Look Right',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(Math.PI);
+                
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(Math.PI/2);
+            }
+        }]
+    });
+}
+
+function decisionPoint30() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 62, 63, town.dpArrows[29], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[29].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-30: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Turn Right',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                restartCycling(63, dialogRef, null, town.dpArrows[29], countdown_interval_id);
+            }
+        }, {
+            label: 'Cross to Right',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(62, dialogRef, null, town.dpArrows[29], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Right',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI/2);
+                
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(Math.PI);
+            }
+        }]
+    });
+}
+
+function decisionPoint31() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 70, 71, town.dpArrows[30], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[30].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-31: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Turn Left',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                restartCycling(70, dialogRef, null, town.dpArrows[30], countdown_interval_id);
+            }
+        }, {
+            label: 'Cross Road',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(71, dialogRef, null, town.dpArrows[30], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Left',
+            cssClass: 'btn-danger lookout',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI/2);
+                
+            }
+        }, {
+            label: 'Look Right',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(Math.PI/2);
+                
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(0);
+            }
+        }]
+    });
+}
+
+function decisionPoint32() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 72, 73, town.dpArrows[31], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[31].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-32: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Cross Left',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                restartCycling(73, dialogRef, null, town.dpArrows[31], countdown_interval_id);
+            }
+        }, {
+            label: 'Continue Straight',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(72, dialogRef, null, town.dpArrows[31], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Left',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(0);
+                
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(Math.PI/2);
+            }
+        }]
+    });
+}
+
+function decisionPoint33() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 74, 75, town.dpArrows[32], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[32].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-33: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Turn Left',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                restartCycling(75, dialogRef, null, town.dpArrows[32], countdown_interval_id);
+            }
+        }, {
+            label: 'Continue Straight',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(74, dialogRef, null, town.dpArrows[32], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Left',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(Math.PI/2);
+                
+            }
+        }, {
+            label: 'Look Right',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI/2);
+                
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI);
+            }
+        }]
+    });
+}
+
+function decisionPoint34() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 76, 77, town.dpArrows[33], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[33].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-34: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Turn Left',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                restartCycling(76, dialogRef, null, town.dpArrows[33], countdown_interval_id);
+            }
+        }, {
+            label: 'Continue Straight',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(77, dialogRef, null, town.dpArrows[33], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Left',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(Math.PI/2);
+                
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI);
+            }
+        }]
+    });
+}
+
+function decisionPoint35() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 78, 79, town.dpArrows[34], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[34].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-35: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Cross To Left',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                restartCycling(79, dialogRef, null, town.dpArrows[34], countdown_interval_id);
+            }
+        }, {
+            label: 'Turn Left',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(78, dialogRef, null, town.dpArrows[34], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Left',
+            cssClass: 'btn-danger lookout',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI);
+                
+            }
+        }, {
+            label: 'Look Right',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(Math.PI/2);
+                
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI/2);
+            }
+        }]
+    });
+}
+
+
+function decisionPoint36() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 80, 81, town.dpArrows[35], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[35].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-36: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Continue Straight',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                restartCycling(80, dialogRef, null, town.dpArrows[35], countdown_interval_id);
+            }
+        }, {
+            label: 'Cross Road',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(81, dialogRef, null, town.dpArrows[35], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Left',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI/2);
+                
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(Math.PI);
+            }
+        }]
+    });
+}
+
+function decisionPoint37() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 82, 83, town.dpArrows[36], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[36].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-37: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Continue Straight',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                restartCycling(82, dialogRef, null, town.dpArrows[36], countdown_interval_id);
+            }
+        }, {
+            label: 'Cross Road',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(83, dialogRef, null, town.dpArrows[36], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Left',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(0);
+                
+            }
+        }, {
+            label: 'Look Right',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI);
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-danger lookout1',
+            action: function(dialogRef){
+                setInspectCamera(Math.PI/2);
+            }
+        }]
+    });
+}
+
+function decisionPoint38() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 84, 85, town.dpArrows[37], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[37].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-38: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Turn Right',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                restartCycling(84, dialogRef, null, town.dpArrows[37], countdown_interval_id);
+            }
+        }, {
+            label: 'Turn Left',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(85, dialogRef, null, town.dpArrows[37], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Right',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI);
+                
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(0);
+            }
+        }]
+    });
+}
+
+function decisionPoint39() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 86, 87, town.dpArrows[38], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[38].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-39: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Cross Road',
+            cssClass: 'btn-primary',
+            action: function(dialogRef){
+                restartCycling(86, dialogRef, null, town.dpArrows[38], countdown_interval_id);
+            }
+        }, {
+            label: 'Turn Left',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(87, dialogRef, null, town.dpArrows[38], countdown_interval_id);
+            }
+         }, {
+            label: 'Look Left',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI/2);
+                
+            }
+        }, {
+            label: 'Look Right',
+            cssClass: 'btn-danger lookout',
+            action: function(dialogRef){
+                setInspectCamera(Math.PI/2);
+                
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(0);
+            }
+        }]
+    });
+}
+
+function decisionPoint40() {
+    choose_timer_id = setTimeout(chooseForRider, choose_period, 82, 83, town.dpArrows[39], null, null);  // args: segment1, segment2, speed1, speed2
+    let $textAndPic = $('<div ></div>');
+    countdown_interval_id = displayCountdown(choose_period/1000);
+    $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
+    previousActive = activeSegment;
+    town.dpArrows[39].position.z = 1;
+    BootstrapDialog.show({
+        title: 'DP-40: Stay Alert/Traffic Alert!',
+        message: $textAndPic,
+        cssClass: 'decisionPoint2',
+        closeByBackdrop: false,
+        closeByKeyboard: false,
+        buttons: [{
+            label: 'Continue Straight',
+            cssClass: 'btn-danger',
+            action: function(dialogRef){
+                restartCycling(88, dialogRef, null, town.dpArrows[39], countdown_interval_id);
+            }
+        }, {
+            label: 'Cross to Finish',
+            cssClass: 'btn-success',
+            action: function(dialogRef){
+                // reward -= 20;
+                restartCycling(89, dialogRef, null, town.dpArrows[39], countdown_interval_id);
+            }
+        }, {
+            label: 'Look Left',
+            cssClass: 'btn-success lookout',
+            action: function(dialogRef){
+                setInspectCamera(0);
+                
+            }
+        }, {
+            label: 'Look Right',
+            cssClass: 'btn-warning lookout1',
+            action: function(dialogRef){
+                setInspectCamera(-Math.PI);
+            }
+        }, {
+            label: 'Look Back',
+            cssClass: 'btn-danger lookout1',
+            action: function(dialogRef){
+                setInspectCamera(Math.PI/2);
+            }
+        }]
+    });
+}
+
+function gameFinishLine2() {
+
+    let $textAndPic = $('<div class="decisionPoint"></div>');
+ 
+    previousActive = activeSegment;
+
+    BootstrapDialog.show({
+        title: 'Successful Return!',
         message: $textAndPic,
         cssClass: 'decisionPoint2',
         closeByBackdrop: false,

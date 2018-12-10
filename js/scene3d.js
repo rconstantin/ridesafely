@@ -365,17 +365,20 @@ function updateBike( segment ) {
     
   inspectCamera.position.lerp(temp, 0.2);
   inspectCamera.lookAt( bike.mesh.position );
-
+ 
   let angle = getAngle(segment, getPosition());
   if (angle > 0) {
     angle = - Math.PI + angle;
   }
-
+   if ((segment > 40) && (segment !== 52) && (segment !== 60) && (segment !== 66) && (segment !== 74) && (segment !== 75) && (segment !== 76) && (segment !== 77) && (segment !== 85)) 
+   {
+     angle -= Math.PI;
+  }
   let up = new THREE.Vector3( 0, 0, 1 );
 
   // set the quaternion
   bike.mesh.quaternion.setFromAxisAngle( up, angle );
-
+  
   if (bike.mesh.children.length > 4) 
   {
     // pedals.rotation.x -= 0.08;

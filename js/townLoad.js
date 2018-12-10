@@ -1,53 +1,24 @@
 'use strict';
 
+import {getDP} from './bikePaths';
+
 let town = null, parkedCarDoor = null;
 let cars, parkedCar = null, doorCollider = null;
 let pedestrians = null;
 let carSpeed = 0.1;
-function createTown() 
+
+function cloneArrow(object, dp, yRotation) {
+  let clone = object.clone(); // ex: DP21
+        let pos = getDP(dp); //
+        clone.position.set(pos.x, pos.y, -1);
+        clone.rotation.y = yRotation; // ex: Math.PI/2;
+        town.dpArrows[dp-1] = clone;
+        town.add(clone);
+}
+function createHelperArrows()
 {
-
-	town = new THREE.Object3D();
-  town.dpArrows = [];
-	cars = new THREE.Object3D();
-	pedestrians = new THREE.Object3D();
-
   let mtlLoader = new THREE.MTLLoader();
-  let loader = new THREE.ColladaLoader();
- 	
-  
-  // let bbox = null;
-  mtlLoader.setTexturePath('assets/');
-  mtlLoader.load('assets/road-design.mtl', function (mtl) {
 
-    mtl.preload();
-    
-    let objLoader = new THREE.OBJLoader();
-    
-    objLoader.setMaterials(mtl);
-    objLoader.load('assets/road-design.obj', function (object) {
-        object.scale.set(24, 24, 24);
-        object.rotation.x = Math.PI/2;
-        // road = object;
-        town.add(object);
-      });
-  });
-  mtlLoader.setTexturePath('assets/');
-  mtlLoader.load('assets/houses-layout.mtl', function (mtl) {
-
-    mtl.preload();
-
-    let objLoader = new THREE.OBJLoader();
-    objLoader.setMaterials(mtl);
-    objLoader.load('assets/houses-layout.obj', function (object) {
-        object.scale.set(2, 2, 2);
-        object.rotation.x = Math.PI/2;
-        // town = object;
-        town.add(object);
-      });
-  });
-  
-  
   mtlLoader.load('assets/dp1-arrows.mtl', function (mtl) {
 
     mtl.preload();
@@ -60,11 +31,14 @@ function createTown()
         object.rotation.y = -Math.PI/2;
         object.position.set(-160, -165, -1); //DP1
         town.dpArrows[0] = object;
-        let clone = object.clone();
-        clone.position.set(-160, 25, -1); //DP2
-        town.dpArrows[1] = clone;
         town.add(object);
-        town.add(clone);
+
+        // let clone = object.clone();
+        // clone.position.set(-160, 25, -1); //DP2
+        // town.dpArrows[1] = clone;
+        // town.add(clone);
+        cloneArrow(object, 2, -Math.PI/2); //DP2
+        cloneArrow(object, 14, -Math.PI/2); //DP14
       });
   });
 
@@ -155,7 +129,7 @@ mtlLoader.load('assets/dp10-arrows.mtl', function (mtl) {
       });
   });
 
-mtlLoader.load('assets/dp9-arrows.mtl', function (mtl) {
+  mtlLoader.load('assets/dp9-arrows.mtl', function (mtl) {
 
     mtl.preload();
 
@@ -181,6 +155,126 @@ mtlLoader.load('assets/dp9-arrows.mtl', function (mtl) {
       });
   });
 
+
+  mtlLoader.load('assets/dpr-r-arrows.mtl', function (mtl) {
+
+    mtl.preload();
+
+    let objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(mtl);
+    objLoader.load('assets/dpr-r-arrows.obj', function (object) {
+        object.scale.set(1, 1, 1);
+        object.rotation.x = Math.PI/2;
+        object.rotation.y = Math.PI/2;
+        let pos = getDP(30);
+        object.position.set(pos.x,pos.y,-1); //DP30
+        town.dpArrows[29] = object;
+        
+        town.add(object);
+       
+      });
+  });
+
+  mtlLoader.load('assets/dpl-l-arrows.mtl', function (mtl) {
+
+    mtl.preload();
+
+    let objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(mtl);
+    objLoader.load('assets/dpl-l-arrows.obj', function (object) {
+        object.scale.set(1, 1, 1);
+        object.rotation.x = Math.PI/2;
+        object.rotation.y = Math.PI;
+        let pos = getDP(24);
+        object.position.set(pos.x,pos.y,-1); //DP24
+        town.dpArrows[23] = object;
+        
+        town.add(object);
+
+        cloneArrow(object, 35, Math.PI/2);
+       
+      });
+  });
+
+  mtlLoader.load('assets/dp38-arrows.mtl', function (mtl) {
+
+    mtl.preload();
+
+    let objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(mtl);
+    objLoader.load('assets/dp38-arrows.obj', function (object) {
+        object.scale.set(1, 1, 1);
+        object.rotation.x = Math.PI/2;
+        object.rotation.y = -Math.PI/2;
+        let pos = getDP(38);
+        object.position.set(pos.x,pos.y, -1); //DP38
+        town.dpArrows[37] = object;
+        
+        town.add(object);
+      });
+  });
+
+
+  mtlLoader.load('assets/dpr-rev-arrows.mtl', function (mtl) {
+
+    mtl.preload();
+
+    let objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(mtl);
+    objLoader.load('assets/dpr-rev-arrows.obj', function (object) {
+        object.scale.set(1, 1, 1);
+        object.rotation.x = Math.PI/2;
+        object.rotation.y = Math.PI/2;
+        let pos = getDP(29);
+        object.position.set(pos.x,pos.y, -1); //DP29
+        town.dpArrows[28] = object;
+        
+        town.add(object);
+       
+      });
+  });
+
+  mtlLoader.load('assets/dp36-arrows.mtl', function (mtl) {
+
+    mtl.preload();
+
+    let objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(mtl);
+    objLoader.load('assets/dp36-arrows.obj', function (object) {
+        object.scale.set(1, 1, 1);
+        object.rotation.x = Math.PI/2;
+        object.rotation.y = -Math.PI/2;
+        let pos = getDP(36);
+        object.position.set(pos.x,pos.y, -1); //DP36
+        town.dpArrows[35] = object;
+        
+        town.add(object);
+        cloneArrow(object, 37, -Math.PI/2);
+        cloneArrow(object, 27, Math.PI/1.3);
+        cloneArrow(object, 31, -Math.PI/2);
+        cloneArrow(object, 39, -Math.PI/2);
+        
+      });
+  });
+
+  mtlLoader.load('assets/dp40-arrows.mtl', function (mtl) {
+
+    mtl.preload();
+
+    let objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(mtl);
+    objLoader.load('assets/dp40-arrows.obj', function (object) {
+        object.scale.set(1, 1, 1);
+        object.rotation.x = Math.PI/2;
+        object.rotation.y = -Math.PI/2;
+        let pos = getDP(40);
+        object.position.set(pos.x,pos.y, -1); //DP36
+        town.dpArrows[39] = object;
+        
+        town.add(object);
+                
+      });
+  });
   mtlLoader.load('assets/dp4-arrows.mtl', function (mtl) {
 
     mtl.preload();
@@ -188,29 +282,88 @@ mtlLoader.load('assets/dp9-arrows.mtl', function (mtl) {
     let objLoader = new THREE.OBJLoader();
     objLoader.setMaterials(mtl);
     objLoader.load('assets/dp4-arrows.obj', function (object) {
-        object.scale.set(1, 1, 1);
+        object.scale.set(0.8, 0.8, 0.8);
         object.rotation.x = Math.PI/2;
         object.rotation.y = -Math.PI/2;
         object.position.set(-55,-165, -1); //DP4
         town.dpArrows[3] = object;
+        town.add(object);
+
         let clone = object.clone(); // DP7
         clone.position.set(100,25, -1);
         town.dpArrows[6] = clone;
-        let clone1 = object.clone(); // DP6
-        clone1.position.set(100,-165, -1);
-        town.dpArrows[5] = clone1;
-        let clone2 = object.clone(); // DP8
-        clone2.position.set(-60,35, -1);
-        town.dpArrows[7] = clone2;
-        
-        town.add(object);
+        clone = object.clone(); // DP6
+        clone.position.set(100,-165, -1);
+        town.dpArrows[5] = clone;
         town.add(clone);
-        town.add(clone1);
-        town.add(clone2);
+        clone = object.clone(); // DP8
+        clone.position.set(-60,35, -1);
+        town.dpArrows[7] = clone;
+        town.add(clone);
+        ///////////////
+        // Level 2
+        ///////////////
+        cloneArrow(object, 21, Math.PI/2);
+        cloneArrow(object,22,Math.PI/2);
+        cloneArrow(object,23,Math.PI/2);
+        cloneArrow(object,25,Math.PI);
+        cloneArrow(object,26,Math.PI/2);
+        cloneArrow(object,28,Math.PI/2);
+        cloneArrow(object,32,Math.PI);
+        cloneArrow(object,33,-Math.PI/2);  
+        cloneArrow(object,34,-Math.PI/2);
+        
+
       });
   });
 
- mtlLoader.load('assets/start.mtl', function (mtl) {
+}
+function createTown() 
+{
+
+	town = new THREE.Object3D();
+  town.dpArrows = [];
+	cars = new THREE.Object3D();
+	pedestrians = new THREE.Object3D();
+
+  let mtlLoader = new THREE.MTLLoader();
+  let loader = new THREE.ColladaLoader();
+ 	
+  
+  // let bbox = null;
+  mtlLoader.setTexturePath('assets/');
+  mtlLoader.load('assets/road-design.mtl', function (mtl) {
+
+    mtl.preload();
+    
+    let objLoader = new THREE.OBJLoader();
+    
+    objLoader.setMaterials(mtl);
+    objLoader.load('assets/road-design.obj', function (object) {
+        object.scale.set(24, 24, 24);
+        object.rotation.x = Math.PI/2;
+        // road = object;
+        town.add(object);
+      });
+  });
+  mtlLoader.setTexturePath('assets/');
+  mtlLoader.load('assets/houses-layout.mtl', function (mtl) {
+
+    mtl.preload();
+
+    let objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(mtl);
+    objLoader.load('assets/houses-layout.obj', function (object) {
+        object.scale.set(2, 2, 2);
+        object.rotation.x = Math.PI/2;
+        // town = object;
+        town.add(object);
+      });
+  });
+  
+  createHelperArrows();
+ 
+  mtlLoader.load('assets/start.mtl', function (mtl) {
 
     mtl.preload();
 

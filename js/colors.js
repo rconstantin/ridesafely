@@ -11,7 +11,8 @@ let Colors = {
   orange:0xFC6531,
   beige: 0xEBCDA4,
   grey: 0x303030,
-  yellow: 0xFFFF1A
+  yellow: 0xFFFF1A, 
+  green: 0x228B22
 };
 
 export default Colors;
