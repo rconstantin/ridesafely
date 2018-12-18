@@ -5,8 +5,7 @@ let bike = null;
 function createBike() {
   bike = new THREE.Object3D();
   bike.mesh = new THREE.Object3D();
-  // bike.backWheel = new THREE.Object3D();
-  // bike.frontWheel = new THREE.Object3D();
+ 
   let mtlLoader = new THREE.MTLLoader();
   let jloader = new THREE.JSONLoader();
   mtlLoader.setTexturePath('assets/');
@@ -19,14 +18,12 @@ function createBike() {
     objLoader.load('assets/Wheel_back1.obj', function (object) {
         object.scale.set(5, 5, 5);
         object.rotation.y = Math.PI/2;
-        // object.position.z = 0;
-        // bike.backWheel.add(object);
+      
         object.position.y = -26;
         object.position.z = -5.5;
         bike.back_wheel = object;
         bike.mesh.add(object);
-        // move to scene3d
-        // scene.add(bike.mesh);
+  
       });
     });
 
@@ -43,7 +40,6 @@ function createBike() {
           object.rotation.y = Math.PI/2;
           object.position.y = -9.5;
           object.position.z = -5.5;
-          // bike.frontWheel.add(object);
           bike.mesh.add(object);
           bike.front_wheel = object;
        });
@@ -73,7 +69,7 @@ function createBike() {
       });
       bike.rider = new THREE.SkinnedMesh(
         geometry,
-        materials//new THREE.MeshFaceMaterial(materials)
+        materials
       );
       bike.rider.scale.set(8,8,8);
       bike.rider.position.set(0,-19,-10);
@@ -89,12 +85,11 @@ function createBike() {
       bike.anim.paused = true;
       bike.anim.timeScale = 2;
       
-      // bike.anim1.paused = false;
+      
       bike.anim.paused = false;
     });
     
     
-    // bike.mesh.position.z = 10;
     bike.mesh.wide = 1;
     bike.mesh.long = 3;
     bike.mesh.position.z = 2.2;

@@ -5,7 +5,7 @@
 
 import debug3dAxes from './dbg_3d_coord';
 import {infoButton, selectCameraView} from './info';
-import {createPaths, pathList, CarSegments, PedSegments} from './bikePaths';
+import {createPaths, lines, pathList, CarSegments, PedSegments} from './bikePaths';
 import Colors from './colors';
 import {activeSegment, resetSegment, resetPosition, getBikeSpeed, getPosition, setPosition, cleanup, reward} from './decisionTree';
 import {createBike, bike} from './bikeLoad';
@@ -36,8 +36,8 @@ function createScene() {
   let width = window.innerWidth;
   scene = new THREE.Scene(); // for now scene is declared as a global variable
   scene.fog = new THREE.Fog(Colors.white, 100, 1000);
-
-  scene.add(debug3dAxes(100));
+  // debug 3dAxes are no longer needed for production code
+  //scene.add(debug3dAxes(100));
  
   scene.rotation.z += Math.PI/2;
   scene.rotation.x -= Math.PI/2;
@@ -82,44 +82,44 @@ function createScene() {
 
 
 
-let Sky = function(){
-  this.mesh = new THREE.Object3D();
-  // Should add some birds and other flying objects
+// let Sky = function(){
+//   this.mesh = new THREE.Object3D();
+//   // Should add some birds and other flying objects
   
-}
+// }
 
 
-function createSky(){
-  sky = new Sky();
-  sky.mesh.position.y = -600;
-  scene.add(sky.mesh);
-}
+// function createSky(){
+//   sky = new Sky();
+//   sky.mesh.position.y = -600;
+//   scene.add(sky.mesh);
+// }
 
-let Road = function(){
-  // this.mesh = new THREE.Object3D();
-  let geometry = new THREE.PlaneGeometry( 1000, 2000);
-  let material = new THREE.MeshBasicMaterial( {color: Colors.red, side: THREE.DoubleSide} );
-  this.mesh = new THREE.Mesh( geometry, material );
-  this.mesh.castShadow = true;
-  this.mesh.position.set(0,0,-5);
-}
+// let Road = function(){
+  
+//   let geometry = new THREE.PlaneGeometry( 1000, 2000);
+//   let material = new THREE.MeshBasicMaterial( {color: Colors.red, side: THREE.DoubleSide} );
+//   this.mesh = new THREE.Mesh( geometry, material );
+//   this.mesh.castShadow = true;
+//   this.mesh.position.set(0,0,-5);
+// }
 
-function createRoad() {
-  let road = new Road();
-  road.mesh.position.y = -600;
-  scene.add(road.mesh);
-}
+// function createRoad() {
+//   let road = new Road();
+//   road.mesh.position.y = -600;
+//   scene.add(road.mesh);
+// }
 
-function createFloor() {
-  // create floor
-  let material = new THREE.MeshBasicMaterial({wireframe:true, color: 0x000000});
-  let geometry = new THREE.PlaneGeometry(500, 500, 20, 20);
-  let floor = new THREE.Mesh(geometry, material);
-  let container = new THREE.Object3D();
-  container.add(floor);
-  scene.add(container);
+// function createFloor() {
+//   // create floor
+//   let material = new THREE.MeshBasicMaterial({wireframe:true, color: 0x000000});
+//   let geometry = new THREE.PlaneGeometry(500, 500, 20, 20);
+//   let floor = new THREE.Mesh(geometry, material);
+//   let container = new THREE.Object3D();
+//   container.add(floor);
+//   scene.add(container);
 
-}
+// }
 
 // Algorithm based on simple 2D collision of objects with Axis-aligned bounding boxes (i.e no rotation)
 // https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
@@ -150,45 +150,46 @@ function welcomeDialog() {
           <source src="./images/sampleScene.png"> \
           Sorry, your browser doesn\'t support embedded videos. \
           </video>');
-    $textAndPic.append('<p> In this level, the user is prompted to choose alternate paths for the cyclist. \
-                        The objective of the game to \n make it to the end without a crash.</p>');
-    $textAndPic.append('<div class="row"> \
-                          <div class="border col-md-6 boxlayout"> \
-                             <ul> Sample Interactions: \
-                               <li> Cyclist stops at intersection. The user has to decide between going straight or turning right.</li> \
+    $textAndPic.append('<div class="description"> <p> The user is prompted to choose alternate paths for the cyclist. \
+      The objective of the game to practice defensive riding habits and to navigate through town without crashing.</p> \
+      <div class="row"> \
+                          <div class="border col-md-6 col-sm-12 boxlayout"> \
+                             <ul> <strong>Sample Interactions:</strong> \
+                               <li> Cyclist stops at intersections and other key locations. The user has to decide between going straight or turning right.</li> \
                                <li> Cyclist can and SHOULD check surrounding traffic before deciding on the next move. </li> \
                                <li> Cyclist can check the View from Behind, Right Side and/or Left Side.</li>\
-                               <li> If the Cyclist does not make a choice when COUNTDOWN reaches 0, A random choice is done.</li> \
+                               <li> If the Cyclist does not make a choice when COUNTDOWN reaches 0, A random choice is executed.</li> \
                              </ul> \
                           </div> \
-                          <div class="border col-md-6 boxlayout"> \
-                            <ul> Controls: \
-                              <li> To Choose the Top Hovering Camera, Press 1 (Mobile: Red Camera Icon)</li> \
-                              <li> To Choose the Trailing Camera, Press 2 (Mobile: Black Camera Icon)</li> \
-                              <li> To Zoom in and Out, use middle mouse wheel(Mobile TBD)</li> \
-                              <li> To Rotate around the Z axis, use left mouse button(Mobile TBD)</li> \
-                              <li> To move the TOP Camera around, use right mouse button (Mobile: screen touch)</li> \
+                          <div class="border col-md-6 col-sm-12 boxlayout"> \
+                            <ul> <strong>Controls:</strong> \
+                              <li> To Choose the Top Hovering Camera, click (Mobile Touch) on Red Camera Icon</li> \
+                              <li> To Choose the Trailing Camera, click (Mobile Touch) on Black Camera Icon</li> \
+                              <li> To Zoom in and Out, use middle mouse wheel, Mobile Touch with 1 finger swipe</li> \
+                              <li> To Rotate around the Z axis the Hovering (Red) Camera , use left mouse button, 2 fingers Mobile Touch</li> \
+                              <li> To move the TOP Camera around, use right mouse button (Mobile: 2 fingers touch)</li> \
                             </ul> \
                           </div> \
                         </div>');
     
     BootstrapDialog.show({
-      title: 'Ride Safely Interactive',
+      title: 'Ride Safely Interactive - Watch for Moving Cars. Be Mindful of Pedestrians!',
       message: $textAndPic,
+      cssClass:'landing-modal',
       closeByBackdrop: false,
       closeByKeyboard: false,
       buttons: [{
         label: 'Start Game',
-        cssClass: 'btn-success',
+        cssClass: 'btn btn-success',
         action: function(dialogRef){
           visibilityDuringGame();
           dialogRef.close();
-          // gameEnd = false;
+          
           animate();
         }
       }, {
         label: 'Quit Game',
-        cssClass: 'btn-danger',
+        cssClass: 'btn btn-danger',
         action: function(dialogRef) {
           visibilityOutsideGame();
           dialogRef.close();
@@ -203,20 +204,14 @@ function restartGame(dialogRef)
 
   // location.reload();
   cleanup();
-  // resetReward();
-  // resetPosition();
-  // resetSegment();
-  // dialogRef.close();
+
   gameEnd = false;
   animate();
 
 }
 
 function crashBike() {
-  // bike.mesh.rotation.z = 0.2;
-  // bike.mesh.position.set(bike.mesh.position.x-0.2, bike.mesh.position.y-0.2,bike.mesh.position.z); 
-  // bike.rider.position.set(3,3,-9);
-  // bike.rider.rotation.z = 0.3;
+  
   $.each(BootstrapDialog.dialogs, function(id, dialog) {
                             dialog.close();
     });
@@ -225,19 +220,18 @@ function crashBike() {
   BootstrapDialog.show({
       title: 'Game Over!',
       message: "Ready to Restart the Game?",
+      cssClass:'smaller-modal',
       closeByBackdrop: false,
       closeByKeyboard: false,
       buttons: [{
           label: 'Restart Game',
-          cssClass: 'btn-success',
+          cssClass: 'btn-sm btn-success',
           action: function(dialogRef){
               restartGame(dialogRef);
-              // dialogRef.close();
-              // gameEnd = false;
           }
       }, {
           label: 'Leave Game',
-          cssClass: 'btn-danger',
+          cssClass: 'btn-sm btn-danger',
           action: function(dialogRef){
               visibilityOutsideGame();
               cancelAnimationFrame(animId);
@@ -369,8 +363,8 @@ function updateBike( segment ) {
   let angle = getAngle(segment, getPosition());
   if (angle > 0) {
     angle = - Math.PI + angle;
-  }
-   if ((segment > 40) && (segment !== 52) && (segment !== 60) && (segment !== 66) && (segment !== 74) && (segment !== 75) && (segment !== 76) && (segment !== 77) && (segment !== 85)) 
+  }    // && (segment !== 60)
+   if ((segment > 40) && (segment !== 52) && (segment !== 66) && (segment !== 74) && (segment !== 75) && (segment !== 76) && (segment !== 77) && (segment !== 85)) 
    {
      angle -= Math.PI;
   }
@@ -381,11 +375,9 @@ function updateBike( segment ) {
   
   if (bike.mesh.children.length > 4) 
   {
-    // pedals.rotation.x -= 0.08;
+    
     bike.front_wheel.rotation.x -=0.1;
     bike.back_wheel.rotation.x -=0.1;
-
-    // collisionTests(segment);
     
   }
 }
@@ -405,7 +397,7 @@ function obeySignLaw(segment, point) {
   
     // pause at stop sign
     if ((point.x + 60.0 < 1)  &&  (point.x + 60.0 > 0)) {
-      // carPosition -= 0.0015 * carSpeed ;
+  
       pauseCount = 1;
       return true;
     } 
@@ -423,7 +415,7 @@ function obeySignLaw(segment, point) {
   
     // pause at stop sign
     if ((point.x + 60.0 < 1)  &&  (point.x + 60.0 > 0)) {
-      // carPosition -= 0.0015 * carSpeed ;
+    
       pauseCount2 = 1;
       return true;
     } 
@@ -619,18 +611,18 @@ function render() {
   {
     pedestrians.runningRobot1.mixer.update(delta);
   }
-  // if (bike.mixer1) bike.mixer1.update(delta);
+
   
 }
 // HANDLE MOUSE EVENTS
 
-let mousePos = { x: 0, y: 0 };
+// let mousePos = { x: 0, y: 0 };
 
-function handleMouseMove(event) {
-  let tx = -1 + (event.clientX / WIDTH)*2;
-  let ty = 1 - (event.clientY / HEIGHT)*2;
-  mousePos = {x:tx, y:ty};
-}
+// function handleMouseMove(event) {
+//   let tx = -1 + (event.clientX / WIDTH)*2;
+//   let ty = 1 - (event.clientY / HEIGHT)*2;
+//   mousePos = {x:tx, y:ty};
+// }
 
 window.addEventListener('load', init, false);
 
@@ -663,10 +655,6 @@ function animate() {
 
   animId = requestAnimationFrame(animate);
 
-  // temp.setFromMatrixPosition(goal.matrixWorld);
-  // hoveringCamera.position.lerp(temp, 0.2);
-  //hoveringCamera.lookAt( bike.mesh.position );
-
   render();
 }
 
@@ -678,7 +666,7 @@ export function init() {
 
   createCameras(scene, renderer, bike);
 
-  createFloor();
+  // createFloor();
   // add the lights
   createLight(scene);
 
@@ -687,54 +675,24 @@ export function init() {
  
   scene.add(town);
 
-  // if ( doorCollider !== null) {
-  //   collidables.push(doorCollider);
-  // }
-  // add the objects
+
   createBike();
   
 
-  // // Bike Collider
-  // let colliderGeometry = new THREE.CubeGeometry(2,3,3,1,1,1);
-  // let wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:true } );
-  // bikeCollider = new THREE.Mesh( colliderGeometry, wireMaterial );
-  // scene.add(bikeCollider);
   scene.add(bike.mesh);
 
   bike.mesh.add(trailingCamera);
   setActiveCamera(trailingCamera);
-  // goal.position.set(0, -400, 50);
-  // bike.mesh.add(goal);
-
-  // let ccGeometry = new THREE.CubeGeometry( 50, 50, 25, 1, 1, 1 );
-  // let ccMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } ); //, wireframe:true } );
   
-  // cc = new THREE.Mesh(ccGeometry, ccMaterial);
-  // cc.position.set(250, 250,1);
-  // bbox1 = new THREE.Box3();
-  // bbox1.setFromObject( cc );
-  
-  
-  // // wall.position.set(100, 50, -100);
-  // scene.add(cc);
-  // collidableMeshList.push(cc);
-
   let lines = [];
 
   lines = createPaths();
 
-  for (let i = 0; i < lines.length; i++) 
+  for (let i = 0; i < lines && lines.length; i++) 
   {
      scene.add(lines[i]);
   }
-  // pathList = list;
-  // createRoad();
-
-  // createSky();
   
-  // start a loop that will update the objects' positions 
-  // and render the scene on each frame
-  //animate();
   hideAll();
   welcomeDialog();
   gameEnd = false;

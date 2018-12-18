@@ -1,9 +1,29 @@
+// This is the most important file in this project. It creates the different paths for the bike,
+// the cars and the pedestrians. it uses the THREE.js Path() functions to create paths (segments) from 
+// a source 2D position to an end destination while going through intermediate points
+//              SOURCE POINT (DECISION POINT x)
+//                  |
+//                  | (sub-segment 1)
+//                  |             (sub-segment 2)
+//                DEST 1 --------------------------DEST2
+//                                                   |
+//                                                   | (sub-segment 3)
+//                                                   |
+//                                                 DEST (DECISION POINT y)
+//                        Path z: starting at DP x and ending at DPy
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
 'use strict';
 
 import Colors from './colors';
 
 
 let pathList = [], decisionPoint = [];
+let DEBUG = 0;
+let segmentLevel2 = 49;
+let counter = 0;
+let lines = [];
 
 let CarSegments = {
   redCar: 31,
@@ -32,9 +52,9 @@ let DP = {
   DP11: 10,
   DP12: 11,
   DP13: 12,
-  DP14: 13,
+  DP14: 13,   // Last DP from Level 1
   DP21: 21,   // start of level 2 decision points
-  DP22: 22,
+  DP22: 22,   
   DP23: 23,
   DP24: 24,
   DP25: 25,
@@ -111,8 +131,8 @@ function getDP(dp)
 
 // Level 1: Segment 1 to segment 24 for level 1 Bike paths from Start to Finish lines
 // Level 2: Segment 50 to segment TBD for level 2 Bike paths from new Start to new Finish
+// lines are only needed for DEBUG purposes. paths drawn by setting DEBUG = 1;
 
-let segmentLevel2 = 49;
 
 function createPath(pId, src, dst) {
 
@@ -120,19 +140,22 @@ function createPath(pId, src, dst) {
   pathList[pId].moveTo(src[0], src[1]);
   for (let i = 0; i < dst.length; i++) {
     pathList[pId].lineTo(dst[i][0], dst[i][1]);
-    // pathList[pId].quadraticCurveTo( dst[i].x-1, dst[i].y-1, dst[i].x, dst[i].y );
+  
   }
-  let line = new THREE.Line();
-  line = drawPath(pId);
-  return line;
+  // let line = null;
+  if (DEBUG) {
+     // visible lines drawing the paths are only needed for debugging purposes
+     lines[counter++] = drawPath(pId);
+  }
+  // return line;
 }
 
 function createPaths() {  
 
   // the pathList
   let destP = [], src = [];
-  let lines = [];
-  let counter = 0;
+  
+  
   
   createDecisionPoints();
 
@@ -140,104 +163,104 @@ function createPaths() {
   
   src = [-155,-240];
   destP = [[-155,-170]];
-  lines[counter] = createPath(0, src, destP);
+  createPath(0, src, destP);
 
   // P2 with 0 based indices
   destP  = []; // reset destP array
   src = [-155,-170];
   destP = [[-155,25]];
-  lines[++counter] = createPath(1, src, destP);
+  createPath(1, src, destP);
   
   // P3 starts at DP2 and goes to DP9
   destP  = []; // reset destP array
   src = [-155,25];
   destP = [[-155,178]];
   // 0 based indices
-  lines[++counter] = createPath(2, src, destP);
+  createPath(2, src, destP);
  
   // P4 DP1 to DP3
   destP  = []; // reset destP array
   src = [-155,-170];
   destP = [[-120,-170]];
   // 0 based indices
-  lines[++counter] = createPath(3, src, destP);
+  createPath(3, src, destP);
   
   // P5
   destP  = []; // reset destP array
   src = [-155,25];
   destP = [[-150,25], [-150,40], [-55,40]];
   // 0 based indices
-  lines[++counter] = createPath(4, src, destP);
+  createPath(4, src, destP);
 
   // P6 from DP3 to DP4
   destP  = []; // reset destP array
   src = [-120,-170];
   destP = [[-110,-160], [-55,-170]];
   // 0 based indices
-  lines[++counter] = createPath(5, src, destP);
+  createPath(5, src, destP);
 
   // P7 from DP3 to DP4
   destP  = []; // reset destP array
   src = [-120,-170];
   destP = [[-55,-170]];
   // 0 based indices
-  lines[++counter] = createPath(6, src, destP);
+  createPath(6, src, destP);
 
   // P8
   destP  = []; // reset destP array
   src = [-55,-170];
   destP = [[110,-170]];
   // 0 based indices
-  lines[++counter] = createPath(7, src, destP);
+  createPath(7, src, destP);
 
   // P9
   destP  = []; // P9 starts at DP4
   src = [-55,-170];
   destP = [[-25,-170], [-25,25]];
   // 0 based indices
-  lines[++counter] = createPath(8, src, destP);
+  createPath(8, src, destP);
 
   // P10 starts at DP5 continue to DP11
   destP  = []; // reset destP array
   src = [-55,25];
   destP = [[-45,25], [-10,25], [-10,178]];
   // 0 based indices
-  lines[++counter] = createPath(9, src, destP);
+  createPath(9, src, destP);
   
   // P11
   destP  = []; // reset destP array
   src = [-55,25];
   destP = [[-45,25], [110,25]];
   // 0 based indices
-  lines[++counter] = createPath(10, src, destP);
+  createPath(10, src, destP);
 
   // P12
   destP  = []; // reset destP array
   src = [110,25];
   destP = [[135,25], [135,185], [250,185]];
   // 0 based indices
-  lines[++counter] = createPath(11, src, destP);
+  createPath(11, src, destP);
 
   // P13
   destP  = []; // reset destP array
   src = [110,25];
   destP = [[150,25], [150,185], [250,185]];
   // 0 based indices
-  lines[++counter] = createPath(12, src, destP);
+  createPath(12, src, destP);
 
   // P14 from DP6 to DP14
   destP  = []; // reset destP array
   src = [100,-170];
   destP = [[135,-170], [135,25]]; 
   // 0 based indices
-  lines[++counter] = createPath(13, src, destP);
+  createPath(13, src, destP);
 
   // P15 starts at DP6 to DP12
   destP  = []; // reset destP array
   src = [100,-170];
   destP = [[150,-170], [150,-15]];
   // 0 based indices
-  lines[++counter] = createPath(14, src, destP);
+  createPath(14, src, destP);
 
   // P16 - starts at DP9 towards DP13
   destP  = []; // reset destP array
@@ -245,7 +268,7 @@ function createPaths() {
   destP = [[-55,178]];
   
   // 0 based indices
-  lines[++counter] = createPath(15, src, destP);
+  createPath(15, src, destP);
   
   // P17 - starts at DP9 towards DP10
   destP  = []; // reset destP array
@@ -254,7 +277,7 @@ function createPaths() {
   
   
   // 0 based indices
-  lines[++counter] = createPath(16, src, destP);
+  createPath(16, src, destP);
 
   // P18 - starts at DP10 towards endline
   destP  = []; // reset destP array
@@ -262,7 +285,7 @@ function createPaths() {
   destP = [[250, 240]];
   
   // 0 based indices
-  lines[++counter] = createPath(17, src, destP);
+  createPath(17, src, destP);
 
   // P19 - starts at DP10 towards endline
   destP  = []; // reset destP array
@@ -270,7 +293,7 @@ function createPaths() {
   destP = [[0, 178], [250, 178]];
   
   // 0 based indices
-  lines[++counter] = createPath(18, src, destP);
+  createPath(18, src, destP);
 
    // P20 - starts at DP11 towards endline
   destP  = []; // reset destP array
@@ -278,7 +301,7 @@ function createPaths() {
   destP = [[250, 178]];
   
   // 0 based indices
-  lines[++counter] = createPath(19, src, destP);
+  createPath(19, src, destP);
 
   // P21 - starts at DP11 towards endline
   destP  = []; // reset destP array
@@ -286,7 +309,7 @@ function createPaths() {
   destP = [[-5, 240], [250, 240]];
   
   // 0 based indices
-  lines[++counter] = createPath(20, src, destP);
+  createPath(20, src, destP);
 
   // P22 - starts at DP12 towards endline
   destP  = []; // reset destP array
@@ -294,7 +317,7 @@ function createPaths() {
   destP = [[150, 178], [250, 178]];
   
   // 0 based indices
-  lines[++counter] = createPath(21, src, destP);
+  createPath(21, src, destP);
 
   // P23 - starts at DP12 towards endline
   destP  = []; // reset destP array
@@ -302,35 +325,35 @@ function createPaths() {
   destP = [[135, -20], [135, 178], [250, 178]];
   
   // 0 based indices
-  lines[++counter] = createPath(22, src, destP);
+  createPath(22, src, destP);
 
   // P24 - starts at DP13 towards endline
   destP  = []; // reset destP array
   src = [-55, 178];
   destP = [[250, 178]];
   // 0 based indices
-  lines[++counter] = createPath(23, src, destP);
+  createPath(23, src, destP);
 
   // P25 - starts at DP13 towards endline
   destP  = []; // reset destP array
   src = [-55, 178];
   destP = [[-55, 240], [250, 240]];
   // 0 based indices
-  lines[++counter] = createPath(24, src, destP);
+  createPath(24, src, destP);
 
   // P26 - starts at DP14 towards finish line
   destP  = []; // reset destP array
   src = [decisionPoint[DP.DP14].x, decisionPoint[DP.DP14].y];
   destP = [[135,178], [250,178]];
   // 0 based indices
-  lines[++counter] = createPath(25, src, destP);
+  createPath(25, src, destP);
 
   // P27 - starts at DP14 towards finish line 135,25
   destP  = []; // reset destP array
   src = [decisionPoint[DP.DP14].x, decisionPoint[DP.DP14].y];
   destP = [[170,decisionPoint[DP.DP14].y], [170,178], [250, 178]];
   // 0 based indices
-  lines[++counter] = createPath(26, src, destP);
+  createPath(26, src, destP);
   
 
   ///////////////////////////////////////////////
@@ -341,7 +364,7 @@ function createPaths() {
   src = [250,210];
   
   destP = [[185, 210], [185, -165], [115, -165], [115, 60], [0, 60], [-10, 40], [-165, 40], [-165, 188], [-40, 188], [-40, 40], [125, 40], [125, 188], [250, 188]];
-  lines[++counter] = createPath(CarSegments.redCar, src, destP);
+  createPath(CarSegments.redCar, src, destP);
 
   // P32 === CarSegments.blueCar
   destP = []; // reset destP array
@@ -351,7 +374,7 @@ function createPaths() {
   destP = [[128, -160], [128, 210], [-185, 210], [-185, -250]];
 
   
-  lines[++counter] = createPath(CarSegments.blueCar, src, destP); 
+  createPath(CarSegments.blueCar, src, destP); 
 
 // P33 === CarSegments.yellowCar1
   destP = []; // reset destP array
@@ -360,7 +383,7 @@ function createPaths() {
   destP = [[-30, -160], [-30, 40], [-40, 40], [-165, 40], [-165, 250]];
 
   
-  lines[++counter] = createPath(CarSegments.yellowCar1, src, destP); 
+  createPath(CarSegments.yellowCar1, src, destP); 
 
 // P35 === CarSegments.greenCar
   destP = []; // reset destP array
@@ -368,7 +391,7 @@ function createPaths() {
   destP = [[-30, 25], [-20, 210], [-200, 210]];
   
   
-  lines[++counter] = createPath(CarSegments.greenCar, src, destP); 
+  createPath(CarSegments.greenCar, src, destP); 
 
 
 
@@ -377,12 +400,12 @@ function createPaths() {
   destP = []; // reset destP array
   src = [160-randPos,-130];
   destP = [[160-randPos, 170], [159-randPos, 170], [159-randPos, -130], [160-randPos, -130]];
-  lines[++counter] = createPath(PedSegments.boy1, src, destP);  
+  createPath(PedSegments.boy1, src, destP);  
 
   destP = []; // reset destP array
   src = [-150, 245-randPos];
   destP = [[220, 245-randPos], [220, 244-randPos], [-150, 244-randPos], [-150, 245-randPos]];
-  lines[++counter] = createPath(PedSegments.robot1, src, destP);  
+  createPath(PedSegments.robot1, src, destP);  
   //////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////
   // Level 2 bike paths starting at segment P49
@@ -390,217 +413,218 @@ function createPaths() {
   destP = []; // reset destP array P49 start at previous FINISH LINE to DP21
   src = [250,decisionPoint[DP.DP21].y];
   destP = [[decisionPoint[DP.DP21].x, decisionPoint[DP.DP21].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
  
   destP = []; // reset destP array P50 start at DP21  to DP27
   src = [decisionPoint[DP.DP21].x, decisionPoint[DP.DP21].y];
   destP = [[decisionPoint[DP.DP21].x, decisionPoint[DP.DP27].y], [decisionPoint[DP.DP27].x, decisionPoint[DP.DP27].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
 
   destP = []; // reset destP array P51: starts DP21 to DP22
   src = [decisionPoint[DP.DP21].x, decisionPoint[DP.DP21].y];
   destP = [[decisionPoint[DP.DP22].x, decisionPoint[DP.DP22].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P52: starts DP27 to DP26
   src = [decisionPoint[DP.DP27].x, decisionPoint[DP.DP27].y];
   destP = [[decisionPoint[DP.DP26].x, decisionPoint[DP.DP26].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P53: starts DP27 to DP31
   src = [decisionPoint[DP.DP27].x, decisionPoint[DP.DP27].y];
   destP = [[decisionPoint[DP.DP31].x, decisionPoint[DP.DP31].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P54: starts DP22 to DP23
   src = [decisionPoint[DP.DP22].x, decisionPoint[DP.DP22].y];
   destP = [[decisionPoint[DP.DP23].x, decisionPoint[DP.DP23].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P55: starts DP22 to DP30
   src = [decisionPoint[DP.DP22].x, decisionPoint[DP.DP22].y];
   destP = [[decisionPoint[DP.DP30].x, decisionPoint[DP.DP22].y], [decisionPoint[DP.DP30].x, decisionPoint[DP.DP30].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P56: starts DP26 to DP38
   src = [decisionPoint[DP.DP26].x, decisionPoint[DP.DP26].y];
   destP = [[decisionPoint[DP.DP38].x, decisionPoint[DP.DP26].y], [decisionPoint[DP.DP38].x, decisionPoint[DP.DP38].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P57: starts DP26 to DP28
   src = [decisionPoint[DP.DP26].x, decisionPoint[DP.DP26].y];
   destP = [[decisionPoint[DP.DP28].x, decisionPoint[DP.DP28].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P58: starts DP28 to DP24
   src = [decisionPoint[DP.DP28].x, decisionPoint[DP.DP28].y];
   destP = [[decisionPoint[DP.DP30].x, decisionPoint[DP.DP24].y], [decisionPoint[DP.DP24].x, decisionPoint[DP.DP24].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P59: starts DP28 to DP29
   src = [decisionPoint[DP.DP28].x, decisionPoint[DP.DP28].y];
   destP = [[decisionPoint[DP.DP29].x, decisionPoint[DP.DP28].y], [decisionPoint[DP.DP29].x, decisionPoint[DP.DP29].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P60: starts DP29 to DP35
   src = [decisionPoint[DP.DP29].x, decisionPoint[DP.DP29].y];
   destP = [[decisionPoint[DP.DP35].x, decisionPoint[DP.DP35].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P61: starts DP29 to DP31
   src = [decisionPoint[DP.DP29].x, decisionPoint[DP.DP29].y];
   destP = [[decisionPoint[DP.DP31].x, decisionPoint[DP.DP31].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P62: starts DP30 to DP24
   src = [decisionPoint[DP.DP30].x, decisionPoint[DP.DP30].y];
   destP = [[decisionPoint[DP.DP30].x, decisionPoint[DP.DP24].y],[decisionPoint[DP.DP24].x, decisionPoint[DP.DP24].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P63: starts DP30 to DP39
   src = [decisionPoint[DP.DP30].x, decisionPoint[DP.DP30].y];
   destP = [[decisionPoint[DP.DP30].x, decisionPoint[DP.DP39].y],[decisionPoint[DP.DP39].x, decisionPoint[DP.DP39].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P64: starts DP24 to DP40
   src = [decisionPoint[DP.DP24].x, decisionPoint[DP.DP24].y];
   destP = [[decisionPoint[DP.DP40].x, decisionPoint[DP.DP24].y], [decisionPoint[DP.DP40].x, decisionPoint[DP.DP40].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
 
   destP = []; // reset destP array P65: starts DP24 to DP37
   src = [decisionPoint[DP.DP24].x, decisionPoint[DP.DP24].y];
   destP = [[decisionPoint[DP.DP37].x, decisionPoint[DP.DP24].y], [decisionPoint[DP.DP37].x, decisionPoint[DP.DP37].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P66: starts DP25 to DP33
   src = [decisionPoint[DP.DP25].x, decisionPoint[DP.DP25].y];
   destP = [[decisionPoint[DP.DP33].x, decisionPoint[DP.DP33].y]]; //, [decisionPoint[DP.DP33].x, decisionPoint[DP.DP33].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P67: starts DP25 to FINISH LINE
   src = [decisionPoint[DP.DP25].x, decisionPoint[DP.DP25].y];
   destP = [[decisionPoint[DP.DP25].x,-250]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P68: starts DP23 to DP36
   src = [decisionPoint[DP.DP23].x, decisionPoint[DP.DP23].y];
   destP = [[decisionPoint[DP.DP36].x, decisionPoint[DP.DP36].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P69: starts DP23 to DP32
   src = [decisionPoint[DP.DP23].x, decisionPoint[DP.DP23].y];
   destP = [[decisionPoint[DP.DP32].x, decisionPoint[DP.DP23].y], [decisionPoint[DP.DP32].x, decisionPoint[DP.DP32].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P70: starts DP31 to FINISH
   src = [decisionPoint[DP.DP31].x, decisionPoint[DP.DP31].y];
   destP = [[-155,-250]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P71: starts DP31 to DP25
   src = [decisionPoint[DP.DP31].x, decisionPoint[DP.DP31].y];
   destP = [[decisionPoint[DP.DP25].x, decisionPoint[DP.DP25].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P72: starts DP32 to DP40
   src = [decisionPoint[DP.DP32].x, decisionPoint[DP.DP32].y];
   destP = [[decisionPoint[DP.DP40].x, decisionPoint[DP.DP40].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P73: starts DP32 to DP37
   src = [decisionPoint[DP.DP32].x, decisionPoint[DP.DP32].y];
   destP = [[decisionPoint[DP.DP24].x, decisionPoint[DP.DP24].y], [decisionPoint[DP.DP37].x, decisionPoint[DP.DP37].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P74: starts DP33 to DP34
   src = [decisionPoint[DP.DP33].x, decisionPoint[DP.DP33].y];
   destP = [[decisionPoint[DP.DP34].x, decisionPoint[DP.DP34].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P75: starts DP33 to DP35
   src = [decisionPoint[DP.DP33].x, decisionPoint[DP.DP33].y];
   destP = [[decisionPoint[DP.DP33].x, decisionPoint[DP.DP35].y], [decisionPoint[DP.DP35].x, decisionPoint[DP.DP35].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P76: starts DP34 to DP26
   src = [decisionPoint[DP.DP34].x, decisionPoint[DP.DP34].y];
   destP = [[decisionPoint[DP.DP26].x, decisionPoint[DP.DP34].y], [decisionPoint[DP.DP26].x, decisionPoint[DP.DP26].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P77: starts DP34 to DP27
   src = [decisionPoint[DP.DP34].x, decisionPoint[DP.DP34].y];
   destP = [[decisionPoint[DP.DP27].x,decisionPoint[DP.DP34].y], [decisionPoint[DP.DP27].x, decisionPoint[DP.DP27].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P78: starts DP35 to DP24
   src = [decisionPoint[DP.DP35].x, decisionPoint[DP.DP35].y];
   destP = [[decisionPoint[DP.DP24].x, decisionPoint[DP.DP24].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P79: starts DP35 to DP39
   src = [decisionPoint[DP.DP35].x, decisionPoint[DP.DP35].y];
   destP = [[decisionPoint[DP.DP39].x, decisionPoint[DP.DP39].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P80: starts DP36 to DP37
   src = [decisionPoint[DP.DP36].x, decisionPoint[DP.DP36].y];
   destP = [[decisionPoint[DP.DP37].x, decisionPoint[DP.DP37].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P81: starts DP36 to DP40
   src = [decisionPoint[DP.DP36].x, decisionPoint[DP.DP36].y];
   destP = [[decisionPoint[DP.DP40].x, decisionPoint[DP.DP36].y], [decisionPoint[DP.DP40].x, decisionPoint[DP.DP40].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P82: starts DP37 to FINISH
   src = [decisionPoint[DP.DP37].x, decisionPoint[DP.DP37].y];
-  destP = [[-155,-250]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  destP = [[decisionPoint[DP.DP37].x,-250]];
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P83: starts DP37 to DP40
   src = [decisionPoint[DP.DP37].x, decisionPoint[DP.DP37].y];
   destP = [[decisionPoint[DP.DP40].x, decisionPoint[DP.DP40].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   
   destP = []; // reset destP array P84: starts DP38 to 31
   src = [decisionPoint[DP.DP38].x, decisionPoint[DP.DP38].y];
   destP = [[decisionPoint[DP.DP38].x, decisionPoint[DP.DP31].y],[decisionPoint[DP.DP31].x, decisionPoint[DP.DP31].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P85: starts DP38 to DP27
   src = [decisionPoint[DP.DP38].x, decisionPoint[DP.DP38].y];
   destP = [[decisionPoint[DP.DP27].x, decisionPoint[DP.DP27].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
 
   destP = []; // reset destP array P86: starts DP39 to 24
   src = [decisionPoint[DP.DP39].x, decisionPoint[DP.DP39].y];
   destP = [[decisionPoint[DP.DP24].x, decisionPoint[DP.DP24].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P87: starts DP39 to DP40
   src = [decisionPoint[DP.DP39].x, decisionPoint[DP.DP39].y];
   destP = [[decisionPoint[DP.DP40].x, decisionPoint[DP.DP39].y], [decisionPoint[DP.DP40].x, decisionPoint[DP.DP40].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P88: starts DP40 to DP25
   src = [decisionPoint[DP.DP40].x, decisionPoint[DP.DP40].y];
   destP = [[decisionPoint[DP.DP25].x, decisionPoint[DP.DP25].y]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P89: starts DP40 to Finish
   src = [decisionPoint[DP.DP40].x, decisionPoint[DP.DP40].y];
   destP = [[decisionPoint[DP.DP40].x, -250]];
-  lines[++counter] = createPath(segmentLevel2++, src, destP); 
+  createPath(segmentLevel2++, src, destP); 
 
-  return lines;
+  // return lines;
 }
 
-
+// This is mainly a debug function for paths accuracy verification. It draws colors lines denoting
+// the paths created. It has potential for special effects but that could be an enhancement.
 function drawPath( segment ) {
   let vertices = [], point;
   let mycolor = (segment < 30) ? Colors.red : ((segment > 48) ? Colors.green : Colors.blue);
@@ -626,4 +650,4 @@ function drawPath( segment ) {
 
 }
 
-export {createPaths, getDP, pathList, CarSegments, PedSegments};
+export {createPaths, lines, getDP, pathList, CarSegments, PedSegments};

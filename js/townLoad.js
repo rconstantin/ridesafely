@@ -292,6 +292,7 @@ mtlLoader.load('assets/dp10-arrows.mtl', function (mtl) {
         let clone = object.clone(); // DP7
         clone.position.set(100,25, -1);
         town.dpArrows[6] = clone;
+        town.add(clone);
         clone = object.clone(); // DP6
         clone.position.set(100,-165, -1);
         town.dpArrows[5] = clone;

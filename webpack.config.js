@@ -11,6 +11,9 @@
          path: path.resolve(__dirname, 'build'),
          filename: '[name].bundle.js'
      },
+     node: {
+         fs: 'empty'
+     },
      module: {
          rules: [
              {

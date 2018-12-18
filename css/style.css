@@ -1,8 +1,3 @@
-/*body {
-  background-color: #000;
-  margin: 0;
-  overflow: hidden;
-}*/
 
 *,
 *::after,
@@ -12,6 +7,8 @@
 }
 
 body {
+  /* padding-right fix for mobile responsiveness*/
+  padding-right: 0px !important;
   font-family: 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif;
   margin: 0;
   color: #444;
@@ -29,98 +26,6 @@ a:hover,
 a:focus {
   color: #3827c5;
   outline: none;
-}
-
-
-/* Top Navigation Style */
-
-.meta {
-  font-size: 0.75em;
-  line-height: 1;
-  position: absolute;
-  top: 1em;
-  left: 40em;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-flex-wrap: wrap;
-  flex-wrap: wrap;
-  white-space: nowrap;
-  border-top: 1px solid #d1b790;
-}
-
-.meta::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 1px;
-  height: 100%;
-  background: #d1b790;
-}
-
-.meta a {
-  display: block;
-  padding: 1em 1.35em;
-  border: 1px solid #d1b790;
-  border-top: 0;
-}
-
-.meta a:not(:last-child) {
-  border-right: 0;
-}
-
-.codrops-icon {
-  width: 4em;
-}
-
-.codrops-icon span {
-  display: none;
-}
-
-.codrops-icon::before {
-  font-family: 'codropsicons';
-  font-size: 1.15em;
-  font-weight: normal;
-  font-style: normal;
-  font-variant: normal;
-  line-height: 1;
-  text-transform: none;
-  speak: none;
-  -webkit-font-smoothing: antialiased;
-}
-
-.codrops-icon--drop::before {
-  content: '\e001';
-  color: #09c;
-}
-
-.codrops-icon--prev::before {
-  content: '\e004';
-}
-
-
-/* Demo links */
-
-.demo-link {
-  font-family: 'Playfair Display';
-  font-weight: bold;
-  text-align: center;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
-
-.demo-link--current {
-  color: #bba077;
-}
-
-@media screen and (max-width:40em) {
-  .meta {
-    right: 1em;
-  }
-  .demo-link {
-    -webkit-flex: 1;
-    flex: 1;
-  }
 }
 
 div#surveyElement {
@@ -185,17 +90,18 @@ span:hover {
   transform: translateY(4px);
 }
 
-   /* height: 20px; */
-    /*width: 50%; */
+
 .modal-content {
     position: relative;
-    right: 390px;
+    /*right: 365px;*/
     top: 60px;
     width: fit-content;
     width: -moz-max-content;
-    /*height:303px;*/
+    max-height:840px;
 }
-
+.landing-modal .modal-content{
+  right: 365px;
+}
 .decisionPoint1 .modal-content {
     position: relative;
     right: 390px;
@@ -243,9 +149,14 @@ span:hover {
     width: 51%;
     position: relative;
     top: -169px;
+    left: 1em;
 }
 
+.welcomeDialog video {
+    position: relative;
+    right: -2em;
 }
+
 .welcomeDialog .modal-content {
     position: relative;
     /* right: 390px; */
@@ -253,18 +164,229 @@ span:hover {
     width: fit-content;
 }
 
-.lookout {
-    position: relative;
-    top: 44px;
-    left: -214px;
+
+.modal-open {
+  overflow-y: auto;
 }
-.lookout1 {
+.description {
     position: relative;
-    top: 44px;
-    left: -184px;
+    top: -123px;
 }
-.lookout2 {
+
+.landing-modal .modal-body {
+    max-height: 680px;
+    padding-left: 8em;
+}
+
+.landing-modal .bootstrap-dialog {
+    width: 95%;
+    margin-left: 2.7em;
+}
+.landing-modal .bootstrap-dialog-header {
+  padding-left: 10em;
+}
+
+.landing-modal .modal-footer {
+   
+    text-align: unset; 
+    
+    padding-left: 42em;
+}
+
+
+@media (max-width: 48em) {
+
+  .landing-modal {
+      width: 98%;
+  }
+  .landing-modal .bootstrap-dialog-header {
+      padding-left: 2em;
+  }
+  .landing-modal .bootstrap-dialog {
+    width: 97%;
+    margin: auto;
+  }
+  .landing-modal .modal-body {
+    padding-left: 0em;
+  }
+  .modal-content {
+    right:unset;
+  }
+  .landing-modal .modal-content {
+    right: 390px;
+  }
+}
+
+@media (max-width: 48em)  {
+ 
+    .decisionPoint1 {
+       left: -31em;
+    }
+    
+    .decsionPoint2 {
+      left: -33em;
+    }
+
+    .decisionPoint2 .modal-content {
+      position: relative;
+      right: 585px;
+      top: 224px;
+      height: 220px;
+    }
+    .description {
+       top: 14px;
+    }
+
+    .modal-open .modal {
+    
+        /*width: 80%;*/
+        margin: auto;
+    }
+    .bootstrap-dialog .bootstrap-dialog-title {
+       font-size: 12px;
+       float: right;
+       width: 60%;
+       margin: auto;
+    }
+    .welcomeDialog img {   
+      width: 31%;
+      position: relative;
+      left: 340px;
+      top: -100px;
+       
+   }
+    .welcomeDialog video {
+      width: 25%;
+      position: relative;
+      left: 365px;
+      top: 0px;
+    }
+    .welcomeDialog p {
+      /* float: right; */
+      position: relative;
+      /* float: left; */
+      /* top: 116px; */
+      margin: auto;
+      width: 40%;
+      left: 68px;
+      top: -77px;
+    }
+    .welcomeDialog .row {
+      width: 55%;
+      position: relative;
+      top: -50px;
+      left: 355px;
+    }
+    
+    .bootstrap-dialog-footer {
+        max-width: 924px;
+        position: relative;
+        top: -17px;
+    }
+}
+@media screen and (max-width: 24em)  {
+
+  canvas {
+    width: 478px !important;
+    height: 812px !important;
+  }
+  .meta {
+    left: 13em;
+  }
+  .landing-modal {
+    height: 990px;
+  }
+  .modal-header {
+    padding: 12px;
+  }
+  .bootstrap-dialog .bootstrap-dialog-title {
+    font-size: 0.7em;
     position: relative;
-    top: 44px;
-    left: -154px;
+    top: 14px;
+  }
+  .landing-modal .bootstrap-dialog-header {
+    padding-right: 18em;
+  }
+  .description {
+    top: 300px;
+    float: left;
+  }
+  .landing-modal .modal-content {
+    height: 930px;
+  }
+  .welcomeDialog img {
+    width: 28%;
+    left: 394px;
+  }
+  
+  .welcomeDialog img {
+    width: 25%;
+    left: 411px;
+    top: -15px;
+    float: left;
+  }
+  .welcomeDialog video {
+    float: left;
+    width: 25%;
+    left: 113px;
+    top: 153px;
+  }
+  .welcomeDialog p {
+    padding-left: 44px;
+    font-size: xx-small;
+    top: -134px;
+  }
+  .welcomeDialog .row {
+    width: 53.5%;
+    position: relative;
+    top: -118px;
+    left: 356px;
+  }
+  ul {
+    font-size: smaller;
+    padding-left: 44px;
+    padding-right: 100px;
+  }
+  .bootstrap-dialog .bootstrap-dialog-message {
+    font-size: 10px;
+  }
+  .bootstrap-dialog-footer {
+    float: left;
+    top: 560px;
+    right: 410px;
+  }
+  .smaller-modal .bootstrap-dialog-footer {
+    right: 380px;
+  }
+  .landing-modal .bootstrap-dialog-footer {
+    top: 420px;
+    right: 450px;
+  }
+  .decisionPoint1 .bootstrap-dialog-footer,  .decisionPoint2 .bootstrap-dialog-footer{
+    top: 570px;
+    right: 380px;
+  }
+
+  .decisionPoint1 .modal-content {
+    right: -434px;
+    width: 350px;
+    height: 220px;
+  }
+  .decisionPoint2 .modal-content {
+    right: 3px;
+    width: 307px;
+    height: 169px;
+  }
+  .decisionPoint1 .modal-header, .decisionPoint2 .modal-header {
+    font-size: small;
+  }
+  .btn-sm, .btn-group-sm > .btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+    position: relative;
+    left: 369px;
+    top: -583px;
+  }
 }

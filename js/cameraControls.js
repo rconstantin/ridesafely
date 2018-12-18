@@ -48,7 +48,7 @@ function createCameras( scene , renderer) {
     nearPlane,
     farPlane
     );
-  hoveringCamera.position.set(0, 350, 450); // 0, 350, 450)// previous settings
+  hoveringCamera.position.set(0, 350, 450); 
   hoveringCamera.lookAt(scene.position);
 
   orbitControls.hcontrols = new THREE.OrbitControls(hoveringCamera, renderer.domElement);

@@ -163,6 +163,7 @@ function check() {
         case 22:
         case 23:
         case 24:
+        case 25:
         case 26:
         case 27:
             journeyCompleted();
@@ -384,27 +385,27 @@ function decisionPoint1()
         closeByKeyboard: false,
         buttons: [{
             label: 'Continue Straight',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
-              reward -= badDecision; // risky move to pass next to parked car.
+              reward += goodDecision; // risky move to pass next to parked car.
               restartCycling(1, dialogRef, null, town.dpArrows[0], countdown_interval_id);
             }
         }, {
             label: 'Turn Right',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 reward += goodDecision; // reward defensive choice
                 restartCycling(3, dialogRef, 1, town.dpArrows[0], countdown_interval_id);
             }
         }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success lookout',
             action: function(dialogRef){
                 setInspectCamera(Math.PI);
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning lookout1',
             action: function(dialogRef){
                 setInspectCamera(0);
             }
@@ -431,21 +432,21 @@ function decisionPoint2()
         closeByKeyboard: false,
         buttons: [{
             label: 'Continue Straight',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(2, dialogRef, 2, town.dpArrows[1], countdown_interval_id);
                 reward += goodDecision;
             }
         }, {
             label: 'Turn Right',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 reward -= badDecision;
                 restartCycling(4, dialogRef, 1, town.dpArrows[1], countdown_interval_id);
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-warning lookout',
+            cssClass: 'btn-sm btn-warning lookout',
             action: function(dialogRef){
                 setInspectCamera(0);
             }
@@ -471,7 +472,7 @@ function decisionPoint3()
         closeByKeyboard: false,
         buttons: [{
             label: 'Continue Straight',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 reward -= badDecision;
                 restartCycling(6, dialogRef, null, town.dpArrows[2], countdown_interval_id);
@@ -479,7 +480,7 @@ function decisionPoint3()
             }
         }, {
             label: 'Steer Away',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 reward += goodDecision;
                 restartCycling(5, dialogRef, null, town.dpArrows[2], countdown_interval_id);
@@ -487,7 +488,7 @@ function decisionPoint3()
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout',
+            cssClass: 'btn-sm btn-warning lookout',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI);
             }
@@ -513,32 +514,32 @@ function decisionPoint4()
         closeByKeyboard: false,
         buttons: [{
             label: 'Turn Left',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(8, dialogRef, null, town.dpArrows[3], countdown_interval_id);
   
             }
         }, {
             label: 'Continue Straight',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 restartCycling(7, dialogRef, null, town.dpArrows[3], countdown_interval_id);
             }
         }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success lookout',
             action: function(dialogRef){
                 setInspectCamera(Math.PI/2);
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning lookout1',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
             }    
         }, {
             label: 'Look Back',
-            cssClass: 'btn-info lookout2',
+            cssClass: 'btn-sm btn-info lookout2',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI);
             }    
@@ -565,26 +566,26 @@ function decisionPoint5()
         closeByKeyboard: false,
         buttons: [{
             label: 'Turn Right',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef) {
                 restartCycling(10, dialogRef, null, town.dpArrows[4], countdown_interval_id);
     
             }
         }, {
             label: 'Continue Straight',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 restartCycling(9, dialogRef, null, town.dpArrows[4], countdown_interval_id);
             }
                 }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success lookout',
             action: function(dialogRef){
                 setInspectCamera(Math.PI);
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning lookout1',
             action: function(dialogRef){
                 setInspectCamera(0);
             }
@@ -611,25 +612,25 @@ function decisionPoint6()
         closeByKeyboard: false,
         buttons: [{
             label: 'Turn Left',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling (13, dialogRef, null, town.dpArrows[5], countdown_interval_id);
             }
         }, {
             label: 'Continue Straight',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 restartCycling(14, dialogRef, null, town.dpArrows[5], countdown_interval_id);
             }
                 }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success lookout',
             action: function(dialogRef){
                 setInspectCamera(Math.PI/2);
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout',
+            cssClass: 'btn-sm btn-warning lookout',
             action: function(dialogRef){
                 setInspectCamera(Math.PI);
             }
@@ -656,13 +657,13 @@ function decisionPoint7()
         closeByKeyboard: false,
         buttons: [{
             label: 'Turn Left',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(11, dialogRef, null, town.dpArrows[6], countdown_interval_id);
             }
         }, {
             label: 'Cross to Sidewalk',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 reward -= 20;
                 restartCycling(12, dialogRef, null, town.dpArrows[6], countdown_interval_id);
@@ -670,14 +671,14 @@ function decisionPoint7()
             }
         }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success lookout',
             action: function(dialogRef){
                 setInspectCamera(Math.PI/2);
                
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning lookout1',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
                 
@@ -704,28 +705,28 @@ function decisionPoint8()
         closeByKeyboard: false,
         buttons: [{
             label: 'Turn Left',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(9, dialogRef, null, town.dpArrows[7], countdown_interval_id);
                 // town.dp8Arrows.position.z = -1; 
             }
         }, {
             label: 'Continue Straight to Sidewalk',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 reward -= 20;
                 restartCycling(10, dialogRef, null, town.dpArrows[7], countdown_interval_id);
             }
                 }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success lookout',
             action: function(dialogRef){
                 setInspectCamera(Math.PI/2);
                 
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning lookout1',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
                 
@@ -751,27 +752,27 @@ function decisionPoint9()
         closeByKeyboard: false,
         buttons: [{
             label: 'Continue on Road',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(15, dialogRef, null, town.dpArrows[8], countdown_interval_id);
             }
         }, {
             label: 'Cross to Sidewalk',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 reward -= 20;
                 restartCycling(16, dialogRef, null, town.dpArrows[8], countdown_interval_id);    
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout',
+            cssClass: 'btn-sm btn-warning lookout',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
              
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-success lookout1',
+            cssClass: 'btn-sm btn-success lookout1',
             action: function(dialogRef){
                 setInspectCamera(0);
                 
@@ -799,7 +800,7 @@ function decisionPoint10()
         closeByKeyboard: false,
         buttons: [{
             label: 'Continue on Sidewalk',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 reward -= 20;
                 restartCycling(17, dialogRef, null, town.dpArrows[9], countdown_interval_id);
@@ -807,13 +808,13 @@ function decisionPoint10()
             }
         }, {
             label: 'Cross to Roadside',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(18, dialogRef, null, town.dpArrows[9], countdown_interval_id);
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout',
+            cssClass: 'btn-sm btn-warning lookout',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI);
                
@@ -839,27 +840,27 @@ function decisionPoint11()
         closeByKeyboard: false,
         buttons: [{
             label: 'Continue on Roadside',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(19, dialogRef, null, town.dpArrows[10], countdown_interval_id);
             }
         }, {
             label: 'Cross to Sidewalk',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 reward -= 20;
                 restartCycling(20, dialogRef, null, town.dpArrows[10], countdown_interval_id);
             }
         }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success lookout',
             action: function(dialogRef){
                 setInspectCamera(Math.PI);
                 
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning lookout1',
             action: function(dialogRef){
                 setInspectCamera(0);
                 
@@ -886,20 +887,20 @@ function decisionPoint12()
         closeByKeyboard: false,
         buttons: [{
             label: 'Continue on Sidewalk',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 reward -= 20;
                 restartCycling(21, dialogRef, null, town.dpArrows[11], countdown_interval_id);
             }
         }, {
             label: 'Cross to Roadside',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(22, dialogRef, null, town.dpArrows[11], countdown_interval_id);
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout',
+            cssClass: 'btn-sm btn-warning lookout',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
               
@@ -925,27 +926,27 @@ function decisionPoint13()
         closeByKeyboard: false,
         buttons: [{
             label: 'Continue on Roadside',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 restartCycling(23, dialogRef, null, town.dpArrows[12], countdown_interval_id);
             }
         }, {
             label: 'Cross to Sidewalk',
-            cssClass: 'btn-success',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 reward -= 20;
                 restartCycling(24, dialogRef, null, town.dpArrows[12], countdown_interval_id);
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success lookout',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
                 
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning lookout1',
             action: function(dialogRef){
                 setInspectCamera(Math.PI);
             }
@@ -970,27 +971,27 @@ function decisionPoint14()
         closeByKeyboard: false,
         buttons: [{
             label: 'Continue straight',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(25, dialogRef, null, town.dpArrows[13], countdown_interval_id);
             }
         }, {
             label: 'Cross thru Sidewalk',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 reward -= 20;
                 restartCycling(26, dialogRef, null, town.dpArrows[13], countdown_interval_id);
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success lookout',
             action: function(dialogRef){
                 setInspectCamera(0);
                 
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning lookout1',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI);
             }
@@ -1004,6 +1005,7 @@ function journeyCompleted() {
     let $textAndPic = $('<div class="decisionPoint"></div>');
  
     previousActive = activeSegment;
+    // write results to file /tmp/results.json
 
     BootstrapDialog.show({
         title: 'Successful Completion!',
@@ -1013,20 +1015,20 @@ function journeyCompleted() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Restart Cycling Journey',
-            cssClass: 'btn-success',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 resetReward();
                 restartCycling(0,dialogRef);
             }
         }, {
             label: 'Go to Level 2',
-            cssClass: 'btn-success',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 restartCycling(49,dialogRef);
             }    
         }, {
             label: 'Leave Game',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 visibilityOutsideGame();
                 showCameraSelect();
@@ -1052,20 +1054,20 @@ function decisionPoint21() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Turn Left',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(50, dialogRef, null, town.dpArrows[20], countdown_interval_id);
             }
         }, {
             label: 'Continue Straight',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(51, dialogRef, null, town.dpArrows[20], countdown_interval_id);
             }
         }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
                 
@@ -1088,27 +1090,27 @@ function decisionPoint22() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Turn Left',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(55, dialogRef, null, town.dpArrows[21], countdown_interval_id);
             }
         }, {
             label: 'Continue Straight',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(54, dialogRef, null, town.dpArrows[21], countdown_interval_id);
             }
         }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
                 
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(0);
             }
@@ -1131,27 +1133,27 @@ function decisionPoint23() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Turn Left',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(68, dialogRef, null, town.dpArrows[22], countdown_interval_id);
             }
         }, {
             label: 'Continue Straight',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(69, dialogRef, null, town.dpArrows[22], countdown_interval_id);
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
                 
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(0);
             }
@@ -1174,34 +1176,34 @@ function decisionPoint24() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Turn Left',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 restartCycling(65, dialogRef, null, town.dpArrows[23], countdown_interval_id);
             }
         }, {
             label: 'Cross Road',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(64, dialogRef, null, town.dpArrows[23], countdown_interval_id);
             }
         }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
                 
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(Math.PI/2);
                 
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(0);
             }
@@ -1224,27 +1226,27 @@ function decisionPoint25() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Continue Straight',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 restartCycling(67, dialogRef, null, town.dpArrows[24], countdown_interval_id);
             }
         }, {
             label: 'Turn Left',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(66, dialogRef, null, town.dpArrows[24], countdown_interval_id);
             }
         }, {
             label: 'Look Left',
-            cssClass: 'btn-danger lookout',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 setInspectCamera(0);
                 
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(Math.PI/2);
             }
@@ -1267,27 +1269,27 @@ function decisionPoint26() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Turn Back',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(56, dialogRef, null, town.dpArrows[25], countdown_interval_id);
             }
         }, {
             label: 'Turn Left',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(57, dialogRef, null, town.dpArrows[25], countdown_interval_id);
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI);
                 
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
             }
@@ -1310,27 +1312,27 @@ function decisionPoint27() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Cross to Roadside',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(53, dialogRef, null, town.dpArrows[26], countdown_interval_id);
             }
         }, {
             label: 'Along Sidewalk',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(52, dialogRef, null, town.dpArrows[26], countdown_interval_id);
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(Math.PI/2);
                 
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(0);
             }
@@ -1353,27 +1355,27 @@ function decisionPoint28() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Turn Left',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(59, dialogRef, null, town.dpArrows[27], countdown_interval_id);
             }
         }, {
             label: 'Continue Cross',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(58, dialogRef, null, town.dpArrows[27], countdown_interval_id);
             }
         }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
                 
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(Math.PI/2);
             }
@@ -1396,34 +1398,34 @@ function decisionPoint29() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Turn Back',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 restartCycling(60, dialogRef, null, town.dpArrows[28], countdown_interval_id);
             }
         }, {
             label: 'Turn Right',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(61, dialogRef, null, town.dpArrows[28], countdown_interval_id);
             }
         }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(0);
                 
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(Math.PI);
                 
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(Math.PI/2);
             }
@@ -1446,27 +1448,27 @@ function decisionPoint30() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Turn Right',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(63, dialogRef, null, town.dpArrows[29], countdown_interval_id);
             }
         }, {
             label: 'Cross to Right',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(62, dialogRef, null, town.dpArrows[29], countdown_interval_id);
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
                 
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(Math.PI);
             }
@@ -1489,34 +1491,34 @@ function decisionPoint31() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Turn Left',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(70, dialogRef, null, town.dpArrows[30], countdown_interval_id);
             }
         }, {
             label: 'Cross Road',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(71, dialogRef, null, town.dpArrows[30], countdown_interval_id);
             }
         }, {
             label: 'Look Left',
-            cssClass: 'btn-danger lookout',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
                 
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(Math.PI/2);
                 
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(0);
             }
@@ -1539,27 +1541,27 @@ function decisionPoint32() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Cross Left',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(73, dialogRef, null, town.dpArrows[31], countdown_interval_id);
             }
         }, {
             label: 'Continue Straight',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(72, dialogRef, null, town.dpArrows[31], countdown_interval_id);
             }
         }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(0);
                 
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(Math.PI/2);
             }
@@ -1582,34 +1584,34 @@ function decisionPoint33() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Turn Left',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(75, dialogRef, null, town.dpArrows[32], countdown_interval_id);
             }
         }, {
             label: 'Continue Straight',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(74, dialogRef, null, town.dpArrows[32], countdown_interval_id);
             }
         }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(Math.PI/2);
                 
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
                 
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI);
             }
@@ -1632,27 +1634,27 @@ function decisionPoint34() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Turn Left',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(76, dialogRef, null, town.dpArrows[33], countdown_interval_id);
             }
         }, {
             label: 'Continue Straight',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(77, dialogRef, null, town.dpArrows[33], countdown_interval_id);
             }
         }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(Math.PI/2);
                 
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI);
             }
@@ -1675,34 +1677,34 @@ function decisionPoint35() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Cross To Left',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(79, dialogRef, null, town.dpArrows[34], countdown_interval_id);
             }
         }, {
             label: 'Turn Left',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(78, dialogRef, null, town.dpArrows[34], countdown_interval_id);
             }
         }, {
             label: 'Look Left',
-            cssClass: 'btn-danger lookout',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI);
                 
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(Math.PI/2);
                 
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
             }
@@ -1726,27 +1728,27 @@ function decisionPoint36() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Continue Straight',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(80, dialogRef, null, town.dpArrows[35], countdown_interval_id);
             }
         }, {
             label: 'Cross Road',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(81, dialogRef, null, town.dpArrows[35], countdown_interval_id);
             }
         }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
                 
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(Math.PI);
             }
@@ -1769,33 +1771,33 @@ function decisionPoint37() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Continue Straight',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(82, dialogRef, null, town.dpArrows[36], countdown_interval_id);
             }
         }, {
             label: 'Cross Road',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(83, dialogRef, null, town.dpArrows[36], countdown_interval_id);
             }
         }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(0);
                 
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI);
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-danger lookout1',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 setInspectCamera(Math.PI/2);
             }
@@ -1818,27 +1820,27 @@ function decisionPoint38() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Turn Right',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(84, dialogRef, null, town.dpArrows[37], countdown_interval_id);
             }
         }, {
             label: 'Turn Left',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(85, dialogRef, null, town.dpArrows[37], countdown_interval_id);
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI);
                 
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(0);
             }
@@ -1861,34 +1863,34 @@ function decisionPoint39() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Cross Road',
-            cssClass: 'btn-primary',
+            cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(86, dialogRef, null, town.dpArrows[38], countdown_interval_id);
             }
         }, {
             label: 'Turn Left',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(87, dialogRef, null, town.dpArrows[38], countdown_interval_id);
             }
          }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI/2);
                 
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-danger lookout',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 setInspectCamera(Math.PI/2);
                 
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(0);
             }
@@ -1911,33 +1913,33 @@ function decisionPoint40() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Continue Straight',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 restartCycling(88, dialogRef, null, town.dpArrows[39], countdown_interval_id);
             }
         }, {
             label: 'Cross to Finish',
-            cssClass: 'btn-success',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 // reward -= 20;
                 restartCycling(89, dialogRef, null, town.dpArrows[39], countdown_interval_id);
             }
         }, {
             label: 'Look Left',
-            cssClass: 'btn-success lookout',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 setInspectCamera(0);
                 
             }
         }, {
             label: 'Look Right',
-            cssClass: 'btn-warning lookout1',
+            cssClass: 'btn-sm btn-warning',
             action: function(dialogRef){
                 setInspectCamera(-Math.PI);
             }
         }, {
             label: 'Look Back',
-            cssClass: 'btn-danger lookout1',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 setInspectCamera(Math.PI/2);
             }
@@ -1959,14 +1961,14 @@ function gameFinishLine2() {
         closeByKeyboard: false,
         buttons: [{
             label: 'Restart Cycling Journey',
-            cssClass: 'btn-success',
+            cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 resetReward();
                 restartCycling(0,dialogRef);
             }
         }, {
             label: 'Leave Game',
-            cssClass: 'btn-danger',
+            cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 visibilityOutsideGame();
                 showCameraSelect();
