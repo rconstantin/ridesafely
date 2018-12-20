@@ -7,7 +7,7 @@ function infoButton()
 	{ "z-index":"2",
 	  "background":"rgba(0,0,0,0)", "opacity":"0.9",
 	  "position": "fixed",
-	  "title":"Place Holder for More Game Info."
+	  "title": "This Interactive Game represents my Fall 2018 HES Capstone Project."
 	  
 	}) // adds CSS
 	.append("<img width='42' height='42' src='images/infoButton.png'/>")

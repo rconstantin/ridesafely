@@ -21,7 +21,9 @@ a {
   color: #3827c5;
   outline: none;
 }
-
+.meta {
+  font-size: 1.2em;
+}
 a:hover,
 a:focus {
   color: #3827c5;
@@ -69,8 +71,9 @@ span:hover {
 }
 #score {
     position: fixed;
-    color: #297532;
-    font-size: large;
+    color: #b38505;
+    font-size: 22px;
+    font-weight: 900;
     left: 200px;
     top: 10px;
 }
@@ -183,7 +186,7 @@ span:hover {
     margin-left: 2.7em;
 }
 .landing-modal .bootstrap-dialog-header {
-  padding-left: 10em;
+  padding-left: 18em;
 }
 
 .landing-modal .modal-footer {
@@ -193,55 +196,62 @@ span:hover {
     padding-left: 42em;
 }
 
-
-@media (max-width: 48em) {
-
-  .landing-modal {
-      width: 98%;
-  }
-  .landing-modal .bootstrap-dialog-header {
-      padding-left: 2em;
-  }
-  .landing-modal .bootstrap-dialog {
-    width: 97%;
+/* unset overflow-y to keep the modal fixed*/
+.modal-open .modal {
     margin: auto;
-  }
-  .landing-modal .modal-body {
-    padding-left: 0em;
-  }
-  .modal-content {
-    right:unset;
-  }
-  .landing-modal .modal-content {
-    right: 390px;
-  }
+    overflow-y: unset; 
 }
 
-@media (max-width: 48em)  {
- 
+
+
+@media (max-width: 896px) and (min-width: 592px) {
+   
+  .decisionPoint1 {
+     top: -22px !important;
+     right: -600px !important;
+  }
+  .decisionPoint2 {
+      top: -150px !important;
+      right: -600px !important;
+  }
+    
     .decisionPoint1 {
        left: -31em;
+       top: 5px !important;
     }
     
-    .decsionPoint2 {
-      left: -33em;
+    .decisionPoint2 {
+        top: 25px !important;
     }
 
     .decisionPoint2 .modal-content {
       position: relative;
-      right: 585px;
-      top: 224px;
-      height: 220px;
+      right: 0px; /*585px;*/
+      top: 0px;
+      height: 190px; /*220px;*/
+    }
+
+    .decisionPoint1 .modal-content {
+       position: relative;
+       right: 0px;  /*286px; */
+       top: 80px;
+       width: 432px;
+       height: 195px;
+    }
+
+    .decisionPoint1 .bootstrap-dialog-footer {
+      width: 56em;
+      left: -17em;
+    }
+    .decisionPoint2 .bootstrap-dialog-footer {
+      width: fit-content;
+      left: -5em;
     }
     .description {
        top: 14px;
+       left: 188px;
     }
-
-    .modal-open .modal {
     
-        /*width: 80%;*/
-        margin: auto;
-    }
     .bootstrap-dialog .bootstrap-dialog-title {
        font-size: 12px;
        float: right;
@@ -251,14 +261,14 @@ span:hover {
     .welcomeDialog img {   
       width: 31%;
       position: relative;
-      left: 340px;
+      left: 556px;/*340px;*/
       top: -100px;
        
    }
     .welcomeDialog video {
       width: 25%;
       position: relative;
-      left: 365px;
+      left: 575px; /*365px;*/
       top: 0px;
     }
     .welcomeDialog p {
@@ -281,10 +291,160 @@ span:hover {
     .bootstrap-dialog-footer {
         max-width: 924px;
         position: relative;
-        top: -17px;
+        /*top: 20px;*/
+        top: 0px;
+        width: 90em;
+    }
+    .modal-footer {
+      padding: 0px;
+      text-align: center;
+      border-top: 1px solid #e5e5e5;
+    }
+    .btn {
+      padding: 2px 6px;
+      font-size: 15px;
+    }
+    .modal-footer .btn + .btn {
+       margin-left: 35px;
+    }
+    .btn-sm {
+    padding: 0px 0px;
+    font-size: 8px;
+    line-height: 3.5;
+    /*border-radius: 3px;*/
+    border-radius: 25px;
+    width: auto;
+    height: 45px;
+    position: relative;
+    left: 70px;/*219px;*/
+    /*top: -565px;*/
+  }
+  .smaller-modal .btn-sm {
+    left: -8em;
+  }
+  .smaller-modal .bootstrap-dialog-footer {
+    width: 28em;
+  }
+}
+
+@media (max-width: 591px) and (min-width:416px) { /* This covers IPhoneX Landscape (600px)*/
+
+  .decisionPoint1 {
+     top: -22px !important;
+     right: -600px !important;
+  }
+  .decisionPoint2 {
+      top: -150px !important;
+      right: -600px !important;
+  }
+  .landing-modal {
+      width: 98%;
+  }
+  .landing-modal .bootstrap-dialog-header {
+      padding-left: 2em;
+  }
+  .landing-modal .bootstrap-dialog {
+    width: 97%;
+    margin: auto;
+  }
+  .landing-modal .modal-body {
+    padding-left: 0em;
+  }
+  .modal-content {
+    right:unset;
+  }
+  .landing-modal .modal-content {
+    right: 390px;
+  }
+  .landing-modal .bootstrap-dialog .bootstrap-dialog-title {
+       font-size: 10px;
+       float: right;
+       width: 60%;
+       margin: auto;
+    }
+    
+}
+
+@media (max-width: 896px) and (min-width: 768px) {
+  .landing-modal {
+      left: -48em;/*-20em;*/
+  }
+  .landing-modal .bootstrap-dialog-header {
+        padding-left: 10em;
+  }
+  .landing-modal .modal-body {
+        max-height: 680px;
+        padding-left: 9em;
+    }
+    .landing-modal .modal-content {
+       right: 390px;
+    }
+    .landing-modal .bootstrap-dialog-footer {
+        max-width: 909px;
+        position: relative;
+        top: -4px;
+        text-align: center;
     }
 }
-@media screen and (max-width: 24em)  {
+
+@media (max-width: 767px) and (min-width: 417px) {
+
+  .decisionPoint1 {
+     top: -22px !important;
+     right: -600px !important;
+  }
+  .decisionPoint2 {
+      top: -150px !important;
+      right: -600px !important;
+  }
+  
+  .decisionPoint1 {
+     /*left: -31em;*/
+     left: 10px;
+     top: 5px !important;
+  }
+  
+  .decisionPoint2 {
+      top: 25px !important;
+  }
+
+  .landing-modal {
+      left: -20em;
+  }
+  .landing-modal .bootstrap-dialog-header {
+        padding-left: 10em;
+  }
+  .landing-modal .modal-body {
+        max-height: 680px;
+        padding-left: 9em;
+    }
+    .landing-modal .modal-content {
+       right: 390px;
+    }
+    .landing-modal .bootstrap-dialog-footer {
+        max-width: 909px;
+        position: relative;
+        top: -4px;
+        text-align: center;
+    }
+    .welcomeDialog img {
+      width: 25%;
+      position: relative;
+      left: 556px;
+      top: -81px;
+   }
+    .welcomeDialog video {
+      width: 20%;
+      position: relative;
+      left: 575px;
+      top: 0px;
+   }
+   .description {
+      font-size: 10px;
+   }
+}
+
+@media (max-width: 415px)  {
 
   canvas {
     width: 478px !important;
@@ -294,10 +454,12 @@ span:hover {
     left: 13em;
   }
   .landing-modal {
-    height: 990px;
+    height: 810px;
+    padding-left: 0px;
   }
   .modal-header {
-    padding: 12px;
+    /*padding: 12px;*/
+    padding-bottom: 20px;
   }
   .bootstrap-dialog .bootstrap-dialog-title {
     font-size: 0.7em;
@@ -305,14 +467,17 @@ span:hover {
     top: 14px;
   }
   .landing-modal .bootstrap-dialog-header {
-    padding-right: 18em;
+    /*padding-right: 18em;*/
+    padding-left: 35em;
   }
   .description {
-    top: 300px;
-    float: left;
+    /*top: 280px;*/
+    top: 372px;
+    /*float: left;*/
   }
   .landing-modal .modal-content {
     height: 930px;
+    right: 496px;
   }
   .welcomeDialog img {
     width: 28%;
@@ -321,6 +486,7 @@ span:hover {
   
   .welcomeDialog img {
     width: 25%;
+    height: 150px;
     left: 411px;
     top: -15px;
     float: left;
@@ -328,22 +494,27 @@ span:hover {
   .welcomeDialog video {
     float: left;
     width: 25%;
-    left: 113px;
-    top: 153px;
+    /*height: 162px;*/
+    left: 111px;
+    top: 135px;
   }
   .welcomeDialog p {
-    padding-left: 44px;
+    position: relative;
     font-size: xx-small;
-    top: -134px;
+    left: -18em;
   }
   .welcomeDialog .row {
-    width: 53.5%;
+    /*width: 53.5%;
     position: relative;
     top: -118px;
+    left: 356px;*/
+    width: 40.5%;
+    position: relative;
+    top: -160px;
     left: 356px;
   }
   ul {
-    font-size: smaller;
+    font-size: 10px;
     padding-left: 44px;
     padding-right: 100px;
   }
@@ -351,42 +522,67 @@ span:hover {
     font-size: 10px;
   }
   .bootstrap-dialog-footer {
-    float: left;
+    /*float: left;*/
     top: 560px;
     right: 410px;
   }
-  .smaller-modal .bootstrap-dialog-footer {
+  /*.smaller-modal .bootstrap-dialog-footer {
     right: 380px;
-  }
+  }*/
   .landing-modal .bootstrap-dialog-footer {
-    top: 420px;
-    right: 450px;
+    position: relative;
+    top: 13em;
+    right: 0px;
   }
   .decisionPoint1 .bootstrap-dialog-footer,  .decisionPoint2 .bootstrap-dialog-footer{
     top: 570px;
     right: 380px;
   }
-
+  
   .decisionPoint1 .modal-content {
     right: -434px;
     width: 350px;
-    height: 220px;
+   /*height: 220px;*/
   }
   .decisionPoint2 .modal-content {
     right: 3px;
     width: 307px;
-    height: 169px;
+    /*height: 169px;*/
   }
   .decisionPoint1 .modal-header, .decisionPoint2 .modal-header {
     font-size: small;
   }
-  .btn-sm, .btn-group-sm > .btn {
-    padding: 5px 10px;
-    font-size: 12px;
-    line-height: 1.5;
-    border-radius: 3px;
+  .decisionPoint1 {
+     left: -31em;
+     top: 5px !important;
+  }
+    
+  .decisionPoint2 {
+      top: 25px !important;
+  }
+  /* This important setting for btn-sm*/
+  .btn-sm {
+    padding: 0px 0px;
+    font-size: 8px;
+    line-height: 3.5;
+    /*border-radius: 3px;*/
+    border-radius: 25px;
+    width: auto;
+    height: 45px;
     position: relative;
-    left: 369px;
-    top: -583px;
+    left: -27px;
+    /*top: -565px;*/
+  }
+
+
+  .landing-modal .btn {
+      font-size: 8px;
+      border-radius: 20px;
+      height: 39px;
+      width: auto;
+      padding: 0;
+      position: relative;
+      top: 0px;
+      left: 36px;
   }
 }

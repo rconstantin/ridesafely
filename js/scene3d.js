@@ -27,6 +27,7 @@ let forwardReset = true, forwardReset1 = true;
 let pauseCount = 0, pauseCount1 = 0, pauseCount2 = 0, crashed = false;
 
 
+
 function createScene() {
   //This function will create the scene, the camera and the renderer
   // for this project
@@ -80,46 +81,20 @@ function createScene() {
 
 }
 
+// This event is used for Mobile Support when user switches from 
+// portrait to landscape window setting: resize is used for desktop simulation
+window.addEventListener('resize', function() {
+  if (renderer) {
+     renderer.setSize(window.innerWidth, window.innerHeight);
+  }
+});
+// Listen for orientation changes of Mobile devices and resize the renderer.
+window.addEventListener("orientationchange", function() {
+   if (renderer) {
+       renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+}, false);
 
-
-// let Sky = function(){
-//   this.mesh = new THREE.Object3D();
-//   // Should add some birds and other flying objects
-  
-// }
-
-
-// function createSky(){
-//   sky = new Sky();
-//   sky.mesh.position.y = -600;
-//   scene.add(sky.mesh);
-// }
-
-// let Road = function(){
-  
-//   let geometry = new THREE.PlaneGeometry( 1000, 2000);
-//   let material = new THREE.MeshBasicMaterial( {color: Colors.red, side: THREE.DoubleSide} );
-//   this.mesh = new THREE.Mesh( geometry, material );
-//   this.mesh.castShadow = true;
-//   this.mesh.position.set(0,0,-5);
-// }
-
-// function createRoad() {
-//   let road = new Road();
-//   road.mesh.position.y = -600;
-//   scene.add(road.mesh);
-// }
-
-// function createFloor() {
-//   // create floor
-//   let material = new THREE.MeshBasicMaterial({wireframe:true, color: 0x000000});
-//   let geometry = new THREE.PlaneGeometry(500, 500, 20, 20);
-//   let floor = new THREE.Mesh(geometry, material);
-//   let container = new THREE.Object3D();
-//   container.add(floor);
-//   scene.add(container);
-
-// }
 
 // Algorithm based on simple 2D collision of objects with Axis-aligned bounding boxes (i.e no rotation)
 // https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
@@ -163,11 +138,11 @@ function welcomeDialog() {
                           </div> \
                           <div class="border col-md-6 col-sm-12 boxlayout"> \
                             <ul> <strong>Controls:</strong> \
-                              <li> To Choose the Top Hovering Camera, click (Mobile Touch) on Red Camera Icon</li> \
-                              <li> To Choose the Trailing Camera, click (Mobile Touch) on Black Camera Icon</li> \
-                              <li> To Zoom in and Out, use middle mouse wheel, Mobile Touch with 1 finger swipe</li> \
-                              <li> To Rotate around the Z axis the Hovering (Red) Camera , use left mouse button, 2 fingers Mobile Touch</li> \
-                              <li> To move the TOP Camera around, use right mouse button (Mobile: 2 fingers touch)</li> \
+                              <li> Click (Mobile Touch) on RED Camera Icon To activate Top View Camera</li> \
+                              <li> Click (Mobile Touch) on BLACK Camera Icon To activate Trailing Camera</li> \
+                              <li> Zoom/PAN/Rotate only enabled for Top View Camera. Use middle mouse wheel, 2 fingers Touch to Zoom In/Out</li> \
+                              <li> To Rotate around the Z axis the Top View (Red) Camera , use left mouse button, 1 fingers Touch</li> \
+                              <li> To Pan the TOP Camera around, use right mouse button and 2 fingers touch</li> \
                             </ul> \
                           </div> \
                         </div>');
@@ -565,13 +540,13 @@ function render() {
 
   orbitControls.hcontrols.update();
   orbitControls.tcontrols.update();
-
-  if ( keyboard.pressed("1") ) {
-     setActiveCamera(hoveringCamera);  
-  }
-  if ( keyboard.pressed("2") ) {
-     setActiveCamera(trailingCamera); 
-  }
+  // Disable Keyboard access to camera in final product
+  // if ( keyboard.pressed("1") ) {
+  //    setActiveCamera(hoveringCamera);  
+  // }
+  // if ( keyboard.pressed("2") ) {
+  //    setActiveCamera(trailingCamera); 
+  // }
   let activeCamera = getActiveCamera();
   if (activeCamera)
   {

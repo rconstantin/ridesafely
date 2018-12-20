@@ -23,22 +23,23 @@ function createCameras( scene , renderer) {
     );
  
 
-  trailingCamera.position.set(0, -250, 50);
+  trailingCamera.position.set(0, -200, 50);
 
   // Default ActiveCamera to be the trailingCamera
   activeCamera = trailingCamera;
 
- 
+ // Limit orbit controls for the trailing camera: No real need.
   orbitControls.tcontrols = new THREE.OrbitControls(trailingCamera, renderer.domElement);
-  orbitControls.tcontrols.maxPolarAngle = Math.PI; 
-  orbitControls.tcontrols.minPolarAngle = 2.4;
-  orbitControls.tcontrols.maxAzimuthAngle=Math.PI/6;
-  orbitControls.tcontrols.minAzimuthAngle=-Math.PI/6;
+  orbitControls.tcontrols.maxPolarAngle = 2.7; 
+  orbitControls.tcontrols.minPolarAngle = 2.7; //Disable Rotation around
+  orbitControls.tcontrols.maxAzimuthAngle=0;//Math.PI/6;
+  orbitControls.tcontrols.minAzimuthAngle=0;//-Math.PI/6;
   orbitControls.tcontrols.minDistance = 50;
   orbitControls.tcontrols.maxDistance = 250; 
   orbitControls.tcontrols.enableDamping = true;
   orbitControls.tcontrols.dampingFactor = 0.25;
-  orbitControls.tcontrols.enableZoom = true;
+  orbitControls.tcontrols.enableZoom = false;
+  orbitControls.tcontrols.enablePan = false;
   orbitControls.tcontrols.update();
 
   // hovering camera
