@@ -16,7 +16,6 @@ import {visibilityDuringGame, visibilityOutsideGame, hideCameraSelect, hideAll} 
 
 let renderer, scene;
 let carPosition = 0, boy1Position = 0, robot1Position = 0;
-let keyboard = new THREEx.KeyboardState();
 let carSpeed = 0.1, pedSpeed = 0.05;
 let animId = null;
 let gameEnd = false;
@@ -155,7 +154,7 @@ function welcomeDialog() {
       closeByKeyboard: false,
       buttons: [{
         label: 'Start Game',
-        cssClass: 'btn btn-success',
+        cssClass: 'btn btn-lg btn-success',
         action: function(dialogRef){
           visibilityDuringGame();
           dialogRef.close();
@@ -164,7 +163,7 @@ function welcomeDialog() {
         }
       }, {
         label: 'Quit Game',
-        cssClass: 'btn btn-danger',
+        cssClass: 'btn btn-lg btn-danger',
         action: function(dialogRef) {
           visibilityOutsideGame();
           dialogRef.close();
@@ -200,13 +199,13 @@ function crashBike() {
       closeByKeyboard: false,
       buttons: [{
           label: 'Restart Game',
-          cssClass: 'btn-sm btn-success',
+          cssClass: 'btn-sm btn-lg btn-success',
           action: function(dialogRef){
               restartGame(dialogRef);
           }
       }, {
           label: 'Leave Game',
-          cssClass: 'btn-sm btn-danger',
+          cssClass: 'btn-sm btn-lg btn-danger',
           action: function(dialogRef){
               visibilityOutsideGame();
               cancelAnimationFrame(animId);

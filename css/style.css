@@ -167,6 +167,11 @@ span:hover {
     width: fit-content;
 }
 
+.btn {
+  font-size: 15px;
+  font-weight: 600;
+  color: black;
+}
 
 .modal-open {
   overflow-y: auto;
@@ -174,6 +179,8 @@ span:hover {
 .description {
     position: relative;
     top: -123px;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .landing-modal .modal-body {
@@ -303,13 +310,15 @@ span:hover {
     .btn {
       padding: 2px 6px;
       font-size: 15px;
+      font-weight: 600;
+      color: black;
     }
     .modal-footer .btn + .btn {
        margin-left: 35px;
     }
     .btn-sm {
     padding: 0px 0px;
-    font-size: 8px;
+    font-size: 12px;
     line-height: 3.5;
     /*border-radius: 3px;*/
     border-radius: 25px;
@@ -317,6 +326,7 @@ span:hover {
     height: 45px;
     position: relative;
     left: 70px;/*219px;*/
+    color: black;
     /*top: -565px;*/
   }
   .smaller-modal .btn-sm {
@@ -343,6 +353,7 @@ span:hover {
   .landing-modal .bootstrap-dialog-header {
       padding-left: 2em;
   }
+  
   .landing-modal .bootstrap-dialog {
     width: 97%;
     margin: auto;
@@ -358,6 +369,7 @@ span:hover {
   }
   .landing-modal .bootstrap-dialog .bootstrap-dialog-title {
        font-size: 10px;
+       font-weight: 600;
        float: right;
        width: 60%;
        margin: auto;
@@ -441,6 +453,7 @@ span:hover {
    }
    .description {
       font-size: 10px;
+      font-weight: 600;
    }
 }
 
@@ -449,6 +462,9 @@ span:hover {
   canvas {
     width: 478px !important;
     height: 812px !important;
+  }
+  .iphone-hidden {
+    display: none;
   }
   .meta {
     left: 13em;
@@ -500,7 +516,8 @@ span:hover {
   }
   .welcomeDialog p {
     position: relative;
-    font-size: xx-small;
+    font-size: 12px;
+    font-weight: 600;
     left: -18em;
   }
   .welcomeDialog .row {
@@ -515,11 +532,13 @@ span:hover {
   }
   ul {
     font-size: 10px;
+    font-weight: 600;
     padding-left: 44px;
     padding-right: 100px;
   }
   .bootstrap-dialog .bootstrap-dialog-message {
-    font-size: 10px;
+    font-size: 12px;
+    font-weight: 600;
   }
   .bootstrap-dialog-footer {
     /*float: left;*/
@@ -563,20 +582,23 @@ span:hover {
   /* This important setting for btn-sm*/
   .btn-sm {
     padding: 0px 0px;
-    font-size: 8px;
+    font-size: 12px;
+    font-weight: 600;
     line-height: 3.5;
     /*border-radius: 3px;*/
     border-radius: 25px;
     width: auto;
     height: 45px;
     position: relative;
-    left: -27px;
+    left: -7px;
+    color: black;
     /*top: -565px;*/
   }
 
 
   .landing-modal .btn {
-      font-size: 8px;
+      font-size: 12px;
+      font-weight: 600;
       border-radius: 20px;
       height: 39px;
       width: auto;
@@ -584,5 +606,6 @@ span:hover {
       position: relative;
       top: 0px;
       left: 36px;
+      color: black;
   }
 }

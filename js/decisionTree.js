@@ -53,8 +53,6 @@ if (list !== null) {
 function cleanup() {
 
     resetReward();
-    // resetSegment();
-    // resetPosition();
 
     //delete dangling dialog(s)
     $.each(BootstrapDialog.dialogs, function(id, dialog) {
@@ -98,7 +96,6 @@ function check() {
   }
   
   
-  // if (pathList[activeSegment] !== null && pathList[activeSegment].getPoint(position) === null) 
   if (pathList[activeSegment].getPoint(position) === null)
   {
      
@@ -373,7 +370,6 @@ function decisionPoint1()
 
 
     countdown_interval_id = displayCountdown(choose_period/1000);
-    // $textAndPic.append('<img src="./images/right.png" />');
     $textAndPic.append("<strong>CountDown: </strong> <span class=display_cnt> </span>");
     previousActive = activeSegment;
     town.dpArrows[0].position.z = 1;
@@ -384,7 +380,7 @@ function decisionPoint1()
         closeByBackdrop: false,
         closeByKeyboard: false,
         buttons: [{
-            label: 'Continue Straight',
+            label: 'Straight',
             cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
               reward += goodDecision; // risky move to pass next to parked car.
@@ -431,7 +427,7 @@ function decisionPoint2()
         closeByBackdrop: false,
         closeByKeyboard: false,
         buttons: [{
-            label: 'Continue Straight',
+            label: 'Straight',
             cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(2, dialogRef, 2, town.dpArrows[1], countdown_interval_id);
@@ -471,7 +467,7 @@ function decisionPoint3()
         closeByBackdrop: false,
         closeByKeyboard: false,
         buttons: [{
-            label: 'Continue Straight',
+            label: 'Straight',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 reward -= badDecision;
@@ -520,7 +516,7 @@ function decisionPoint4()
   
             }
         }, {
-            label: 'Continue Straight',
+            label: 'Straight',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 restartCycling(7, dialogRef, null, town.dpArrows[3], countdown_interval_id);
@@ -572,7 +568,7 @@ function decisionPoint5()
     
             }
         }, {
-            label: 'Continue Straight',
+            label: 'Straight',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 restartCycling(9, dialogRef, null, town.dpArrows[4], countdown_interval_id);
@@ -617,7 +613,7 @@ function decisionPoint6()
                 restartCycling (13, dialogRef, null, town.dpArrows[5], countdown_interval_id);
             }
         }, {
-            label: 'Continue Straight',
+            label: 'Straight',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 restartCycling(14, dialogRef, null, town.dpArrows[5], countdown_interval_id);
@@ -662,7 +658,7 @@ function decisionPoint7()
                 restartCycling(11, dialogRef, null, town.dpArrows[6], countdown_interval_id);
             }
         }, {
-            label: 'Cross to Sidewalk',
+            label: 'Sidewalk',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 reward -= 20;
@@ -711,7 +707,7 @@ function decisionPoint8()
                 // town.dp8Arrows.position.z = -1; 
             }
         }, {
-            label: 'Continue Straight to Sidewalk',
+            label: 'Sidewalk',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 reward -= 20;
@@ -751,13 +747,13 @@ function decisionPoint9()
         closeByBackdrop: false,
         closeByKeyboard: false,
         buttons: [{
-            label: 'Continue on Road',
+            label: 'Roadside',
             cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(15, dialogRef, null, town.dpArrows[8], countdown_interval_id);
             }
         }, {
-            label: 'Cross to Sidewalk',
+            label: 'Sidewalk',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 reward -= 20;
@@ -799,7 +795,7 @@ function decisionPoint10()
         closeByBackdrop: false,
         closeByKeyboard: false,
         buttons: [{
-            label: 'Continue on Sidewalk',
+            label: 'Sidewalk',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 reward -= 20;
@@ -807,7 +803,7 @@ function decisionPoint10()
                 // town.dp10Arrows.position.z = -1;
             }
         }, {
-            label: 'Cross to Roadside',
+            label: 'Roadside',
             cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(18, dialogRef, null, town.dpArrows[9], countdown_interval_id);
@@ -839,13 +835,13 @@ function decisionPoint11()
         closeByBackdrop: false,
         closeByKeyboard: false,
         buttons: [{
-            label: 'Continue on Roadside',
+            label: 'Roadside',
             cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(19, dialogRef, null, town.dpArrows[10], countdown_interval_id);
             }
         }, {
-            label: 'Cross to Sidewalk',
+            label: 'Sidewalk',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 reward -= 20;
@@ -886,7 +882,7 @@ function decisionPoint12()
         closeByBackdrop: false,
         closeByKeyboard: false,
         buttons: [{
-            label: 'Continue on Sidewalk',
+            label: 'Sidewalk',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 reward -= 20;
@@ -925,13 +921,13 @@ function decisionPoint13()
         closeByBackdrop: false,
         closeByKeyboard: false,
         buttons: [{
-            label: 'Continue on Roadside',
+            label: 'Roadside',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 restartCycling(23, dialogRef, null, town.dpArrows[12], countdown_interval_id);
             }
         }, {
-            label: 'Cross to Sidewalk',
+            label: 'Sidewalk',
             cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 reward -= 20;
@@ -970,13 +966,13 @@ function decisionPoint14()
         closeByBackdrop: false,
         closeByKeyboard: false,
         buttons: [{
-            label: 'Continue straight',
+            label: 'straight',
             cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(25, dialogRef, null, town.dpArrows[13], countdown_interval_id);
             }
         }, {
-            label: 'Cross thru Sidewalk',
+            label: 'Cross',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 reward -= 20;
@@ -1014,7 +1010,7 @@ function journeyCompleted() {
         closeByBackdrop: false,
         closeByKeyboard: false,
         buttons: [{
-            label: 'Restart Cycling Journey',
+            label: 'Restart',
             cssClass: 'btn-sm btn-success',
             action: function(dialogRef){
                 resetReward();
@@ -1059,7 +1055,7 @@ function decisionPoint21() {
                 restartCycling(50, dialogRef, null, town.dpArrows[20], countdown_interval_id);
             }
         }, {
-            label: 'Continue Straight',
+            label: 'Straight',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
@@ -1095,7 +1091,7 @@ function decisionPoint22() {
                 restartCycling(55, dialogRef, null, town.dpArrows[21], countdown_interval_id);
             }
         }, {
-            label: 'Continue Straight',
+            label: 'Straight',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
@@ -1138,7 +1134,7 @@ function decisionPoint23() {
                 restartCycling(68, dialogRef, null, town.dpArrows[22], countdown_interval_id);
             }
         }, {
-            label: 'Continue Straight',
+            label: 'Straight',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
@@ -1225,7 +1221,7 @@ function decisionPoint25() {
         closeByBackdrop: false,
         closeByKeyboard: false,
         buttons: [{
-            label: 'Continue Straight',
+            label: 'Straight',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 restartCycling(67, dialogRef, null, town.dpArrows[24], countdown_interval_id);
@@ -1317,7 +1313,7 @@ function decisionPoint27() {
                 restartCycling(53, dialogRef, null, town.dpArrows[26], countdown_interval_id);
             }
         }, {
-            label: 'Along Sidewalk',
+            label: 'Sidewalk',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
@@ -1360,7 +1356,7 @@ function decisionPoint28() {
                 restartCycling(59, dialogRef, null, town.dpArrows[27], countdown_interval_id);
             }
         }, {
-            label: 'Continue Cross',
+            label: 'Cross',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
@@ -1546,7 +1542,7 @@ function decisionPoint32() {
                 restartCycling(73, dialogRef, null, town.dpArrows[31], countdown_interval_id);
             }
         }, {
-            label: 'Continue Straight',
+            label: 'Straight',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
@@ -1589,7 +1585,7 @@ function decisionPoint33() {
                 restartCycling(75, dialogRef, null, town.dpArrows[32], countdown_interval_id);
             }
         }, {
-            label: 'Continue Straight',
+            label: 'Straight',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
@@ -1639,7 +1635,7 @@ function decisionPoint34() {
                 restartCycling(76, dialogRef, null, town.dpArrows[33], countdown_interval_id);
             }
         }, {
-            label: 'Continue Straight',
+            label: 'Straight',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 // reward -= 20;
@@ -1727,7 +1723,7 @@ function decisionPoint36() {
         closeByBackdrop: false,
         closeByKeyboard: false,
         buttons: [{
-            label: 'Continue Straight',
+            label: 'Straight',
             cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(80, dialogRef, null, town.dpArrows[35], countdown_interval_id);
@@ -1770,7 +1766,7 @@ function decisionPoint37() {
         closeByBackdrop: false,
         closeByKeyboard: false,
         buttons: [{
-            label: 'Continue Straight',
+            label: 'Straight',
             cssClass: 'btn-sm btn-primary',
             action: function(dialogRef){
                 restartCycling(82, dialogRef, null, town.dpArrows[36], countdown_interval_id);
@@ -1912,7 +1908,7 @@ function decisionPoint40() {
         closeByBackdrop: false,
         closeByKeyboard: false,
         buttons: [{
-            label: 'Continue Straight',
+            label: 'Straight',
             cssClass: 'btn-sm btn-danger',
             action: function(dialogRef){
                 restartCycling(88, dialogRef, null, town.dpArrows[39], countdown_interval_id);
@@ -1960,15 +1956,15 @@ function gameFinishLine2() {
         closeByBackdrop: false,
         closeByKeyboard: false,
         buttons: [{
-            label: 'Restart Cycling Journey',
-            cssClass: 'btn-sm btn-success',
+            label: 'Restart',
+            cssClass: 'btn-sm btn-lg btn-success',
             action: function(dialogRef){
                 resetReward();
                 restartCycling(0,dialogRef);
             }
         }, {
             label: 'Leave Game',
-            cssClass: 'btn-sm btn-danger',
+            cssClass: 'btn-sm btn-lg btn-danger',
             action: function(dialogRef){
                 visibilityOutsideGame();
                 showCameraSelect();
