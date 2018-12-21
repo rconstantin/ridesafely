@@ -533,9 +533,10 @@ function createPaths() {
   destP = [[decisionPoint[DP.DP40].x, decisionPoint[DP.DP40].y]];
   createPath(segmentLevel2++, src, destP); 
 
-  destP = []; // reset destP array P73: starts DP32 to DP37
+  destP = []; // reset destP array P73: starts DP32 to DP37 
   src = [decisionPoint[DP.DP32].x, decisionPoint[DP.DP32].y];
-  destP = [[decisionPoint[DP.DP24].x, decisionPoint[DP.DP24].y], [decisionPoint[DP.DP37].x, decisionPoint[DP.DP37].y]];
+  // removed intermediate: decisionPoint[DP.DP24].y], [decisionPoint[DP.DP37].x,
+  destP = [[decisionPoint[DP.DP24].x,  decisionPoint[DP.DP37].y]];
   createPath(segmentLevel2++, src, destP); 
 
   destP = []; // reset destP array P74: starts DP33 to DP34

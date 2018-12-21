@@ -127,7 +127,7 @@ function welcomeDialog() {
     $textAndPic.append('<div class="description"> <p> The user is prompted to choose alternate paths for the cyclist. \
       The objective of the game to practice defensive riding habits and to navigate through town without crashing.</p> \
       <div class="row"> \
-                          <div class="border col-md-6 col-sm-12 boxlayout"> \
+                          <div class="border iphone-hidden col-md-6 col-sm-12 boxlayout"> \
                              <ul> <strong>Sample Interactions:</strong> \
                                <li> Cyclist stops at intersections and other key locations. The user has to decide between going straight or turning right.</li> \
                                <li> Cyclist can and SHOULD check surrounding traffic before deciding on the next move. </li> \
@@ -338,7 +338,7 @@ function updateBike( segment ) {
   if (angle > 0) {
     angle = - Math.PI + angle;
   }    // && (segment !== 60)
-   if ((segment > 40) && (segment !== 52) && (segment !== 66) && (segment !== 74) && (segment !== 75) && (segment !== 76) && (segment !== 77) && (segment !== 85)) 
+   if ((segment > 40) && (segment !== 52) && (segment !== 66) && (segment !== 73) && (segment !== 74) && (segment !== 75) && (segment !== 76) && (segment !== 77) && (segment !== 85)) 
    {
      angle -= Math.PI;
   }

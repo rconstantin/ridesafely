@@ -202,7 +202,9 @@ span:hover {
     
     padding-left: 42em;
 }
-
+.iphone-hidden {
+  display: block;
+}
 /* unset overflow-y to keep the modal fixed*/
 .modal-open .modal {
     margin: auto;
@@ -459,10 +461,6 @@ span:hover {
 
 @media (max-width: 415px)  {
 
-  canvas {
-    width: 478px !important;
-    height: 812px !important;
-  }
   .iphone-hidden {
     display: none;
   }
@@ -488,7 +486,8 @@ span:hover {
   }
   .description {
     /*top: 280px;*/
-    top: 372px;
+    /*top: 372px;*/
+    top: 290px;
     /*float: left;*/
   }
   .landing-modal .modal-content {
@@ -496,29 +495,40 @@ span:hover {
     right: 496px;
   }
   .welcomeDialog img {
-    width: 28%;
-    left: 394px;
+    /*width: 28%;
+    left: 394px;*/
+    display: none;
   }
   
-  .welcomeDialog img {
+  /*.welcomeDialog img {
     width: 25%;
     height: 150px;
     left: 411px;
     top: -15px;
     float: left;
-  }
+  }*/
   .welcomeDialog video {
-    float: left;
+    /*float: left;
     width: 25%;
-    /*height: 162px;*/
     left: 111px;
-    top: 135px;
+    top: 135px;*/
+
+    float: left;
+    width: 30%;
+    left: 379px;
+    top: 8px;
   }
   .welcomeDialog p {
+    /*position: relative;
+    font-size: 12px;
+    font-weight: 600;
+    left: -18em;*/
     position: relative;
     font-size: 12px;
     font-weight: 600;
-    left: -18em;
+    text-align: justify;
+    width: 700px;
+    left: 2em;
   }
   .welcomeDialog .row {
     /*width: 53.5%;
@@ -604,8 +614,10 @@ span:hover {
       width: auto;
       padding: 0;
       position: relative;
-      top: 0px;
-      left: 36px;
+      /*top: 0px;
+      left: 36px;*/
+      top: -50px;
+      left: 10px;
       color: black;
   }
 }
